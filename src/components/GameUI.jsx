@@ -540,7 +540,7 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
     return GRADE_LEVEL_CONFIG[nextLevel].unlockStreak;
   };
 
-  const handleCorrectAnswer = () => {
+ const handleCorrectAnswer = () => {
     const newStreak = streak + 1;
     updateProfile({ streak: newStreak });
     
@@ -555,12 +555,8 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
       toast({ title: '🎉 New Grade Level Unlocked!', description: `Welcome to ${nextLevel}!` });
     }
 
-    setFeedbackModal({
-        isCorrect: true,
-        message: "Protocol Adhered",
-        details: `Streak: ${newStreak}`,
-        xpChange: 100 
-    });
+    // REMOVED: setFeedbackModal(...)
+    // The GradingAnimation in ClassroomLogic now handles the visual success state.
   };
 
   const handleWrongAnswer = () => {
@@ -571,12 +567,8 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
     }
     updateProfile({ streak: 0 });
 
-    setFeedbackModal({
-        isCorrect: false,
-        message: "Deviation Detected",
-        details: "Streak Reset",
-        xpChange: 0
-    });
+    // REMOVED: setFeedbackModal(...)
+    // The GradingAnimation in ClassroomLogic now handles the visual failure state.
   };
   
   const handleRequestApproveWrapper = (id) => {
