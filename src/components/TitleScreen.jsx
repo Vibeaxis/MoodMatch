@@ -67,18 +67,26 @@ function TitleScreen({ onClockIn }) {
   ];
 
   if (isTransitioning) {
+
     return (
-      <div className="fixed inset-0 bg-[#1c1917] z-[100] flex items-center justify-center animate-in fade-in duration-1000">
-        <div className="flex flex-col items-center gap-6">
-            {/* Simple spinning loader using Tailwind */}
-            <div className="w-16 h-16 border-4 border-stone-800 border-t-amber-500 rounded-full animate-spin"></div>
-            <div className="font-mono-typewriter text-xl text-stone-400 tracking-widest animate-pulse">
-                INITIALIZING SHIFT...
-            </div>
+
+      <div className="desk-transition-view">
+
+        <div className="desk-surface">
+
+          <div className="animate-spin text-6xl mb-4">⏳</div>
+
+          <div className="desk-message">REPORTING FOR DUTY...</div>
+
         </div>
+
       </div>
+
     );
+
   }
+
+
 
   return (
     <div className="title-screen-container">
