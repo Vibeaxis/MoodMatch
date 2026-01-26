@@ -426,7 +426,8 @@ function ClassroomLogic({
           modifierApplied={gradingResult?.modifierApplied}
           onAnimationComplete={() => {
             setShowGrading(false);       
-            setSelectedActivity(null);   
+            setSelectedActivity(null); 
+            handleManualNextDay();  
           }}
         />
       </div>
