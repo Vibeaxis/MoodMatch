@@ -363,80 +363,74 @@ const EmployeeHandbook = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-0 md:p-8">
           <motion.div 
-            className="handbook-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-stone-950/80 backdrop-blur-sm"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
           />
+          
           <motion.div 
-            className="handbook-modal"
-            initial={{ y: 50, opacity: 0, scale: 0.95 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 50, opacity: 0, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="relative w-full h-full md:h-[90vh] md:max-w-6xl bg-[#EBE7E0] shadow-2xl flex flex-col overflow-hidden md:rounded-sm border-x md:border-4 border-stone-900"
+            initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            {/* Modal Header */}
-            <div className="handbook-header">
-              <div className="header-content">
-                <h2>Employee Handbook</h2>
-                <div className="confidential-stamp">CONFIDENTIAL</div>
-                <p className="subtitle">District Reg. 44-B // Eyes Only</p>
+            {/* Header */}
+            <div className="bg-stone-900 text-white p-4 flex justify-between items-center shadow-lg shrink-0">
+              <div className="flex flex-col">
+                <h2 className="text-lg font-black uppercase tracking-tighter leading-none flex items-center gap-2">
+                    <Book size={20} className="text-amber-500" /> Employee Handbook
+                </h2>
+                <span className="text-[10px] text-stone-400 font-mono tracking-widest mt-1">District Reg. 44-B // Eyes Only</span>
               </div>
-              <button className="close-btn" onClick={onClose} aria-label="Close Handbook">
+              <button onClick={onClose} className="hover:rotate-90 transition-transform p-2 bg-stone-800 rounded-full">
                 <X size={24} />
               </button>
             </div>
 
-            <div className="handbook-body">
-              {/* Left Navigation */}
-              <div className="handbook-nav">
+            {/* Main Layout Area */}
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+              
+              {/* Responsive Navigation Tabs */}
+              <nav className="shrink-0 bg-stone-800 flex md:flex-col overflow-x-auto no-scrollbar md:w-48 border-b md:border-b-0 md:border-r border-stone-700 shadow-xl z-10">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    className={`nav-btn ${activeTab === tab.id ? 'active' : ''}`}
                     onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-3 p-4 md:p-5 text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap
+                      ${activeTab === tab.id 
+                        ? 'bg-[#EBE7E0] text-stone-900 shadow-[4px_0_0_inset_#f59e0b] md:shadow-[-4px_0_0_inset_#f59e0b]' 
+                        : 'text-stone-400 hover:text-stone-100 hover:bg-stone-700/50'}`}
                   >
                     {tab.icon}
-                    <span>{tab.label}</span>
+                    <span className="md:inline">{tab.label}</span>
                   </button>
                 ))}
-              </div>
+              </nav>
 
-              {/* Right Content */}
-              <div className={`handbook-content-area ${activeTab === 'taxonomy' ? 'no-padding' : ''}`}>
-                {activeTab !== 'taxonomy' && (
-                  <div className="page-header">
-                    <h3>{tabs.find(t => t.id === activeTab)?.label}</h3>
-                    <div className="gold-divider"></div>
-                  </div>
-                )}
+              {/* Content Area */}
+              <main className="flex-1 overflow-hidden flex flex-col bg-[#FDFBF7] relative">
+                {/* Visual Binder Rings (Desktop Only) */}
+                <div className="hidden md:block absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-stone-300 to-transparent pointer-events-none z-20" />
                 
-                <div className={`content-scroll ${activeTab === 'taxonomy' ? 'full-height' : ''}`}>
-                  {renderContent()}
+                <div className="flex-1 overflow-y-auto p-6 md:p-10 md:pl-16 relative">
+                    {renderContent()}
                 </div>
 
-                {activeTab !== 'taxonomy' && (
-                  <div className="page-footer">
-                    <div className="signature-line">
-                      <span>X ___________________________________</span>
-                      <small>I acknowledge receipt of this information</small>
-                    </div>
+                {/* Footer Decal */}
+                <div className="p-6 border-t border-stone-200 bg-stone-50 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
+                  <div className="font-handwriting text-stone-400 flex flex-col leading-none">
+                    <span className="text-xl">X _______________________</span>
+                    <small className="text-[10px] mt-1 font-sans font-bold uppercase tracking-widest">Acknowledge receipt of information</small>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="handbook-footer">
-              <button className="ack-btn" onClick={onClose}>
-                I ACKNOWLEDGE & CLOSE
-              </button>
+                  <button onClick={onClose} className="w-full md:w-auto px-8 py-3 bg-stone-900 text-white font-black uppercase text-xs tracking-widest hover:bg-amber-600 transition-colors shadow-lg">
+                    I Acknowledge & Close
+                  </button>
+                </div>
+              </main>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
