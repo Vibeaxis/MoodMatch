@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, Mail, ShoppingBag, LineChart, BookOpen, Calendar } from 'lucide-react';
@@ -20,84 +19,65 @@ function TeacherPlanner({
   if (!isOpen) return null;
 
   const tabs = [
-    { id: 'schedule', icon: <Calendar className="w-3 h-3 md:w-4 md:h-4" />, label: 'Schedule' },
-    { id: 'id', icon: <User className="w-3 h-3 md:w-4 md:h-4" />, label: 'ID Card' },
-    { id: 'memos', icon: <Mail className="w-3 h-3 md:w-4 md:h-4" />, label: 'Memos' },
-    { id: 'supplies', icon: <ShoppingBag className="w-3 h-3 md:w-4 md:h-4" />, label: 'Supplies' },
-    { id: 'performance', icon: <LineChart className="w-3 h-3 md:w-4 md:h-4" />, label: 'Performance' }
+    { id: 'schedule', icon: <Calendar className="w-4 h-4" />, label: 'Schedule' },
+    { id: 'id', icon: <User className="w-4 h-4" />, label: 'ID Card' },
+    { id: 'memos', icon: <Mail className="w-4 h-4" />, label: 'Memos' },
+    { id: 'supplies', icon: <ShoppingBag className="w-4 h-4" />, label: 'Supplies' },
+    { id: 'performance', icon: <LineChart className="w-4 h-4" />, label: 'Performance' }
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8">
-
-      {/* Scrollbar Styling Injection */}
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-2 md:p-8">
+      
+      {/* Scrollbar & UI Fixes Injection */}
       <style>{`
-        .planner-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .planner-scrollbar::-webkit-scrollbar-track {
-          background: rgba(0,0,0,0.05);
-          margin-top: 10px;
-          margin-bottom: 10px;
-        }
-        .planner-scrollbar::-webkit-scrollbar-thumb {
-          background: #D4AF37;
-          border-radius: 10px;
-          opacity: 0.5;
-        }
-        .planner-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #B89628;
-        }
+        .planner-scrollbar::-webkit-scrollbar { width: 8px; }
+        .planner-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); border-radius: 10px; }
+        .planner-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; border: 2px solid #F5F1E8; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* Click outside to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Planner Body */}
       <motion.div
-        initial={{ y: '20%', opacity: 0, scale: 0.95 }}
+        initial={{ y: 50, opacity: 0, scale: 0.98 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
-        exit={{ y: '20%', opacity: 0, scale: 0.95 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative w-full max-w-4xl h-full max-h-[85vh] bg-[#5D4037] rounded-xl shadow-2xl flex flex-col overflow-hidden border border-[#3E2723]"
-        style={{
-          boxShadow: '0 50px 100px -20px rgba(0,0,0,0.7), 0 30px 60px -30px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.1)'
-        }}
+        exit={{ y: 50, opacity: 0, scale: 0.98 }}
+        className="relative w-full max-w-5xl h-[90vh] md:h-[85vh] bg-[#5D4037] rounded-lg shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden border-2 border-[#3E2723]"
       >
-        {/* Leather Texture Overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-40 mix-blend-multiply"
-          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")` }}
+        {/* Leather Grain Effect */}
+        <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-overlay"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
         />
 
-        {/* --- HEADER --- */}
-        <div className="shrink-0 h-16 md:h-20 bg-[#4E342E] relative flex items-center justify-between px-4 md:px-6 border-b-8 border-[#3E2723] z-30 shadow-lg">
-
-          {/* Binder Rings */}
-          <div className="absolute top-[-10px] md:top-[-12px] left-1/2 -translate-x-1/2 flex gap-8 md:gap-16 pointer-events-none z-40">
+        {/* --- BINDER HEADER --- */}
+        <div className="shrink-0 h-16 md:h-20 bg-[#4E342E] flex items-center justify-between px-6 border-b-4 border-[#3E2723] z-50">
+          
+          {/* Binder Rings (Physically outside the frame) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-12 md:gap-24 pointer-events-none z-50">
             {[1, 2, 3].map(i => (
-              <div key={i} className="w-5 md:w-8 h-10 md:h-12 rounded-full border-[4px] md:border-[6px] border-[#D4AF37] bg-[#2d2d2d] shadow-lg relative">
-                <div className="absolute top-2 left-1 w-1 h-3 bg-white/40 rounded-full" />
+              <div key={i} className="w-6 md:w-8 h-12 md:h-16 rounded-full border-4 md:border-[6px] border-[#D4AF37] bg-[#1a1a1a] shadow-2xl relative">
+                <div className="absolute top-2 left-1.5 w-1.5 h-4 bg-white/20 rounded-full" />
               </div>
             ))}
           </div>
 
-          <div className="flex items-center gap-3 z-10">
-            <BookOpen className="text-[#D4AF37]" size={20} />
-            <h1 className="text-[#D4AF37] font-mono-typewriter font-bold text-lg md:text-xl tracking-[0.2em] drop-shadow-md truncate">
-              FACULTY PLANNER
+          <div className="flex items-center gap-4">
+            <BookOpen className="text-[#D4AF37] hidden md:block" />
+            <h1 className="text-[#D4AF37] font-mono-typewriter font-bold text-sm md:text-xl tracking-[0.3em] uppercase drop-shadow-lg">
+              Faculty Planner
             </h1>
           </div>
 
-          <button
-            onClick={onClose}
-            className="z-10 group bg-[#3E2723] text-[#D4AF37] p-1.5 md:p-2 rounded-full border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#3E2723] transition-all duration-300"
-          >
-            <X className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform" />
+          <button onClick={onClose} className="p-2 hover:bg-[#D4AF37] hover:text-white rounded-full transition-all border border-transparent hover:border-[#3E2723]">
+            <X size={20} className="text-[#D4AF37] group-hover:text-white" />
           </button>
         </div>
 
-        {/* --- TABS ROW --- */}
-        <div className="shrink-0 flex px-2 md:px-4 pt-4 md:pt-5 gap-1 z-20 overflow-x-auto no-scrollbar items-end">
+        {/* --- TABS ROW (Fixed Scrollbar) --- */}
+        <div className="shrink-0 flex px-4 md:px-8 pt-4 gap-1 z-40 overflow-x-auto no-scrollbar">
           {tabs.map(tab => {
             const isActive = activeTab === tab.id;
             return (
@@ -105,96 +85,80 @@ function TeacherPlanner({
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                   flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-t-lg font-bold text-[10px] md:text-xs uppercase tracking-wider whitespace-nowrap
-                   transition-all duration-200 transform relative
-                   ${isActive
-                    ? 'bg-[#F5F1E8] text-stone-900 translate-y-0.5 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] z-20'
-                    : 'bg-[#3E2723] text-[#A1887F] hover:bg-[#4E342E] hover:text-[#D7CCC8] mb-1 z-0 shadow-inner'
-                  }
-                 `}
+                   flex items-center gap-2 px-4 py-2.5 rounded-t-lg font-bold text-[10px] md:text-xs uppercase tracking-widest
+                   transition-all duration-200 relative whitespace-nowrap
+                   ${isActive 
+                    ? 'bg-[#FDFBF7] text-stone-900 shadow-lg z-30 -mb-[2px] border-x border-t border-white/20' 
+                    : 'bg-[#3E2723] text-stone-400 hover:text-stone-200 mt-1 opacity-80'}
+                `}
               >
                 {tab.icon} {tab.label}
-                {isActive && <div className="absolute bottom-[-5px] left-0 right-0 h-4 bg-[#F5F1E8]" />}
               </button>
             );
           })}
         </div>
 
-        {/* --- MAIN CONTENT AREA (The Paper) --- */}
-        <div className="flex-1 bg-[#F5F1E8] mx-2 md:mx-4 mb-4 rounded-b-lg rounded-tr-lg shadow-[inset_0_2px_15px_rgba(0,0,0,0.1)] relative overflow-hidden flex flex-col z-10">
-
-          {/* Paper Grain Texture */}
-          <div className="absolute inset-0 pointer-events-none opacity-40 mix-blend-multiply z-0"
-            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")` }}
-          />
-
-          {/* SCROLLABLE CONTENT WRAPPER */}
-          <div className="flex-1 overflow-y-auto planner-scrollbar p-4 md:p-6 relative z-10 pb-8">
+        {/* --- MAIN CONTENT (The Paper Binder) --- */}
+        <div className="flex-1 bg-[#FDFBF7] mx-2 md:mx-6 mb-4 rounded-b-md shadow-2xl relative flex flex-col overflow-hidden border-t-2 border-white/50">
+          
+          {/* Subtle Paper Texture */}
+          <div className="absolute inset-0 pointer-events-none opacity-5 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')] shadow-inner" />
+          
+          {/* Internal Content Area */}
+          <div className="flex-1 overflow-y-auto planner-scrollbar p-6 md:p-10 relative z-10">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                transition={{ duration: 0.15 }}
-                className="h-full"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.1 }}
+                className="min-h-full"
               >
                 {activeTab === 'schedule' && (
-                  <ScheduleTab
-                    weeklySchedule={gameData.weeklySchedule}
-                    currentDayIndex={gameData.dayOfWeek}
-                    weekNumber={gameData.weekNumber}
+                  <ScheduleTab 
+                    weeklySchedule={gameData.weeklySchedule} 
+                    currentDayIndex={gameData.dayOfWeek} 
+                    weekNumber={gameData.weekNumber} 
                   />
                 )}
                 {activeTab === 'id' && (
-                  <IDTab
-                    currentRank={gameData.currentRank}
-                    totalXP={gameData.totalXP}
-                    currentStreak={gameData.currentStreak}
+                  <IDTab 
+                    currentRank={gameData.currentRank} 
+                    totalXP={gameData.totalXP} 
+                    currentStreak={gameData.currentStreak} 
                   />
                 )}
                 {activeTab === 'memos' && (
-                  <MemosTab
-                    dailyMemo={gameData.dailyMemo}
-                    activeModifier={gameData.activeModifier}
-                    onReadMemo={onReadMemo}
-                    earlyPeekUnlocked={gameData.unlockedPerks?.includes('EARLY_MEMO_PEEK')}
+                  <MemosTab 
+                    dailyMemo={gameData.dailyMemo} 
+                    activeModifier={gameData.activeModifier} 
+                    onReadMemo={onReadMemo} 
+                    earlyPeekUnlocked={gameData.unlockedPerks?.includes('EARLY_MEMO_PEEK')} 
                   />
                 )}
                 {activeTab === 'supplies' && (
-                  <SuppliesTab
-                    currentStreak={gameData.currentStreak}
-                    unlockedSupplies={gameData.unlockedSupplies}
-                    onRequisition={onRequisition}
-                    unionDiscountActive={gameData.unlockedPerks?.includes('UNION_DISCOUNTS')}
+                  <SuppliesTab 
+                    currentStreak={gameData.currentStreak} 
+                    unlockedSupplies={gameData.unlockedSupplies} 
+                    onRequisition={onRequisition} 
+                    unionDiscountActive={gameData.unlockedPerks?.includes('UNION_DISCOUNTS')} 
                   />
                 )}
-               {activeTab === 'performance' && (
-  <PerformanceTab
-    playerProfile={{
-      ...gameData.playerProfile,
-      gpa: gameData.careerGPA
-    }}
-    unlockedPerks={gameData.unlockedPerks}
-    /* ADD THIS LINE - This is the missing link */
-    shiftHistory={gameData.shiftHistory} 
-  />
-)}
+                {activeTab === 'performance' && (
+                  <PerformanceTab 
+                    playerProfile={{ ...gameData.playerProfile, gpa: gameData.careerGPA }} 
+                    unlockedPerks={gameData.unlockedPerks} 
+                    shiftHistory={gameData.shiftHistory} 
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Decorative Footer Stamp */}
-          <div className="absolute bottom-4 right-4 opacity-5 pointer-events-none z-0">
-            <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-black rounded-full flex items-center justify-center rotate-[-15deg]">
-              <span className="font-mono-typewriter font-bold text-[8px] md:text-xs uppercase text-center leading-tight">
-                Property of<br />District<br />Board
-              </span>
-            </div>
-          </div>
-
+          {/* Decorative Red Line (Notebook Margin) */}
+          <div className="absolute left-8 md:left-12 top-0 bottom-0 w-[2px] bg-red-200/50 pointer-events-none" />
         </div>
-
       </motion.div>
     </div>
   );
