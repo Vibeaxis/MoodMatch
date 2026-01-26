@@ -39,7 +39,7 @@ const MorningReport = forwardRef(({ clue, gradeLevel, stampCommitted, grade, phi
       initial={{ opacity: 0, x: -50, rotate: 0 }}
       animate={{ opacity: 1, x: 0, rotate: 1 }}
       transition={{ duration: 0.6, type: "spring", bounce: 0.3 }}
-      className="w-full max-w-md relative group perspective-1000"
+      className="w-full max-w-md relative group perspective-1000 mt-24 md:mt-0"
     >
       {/* Paper Shadow */}
       <div className="absolute inset-0 bg-black/20 translate-y-2 translate-x-2 blur-sm rounded-sm transform group-hover:translate-y-3 group-hover:translate-x-3 transition-transform duration-300" />
