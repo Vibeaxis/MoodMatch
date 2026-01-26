@@ -30,7 +30,7 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
 
   return (
     <>
-      <div className="absolute bottom-4 left-4 z-20 w-48">
+     <div className="fixed bottom-6 left-6 z-[60] w-56 group">
         <div className="flex justify-between items-center bg-stone-800 text-stone-200 px-3 py-1 rounded-t-sm border-b border-stone-600">
             <span className="text-xs font-bold tracking-widest">INBOX</span>
             <span className={`text-[10px] font-mono ${requests.length > 5 ? 'text-red-400 animate-pulse' : 'text-stone-400'}`}>
@@ -38,7 +38,7 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
             </span>
         </div>
         
-        <div className="relative h-32 bg-stone-900/50 rounded-b-sm border-x border-b border-stone-700 backdrop-blur-sm p-2">
+     <div className="relative h-36 bg-stone-900/60 backdrop-blur-md rounded-b-sm border-x border-b border-stone-800 p-2 transition-all group-hover:bg-stone-900/80">
           <AnimatePresence>
             {requests.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center opacity-30">

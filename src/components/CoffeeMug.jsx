@@ -79,8 +79,9 @@ function CoffeeMug({ usesRemaining, maxUses, onUse }) {
               initial={{ opacity: 0, y: 10, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
-              className="absolute bottom-20 left-0 bg-white/90 backdrop-blur-md p-2 rounded-lg shadow-xl border border-stone-200 min-w-[140px]"
-            >
+             className="absolute bottom-full right-0 mb-2 w-32 bg-white shadow-xl rounded-sm border border-stone-200 z-50 origin-bottom-right"
+    >
+            
               <div className="flex flex-col gap-1">
                 <button
                   onClick={() => handleInteraction('REROLL')}
