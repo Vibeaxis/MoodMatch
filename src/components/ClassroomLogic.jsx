@@ -356,11 +356,13 @@ function ClassroomLogic({
                className={`boon-modal ${activeBoon.rarity}`}
                onClick={(e) => e.stopPropagation()} 
              >
-                <div className="boon-modal-header">
-                   {activeBoon.icon}
-                   <h2>{activeBoon.name}</h2>
-                   <div className="boon-rarity-badge">{activeBoon.rarity}</div>
-                </div>
+              <div className="boon-modal-header">
+  {/* FIX: Use a tag < /> instead of braces { } */}
+  <activeBoon.icon size={48} className="w-12 h-12 mb-2" />
+  
+  <h2>{activeBoon.name}</h2>
+  <div className="boon-rarity-badge">{activeBoon.rarity}</div>
+</div>
                 <div className="boon-modal-content">
                    <p className="boon-description">{activeBoon.description}</p>
                    <p className="boon-flavor">"{activeBoon.flavor}"</p>
