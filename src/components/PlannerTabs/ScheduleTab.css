@@ -1,0 +1,212 @@
+
+.schedule-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.schedule-title {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #3E2723;
+  text-align: center;
+  border-bottom: 2px solid #d7ccc8;
+  padding-bottom: 1rem;
+}
+
+.schedule-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.schedule-card {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-left: 6px solid #9ca3af; /* Default gray */
+  border-radius: 8px;
+  padding: 1.25rem;
+  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.schedule-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Event Type Borders */
+.schedule-card.type-normal { border-left-color: #9ca3af; }
+.schedule-card.type-modifier { border-left-color: #f59e0b; }
+.schedule-card.type-crisis { border-left-color: #ef4444; }
+.schedule-card.type-boon { border-left-color: #3b82f6; }
+.schedule-card.type-jackpot { border-left-color: #8b5cf6; }
+
+/* States */
+.schedule-card.past {
+  background-color: #f5f5f4;
+  filter: grayscale(100%);
+  opacity: 0.7;
+  border-color: #e5e5e5;
+}
+
+.schedule-card.today {
+  transform: scale(1.02);
+  border: 2px solid #d4af37;
+  border-left: 6px solid #d4af37;
+  background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+  animation: todayPulse 3s infinite;
+}
+
+@keyframes todayPulse {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+.schedule-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background-color: #d4af37;
+  color: #3e2723;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.schedule-checkmark {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.schedule-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e7e5e4;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.schedule-day-name {
+  font-family: 'Courier Prime', monospace;
+  font-weight: 700;
+  color: #44403c;
+  font-size: 1.1rem;
+}
+
+.schedule-event-type {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #78716c;
+}
+
+.schedule-event-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.schedule-event-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.schedule-icon-wrapper {
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: #f5f5f4;
+  color: #57534e;
+}
+
+.schedule-card.type-crisis .schedule-icon-wrapper { background-color: #fecaca; color: #991b1b; }
+.schedule-card.type-modifier .schedule-icon-wrapper { background-color: #fde68a; color: #92400e; }
+.schedule-card.type-boon .schedule-icon-wrapper { background-color: #bfdbfe; color: #1e40af; }
+.schedule-card.type-jackpot .schedule-icon-wrapper { background-color: #ddd6fe; color: #5b21b6; }
+
+.schedule-event-name {
+  font-weight: 700;
+  color: #1c1917;
+  font-size: 1rem;
+}
+
+.schedule-description {
+  font-size: 0.9rem;
+  color: #57534e;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.mechanics-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mechanic-tag {
+  display: inline-block;
+  background-color: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #78350f;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.schedule-footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: rgba(212, 175, 55, 0.05);
+  border: 1px dashed rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  margin-top: auto;
+}
+
+.schedule-tip {
+  font-size: 0.85rem;
+  color: #57534e;
+  line-height: 1.6;
+}
+
+.schedule-tip strong {
+  color: #b45309;
+}
+
+.schedule-tab-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #a8a29e;
+  font-style: italic;
+}
