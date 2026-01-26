@@ -251,35 +251,64 @@ export const MOOD_SOLUTION_MATRIX = {
   HighEnergy: {
     solution: 'Kinetic',
     description: 'needs physical activity to channel energy',
-    baseClue: 'Students are bouncing off the walls.'
+    behaviors: [
+      "Students are bouncing off the walls.",
+      "The class is vibrating at a frequency that threatens the windows.",
+      "A small group is attempting to start a mosh pit near the cubbies.",
+      "Students are running laps around their desks in tight, frantic circles."
+    ]
   },
   LowEnergy: {
     solution: 'Media',
     description: 'needs passive engagement',
-    baseClue: 'Everyone is yawning and struggling to keep eyes open.'
+    behaviors: [
+      "Everyone is yawning and struggling to keep their eyes open.",
+      "Students are melting into their chairs like warm cheese.",
+      "The collective energy levels have dropped into a catatonic state.",
+      "Half the class is using their textbooks as makeshift pillows."
+    ]
   },
   Rebellious: {
     solution: 'Discipline',
     description: 'needs structure and boundaries',
-    baseClue: 'There is open defiance and rule-breaking occurring.'
+    behaviors: [
+      "There is open defiance and systematic rule-breaking occurring.",
+      "Students have begun dismantling the furniture to build a fort.",
+      "A formal list of demands has been taped to your coffee mug.",
+      "Instructions are being ignored with professional-grade intensity."
+    ]
   },
   Distracted: {
     solution: 'Lecture',
     description: 'needs focused attention and guidance',
-    baseClue: 'Attention is scattered and side conversations are rampant.'
+    behaviors: [
+      "Attention is scattered and side conversations are rampant.",
+      "Students are attempting to communicate via complex blinking codes.",
+      "Most of the back row is currently trading crypto-currency.",
+      "Everyone is focusing on literally anything except the whiteboard."
+    ]
   },
   Existential: {
     solution: 'Lecture',
     description: 'needs deep intellectual engagement',
-    baseClue: 'Students are questioning the meaning of the curriculum.'
+    behaviors: [
+      "Students are staring into the abyss and questioning reality.",
+      "The curriculum is being met with sighs of profound nihilism.",
+      "A student just asked if the grading scale is 'merely a social construct'.",
+      "The class has collectively decided that nothing matters."
+    ]
   },
   Hungover: {
     solution: 'Media',
     description: 'needs minimal effort and gentle content',
-    baseClue: 'The room smells of regret and cheap beverages.'
+    behaviors: [
+      "The room smells of regret and cheap beverages.",
+      "Any sudden movement causes audible groaning from the students.",
+      "Light sensitivity is at an all-time high; everyone is wearing shades.",
+      "The class is moving in slow motion and avoiding eye contact."
+    ]
   }
 };
-
 export const GRADE_LEVEL_CONFIG = {
   Kindergarten: {
     availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted'],
@@ -673,10 +702,14 @@ export function generateClue(gradeLevel, mood) {
   const moodData = MOOD_SOLUTION_MATRIX[mood];
   const config = GRADE_LEVEL_CONFIG[gradeLevel];
   
+  // 1. Pick a random behavior from our new arrays
+  const behavior = moodData.behaviors[Math.floor(Math.random() * moodData.behaviors.length)];
+
+  // 2. Existing constraint selection logic (Keep as is)
   const correctFolder = moodData.solution;
   const potentialActivities = ACTIVITY_CARDS[correctFolder];
-  
   const validTags = new Set();
+  
   potentialActivities.forEach(card => {
     card.tags.forEach(tag => {
       if (config.availableConstraints.includes(tag)) {
@@ -690,12 +723,14 @@ export function generateClue(gradeLevel, mood) {
     ? validTagsArray[Math.floor(Math.random() * validTagsArray.length)]
     : config.availableConstraints[Math.floor(Math.random() * config.availableConstraints.length)];
 
+  // 3. Use your existing buildConstraintString function
   const constraintText = buildConstraintString(constraint);
 
   return {
     mood,
     constraint,
-    text: `${moodData.baseClue} (Constraint: ${constraintText})`
+    // The final result: Varied behavior + Procedural Constraint
+    text: `${behavior} (Constraint: ${constraintText})`
   };
 }
 
