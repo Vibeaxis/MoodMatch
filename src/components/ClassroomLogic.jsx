@@ -288,8 +288,7 @@ function ClassroomLogic({
     <div 
       className="min-h-screen w-full p-8 relative overflow-hidden"
       style={{
-        // LIGHTER BACKGROUND: Changed to a warmer, flatter wood tone
-        background: '#5D4037',
+        background: 'radial-gradient(circle at center, #78350f 0%, #0c0a09 100%)', 
       }}
     >
      {/* Wood Texture (Optional - Keep this one if you want texture but no darkness) */}
