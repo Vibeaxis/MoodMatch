@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, X, FileCheck, FileX, Stamp } from 'lucide-react';
+import { AlertTriangle, X, FileCheck, FileX } from 'lucide-react';
 
 const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [stampAnimation, setStampAnimation] = useState(null); // 'approved' | 'denied' | null
+  const [stampAnimation, setStampAnimation] = useState(null); 
 
-  // Auto-topple if too many requests
   useEffect(() => {
     if (requests.length > 8) {
       onTopple();
@@ -20,17 +19,10 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
 
   const handleStamp = (type) => {
     if (!selectedRequest || stampAnimation) return;
-    
-    // 1. Trigger Animation
     setStampAnimation(type);
-
-    // 2. Delay Logic so player sees the stamp
     setTimeout(() => {
-      if (type === 'approved') {
-        onApprove(selectedRequest.id);
-      } else {
-        onDeny(selectedRequest.id);
-      }
+      if (type === 'approved') onApprove(selectedRequest.id);
+      else onDeny(selectedRequest.id);
       setSelectedRequest(null);
       setStampAnimation(null);
     }, 600);
@@ -38,9 +30,7 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
 
   return (
     <>
-      {/* --- THE TRAY (Bottom Left UI) --- */}
       <div className="absolute bottom-4 left-4 z-20 w-48">
-        {/* Header */}
         <div className="flex justify-between items-center bg-stone-800 text-stone-200 px-3 py-1 rounded-t-sm border-b border-stone-600">
             <span className="text-xs font-bold tracking-widest">INBOX</span>
             <span className={`text-[10px] font-mono ${requests.length > 5 ? 'text-red-400 animate-pulse' : 'text-stone-400'}`}>
@@ -48,7 +38,6 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
             </span>
         </div>
         
-        {/* Tray Bed */}
         <div className="relative h-32 bg-stone-900/50 rounded-b-sm border-x border-b border-stone-700 backdrop-blur-sm p-2">
           <AnimatePresence>
             {requests.length === 0 && (
@@ -58,8 +47,13 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
             )}
             
             {requests.map((req, index) => {
-              // Stack logic
-              const rotation = (index * 3) - 6 + (req.id.charCodeAt(req.id.length-1) % 4); 
+              // --- CRASH FIX START ---
+              // Safely convert ID to string to prevent .charCodeAt crash on numbers
+              const safeId = String(req.id);
+              const charCode = safeId.charCodeAt(safeId.length - 1) || 0;
+              const rotation = (index * 3) - 6 + (charCode % 4); 
+              // --- CRASH FIX END ---
+              
               const isPink = req.type === 'pink';
 
               return (
@@ -75,15 +69,12 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                     border-l-4 shadow-md cursor-pointer
                     ${isPink ? 'bg-pink-50 border-pink-400' : 'bg-blue-50 border-blue-500'}
                   `}
-                  style={{ 
-                    bottom: '10px',
-                    zIndex: index + 1,
-                  }}
+                  style={{ bottom: '10px', zIndex: index + 1 }}
                 >
                   <div className="p-2 flex flex-col h-full justify-between">
                     <div className="flex justify-between items-start">
                         <span className="font-mono text-[8px] text-stone-500 uppercase tracking-wider">
-                            {req.category.substring(0, 3)}
+                            {req.category?.substring(0, 3) || 'GEN'}
                         </span>
                         {req.urgency === 'critical' && <AlertTriangle size={10} className="text-red-600 animate-pulse" />}
                     </div>
@@ -98,7 +89,6 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
         </div>
       </div>
 
-      {/* --- THE FOCUS VIEW (Overlay) --- */}
       <AnimatePresence>
         {selectedRequest && (
           <motion.div 
@@ -119,7 +109,6 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                 ${selectedRequest.type === 'pink' ? 'border-pink-300' : 'border-blue-300'}
               `}
             >
-                {/* Paper Header */}
                 <div className={`
                     p-4 border-b-2 border-dashed flex justify-between items-start
                     ${selectedRequest.type === 'pink' ? 'border-pink-200 bg-pink-50/50' : 'border-blue-200 bg-blue-50/50'}
@@ -130,7 +119,8 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                         </h3>
                         <div className="flex gap-2 mt-1">
                             <span className="text-[10px] font-bold bg-white border border-stone-300 px-1 py-0.5 rounded text-stone-500 uppercase">
-                                ID: {selectedRequest.id.split('-')[1] || '000'}
+                                {/* FIX: Safe string splitting */}
+                                ID: {String(selectedRequest.id).includes('-') ? String(selectedRequest.id).split('-')[1] : String(selectedRequest.id).substring(0, 4)}
                             </span>
                             <span className={`text-[10px] font-bold uppercase px-1 py-0.5 rounded text-white ${
                                 selectedRequest.urgency === 'critical' ? 'bg-red-600' : 
@@ -145,10 +135,7 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                     </button>
                 </div>
 
-                {/* Paper Body */}
                 <div className="p-6 relative min-h-[240px] flex flex-col gap-4">
-                    
-                    {/* STAMP ANIMATION LAYER */}
                     <AnimatePresence>
                         {stampAnimation && (
                             <motion.div 
@@ -180,7 +167,6 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                         </p>
                     </div>
 
-                    {/* Hint / Obfuscation */}
                     <div className="mt-auto bg-stone-100 p-3 rounded border border-stone-200 flex items-center gap-2">
                         <AlertTriangle size={14} className="text-amber-500" />
                         <span className="text-xs font-mono text-stone-500">
@@ -189,7 +175,6 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                     </div>
                 </div>
 
-                {/* Action Footer */}
                 <div className="p-4 bg-stone-50 border-t border-stone-200 flex gap-4">
                     <button 
                         onClick={() => handleStamp('denied')}
@@ -209,7 +194,6 @@ const InboxTray = ({ requests, onApprove, onDeny, onTopple }) => {
                         GRANT
                     </button>
                 </div>
-
             </motion.div>
           </motion.div>
         )}
