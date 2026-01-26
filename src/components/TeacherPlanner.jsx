@@ -169,15 +169,17 @@ function TeacherPlanner({
                     unionDiscountActive={gameData.unlockedPerks?.includes('UNION_DISCOUNTS')}
                   />
                 )}
-                {activeTab === 'performance' && (
-                  <PerformanceTab
-                    playerProfile={{
-                      ...gameData.playerProfile,
-                      gpa: gameData.careerGPA
-                    }}
-                    unlockedPerks={gameData.unlockedPerks}
-                  />
-                )}
+               {activeTab === 'performance' && (
+  <PerformanceTab
+    playerProfile={{
+      ...gameData.playerProfile,
+      gpa: gameData.careerGPA
+    }}
+    unlockedPerks={gameData.unlockedPerks}
+    /* ADD THIS LINE - This is the missing link */
+    shiftHistory={gameData.shiftHistory} 
+  />
+)}
               </motion.div>
             </AnimatePresence>
           </div>
