@@ -633,7 +633,7 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
         <title>Classroom Mood Matcher</title>
       </Helmet>
 
-      <div ref={gameContainerRef} className={`game-ui-container min-h-screen bg-stone-900 font-serif relative overflow-y-auto md:overflow-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
+      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
 >
         
         {/* Settings Button Header */}

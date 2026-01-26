@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PHILOSOPHY_CONFIG } from '@/lib/GameLogic';
 import { SaveManager } from '@/lib/SaveSystem';
 import SettingsModal from '@/components/SettingsModal';
@@ -12,10 +11,21 @@ function TitleScreen({ onClockIn }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState(SaveManager.loadSettings());
+  const [hasSave, setHasSave] = useState(false);
+
+  // Check for save on mount to avoid hydration mismatches
+  useEffect(() => {
+    setHasSave(SaveManager.hasSave());
+  }, []);
 
   const handleSelect = (id) => {
     if (isTransitioning) return;
-    setSelectedPhilosophy(id);
+    // Toggle: if clicking selected, unselect it
+    if (selectedPhilosophy === id) {
+        setSelectedPhilosophy(null);
+    } else {
+        setSelectedPhilosophy(id);
+    }
   };
 
   const handleStartGame = () => {
@@ -23,7 +33,6 @@ function TitleScreen({ onClockIn }) {
     
     setIsTransitioning(true);
     
-    // Simulate transition delay
     setTimeout(() => {
       onClockIn({
         name: playerName.trim(),
@@ -33,7 +42,7 @@ function TitleScreen({ onClockIn }) {
         streak: 0,
         supplies: []
       });
-    }, 1500); // 1.5s transition
+    }, 1500); 
   };
   
   const handleLoadGame = () => {
@@ -57,14 +66,15 @@ function TitleScreen({ onClockIn }) {
     PHILOSOPHY_CONFIG['Pragmatist']
   ];
 
-  const hasSave = SaveManager.hasSave();
-
   if (isTransitioning) {
     return (
-      <div className="desk-transition-view">
-        <div className="desk-surface">
-          <div className="animate-spin text-6xl mb-4">⏳</div>
-          <div className="desk-message">REPORTING FOR DUTY...</div>
+      <div className="fixed inset-0 bg-[#1c1917] z-[100] flex items-center justify-center animate-in fade-in duration-1000">
+        <div className="flex flex-col items-center gap-6">
+            {/* Simple spinning loader using Tailwind */}
+            <div className="w-16 h-16 border-4 border-stone-800 border-t-amber-500 rounded-full animate-spin"></div>
+            <div className="font-mono-typewriter text-xl text-stone-400 tracking-widest animate-pulse">
+                INITIALIZING SHIFT...
+            </div>
         </div>
       </div>
     );
@@ -72,16 +82,18 @@ function TitleScreen({ onClockIn }) {
 
   return (
     <div className="title-screen-container">
+      {/* Settings Button */}
+      <button 
+        className="absolute top-6 right-6 text-stone-500 hover:text-white transition-colors z-50 p-2"
+        onClick={() => setShowSettings(true)}
+        aria-label="Settings"
+      >
+        <SettingsIcon size={24} />
+      </button>
+
       <div className="title-header">
         <h1 className="main-title">MOOD: MANDATE</h1>
         <p className="sub-title">Establish Your Teaching Persona</p>
-        
-        <button 
-          className="absolute top-4 right-4 text-stone-400 hover:text-white transition-colors"
-          onClick={() => setShowSettings(true)}
-        >
-          <SettingsIcon size={24} />
-        </button>
       </div>
 
       <div className="philosophy-selection">
@@ -110,29 +122,31 @@ function TitleScreen({ onClockIn }) {
 
       <div className={`input-section ${selectedPhilosophy ? 'visible' : ''}`}>
         <div className="name-input-container">
-          <label htmlFor="teacherName">Enter Callsign / Name</label>
+          <label htmlFor="teacherName">ENTER CALLSIGN</label>
           <input 
             type="text" 
             id="teacherName"
             className="name-input"
-            placeholder="e.g. Mr. Smith"
+            placeholder="e.g. PROF. CHAOS"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             maxLength={20}
             autoComplete="off"
+            autoFocus
           />
         </div>
 
         {playerName.trim().length > 0 && (
           <button className="clock-in-btn" onClick={handleStartGame}>
-            Clock In
+            CLOCK IN
           </button>
         )}
       </div>
       
+      {/* Load Game Button - Only shows if NOT starting a new game */}
       {hasSave && !selectedPhilosophy && (
          <div className="load-game-section">
-           <p className="text-stone-400 text-sm mb-2">Previous Record Found</p>
+           <p className="font-mono-typewriter text-xs text-stone-500 mb-3 tracking-widest">PREVIOUS RECORD FOUND</p>
            <button className="load-btn" onClick={handleLoadGame}>
              RESUME SHIFT
            </button>

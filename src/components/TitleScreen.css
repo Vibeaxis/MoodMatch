@@ -5,127 +5,130 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #292524 0%, #1c1917 100%);
+  background: radial-gradient(circle at center, #292524 0%, #0c0a09 100%);
   color: #fafaf9;
   font-family: 'Merriweather', serif;
   overflow: hidden;
   z-index: 50;
 }
 
-/* Animations */
+/* --- Animations --- */
 @keyframes titleFadeIn {
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(-20px); filter: blur(10px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
 @keyframes subtitleFadeIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; letter-spacing: 0em; }
+  100% { opacity: 0.6; letter-spacing: 0.2em; }
 }
 
 @keyframes cardSlideIn {
-  0% { opacity: 0; transform: translateY(50px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(100px) rotate(5deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
 }
 
 @keyframes stampAppear {
-  0% { opacity: 0; transform: scale(1.5) rotate(-10deg); }
-  50% { opacity: 1; transform: scale(0.9) rotate(-2deg); }
-  70% { transform: scale(1.05) rotate(-5deg); }
-  100% { transform: scale(1) rotate(-3deg); }
+  0% { opacity: 0; transform: scale(3) rotate(-20deg); }
+  30% { opacity: 1; transform: scale(0.8) rotate(-5deg); }
+  100% { transform: scale(1) rotate(-8deg); }
 }
 
-@keyframes deskSlideUp {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(0); }
-}
-
+/* --- Header --- */
 .title-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   z-index: 10;
+  position: relative;
 }
 
 .main-title {
   font-family: 'Courier Prime', monospace;
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  color: #f5f5f4;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  letter-spacing: -0.05em;
+  color: #e7e5e4;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
   margin-bottom: 0.5rem;
-  animation: titleFadeIn 1.5s ease-out forwards;
+  animation: titleFadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .sub-title {
   font-family: 'Courier Prime', monospace;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: #a8a29e;
-  letter-spacing: 0.1em;
   text-transform: uppercase;
-  animation: subtitleFadeIn 1.5s ease-out 0.5s forwards;
+  animation: subtitleFadeIn 1.5s ease-out 0.8s forwards;
   opacity: 0;
 }
 
+/* --- Philosophy Cards --- */
 .philosophy-selection {
   display: flex;
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   z-index: 10;
   width: 100%;
   max-width: 1200px;
   justify-content: center;
   flex-wrap: wrap;
+  perspective: 1000px;
 }
 
 .personnel-file {
-  width: 300px;
+  width: 280px;
   background: #e7e5e4;
   padding: 1.5rem;
-  border-radius: 4px;
+  border-radius: 2px;
   position: relative;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   opacity: 0;
-  animation: cardSlideIn 0.8s ease-out forwards;
+  animation: cardSlideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   border: 1px solid #d6d3d1;
 }
 
-.personnel-file:nth-child(1) { animation-delay: 0.8s; }
-.personnel-file:nth-child(2) { animation-delay: 1.0s; }
-.personnel-file:nth-child(3) { animation-delay: 1.2s; }
+.personnel-file:nth-child(1) { animation-delay: 0.2s; transform: rotate(-2deg); }
+.personnel-file:nth-child(2) { animation-delay: 0.4s; z-index: 5; }
+.personnel-file:nth-child(3) { animation-delay: 0.6s; transform: rotate(2deg); }
 
 .personnel-file:hover {
-  transform: translateY(-10px) rotate(1deg);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  z-index: 20;
+  transform: translateY(-20px) scale(1.05) rotate(0deg) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  background: #fafaf9;
 }
 
 .personnel-file.selected {
   border: 2px solid #ea580c;
-  transform: translateY(-5px);
+  transform: translateY(-10px) scale(1.05) rotate(0deg) !important;
+  z-index: 40;
+  background: #fff;
 }
 
 .file-tab {
   position: absolute;
   top: -25px;
   left: 0;
-  width: 40%;
-  height: 30px;
+  width: 120px;
+  height: 26px;
   background: #d6d3d1;
   border-radius: 4px 4px 0 0;
   z-index: -1;
-  clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
   border-top: 1px solid #a8a29e;
   border-left: 1px solid #a8a29e;
+  border-right: 1px solid #a8a29e;
 }
+
+.personnel-file:hover .file-tab { background: #e7e5e4; }
+.personnel-file.selected .file-tab { background: #ea580c; border-color: #ea580c; }
 
 .file-content h3 {
   font-family: 'Courier Prime', monospace;
   color: #1c1917;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-bottom: 1rem;
   border-bottom: 2px solid #a8a29e;
   padding-bottom: 0.5rem;
@@ -134,9 +137,10 @@
 
 .file-content p {
   color: #44403c;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  line-height: 1.6;
   margin-bottom: 1.5rem;
+  min-height: 60px;
 }
 
 .keywords-list {
@@ -150,35 +154,40 @@
   border: 1px solid #a8a29e;
   color: #57534e;
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   border-radius: 2px;
   font-family: 'Courier Prime', monospace;
+  text-transform: uppercase;
 }
 
+/* --- Stamp Effect --- */
 .stamp-overlay {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-3deg);
+  width: 100%;
+  text-align: center;
+  transform: translate(-50%, -50%);
   border: 4px solid #ef4444;
   color: #ef4444;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   font-family: 'Courier Prime', monospace;
-  font-weight: 700;
-  font-size: 2rem;
+  font-weight: 900;
+  font-size: 2.5rem;
   text-transform: uppercase;
-  border-radius: 8px;
+  border-radius: 4px;
   opacity: 0;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   mix-blend-mode: multiply;
-  mask-image: url("data:image/svg+xml,%3Csvg width='200' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.5);
 }
 
 .personnel-file.selected .stamp-overlay {
-  animation: stampAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: stampAppear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
+/* --- Input Section --- */
 .input-section {
   display: flex;
   flex-direction: column;
@@ -188,59 +197,48 @@
   transform: translateY(20px);
   transition: all 0.5s ease;
   z-index: 10;
+  height: 0;
+  overflow: hidden;
 }
 
 .input-section.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.name-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.name-input-container label {
-  font-family: 'Courier Prime', monospace;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #a8a29e;
+  height: auto;
+  margin-top: 2rem;
 }
 
 .name-input {
-  background: transparent;
+  background: rgba(0,0,0,0.2);
   border: none;
   border-bottom: 2px solid #57534e;
   color: #f5f5f4;
   font-family: 'Courier Prime', monospace;
   font-size: 1.5rem;
   text-align: center;
-  padding: 0.5rem 1rem;
-  width: 300px;
+  padding: 0.75rem 1rem;
+  width: 320px;
   outline: none;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
 }
 
 .name-input:focus {
   border-bottom-color: #f59e0b;
+  background: rgba(0,0,0,0.4);
 }
 
 .clock-in-btn {
   background: #f59e0b;
   color: #292524;
   border: none;
-  padding: 1rem 3rem;
+  padding: 1rem 4rem;
   font-family: 'Courier Prime', monospace;
   font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   transition: all 0.2s;
   position: relative;
   overflow: hidden;
@@ -248,57 +246,41 @@
 
 .clock-in-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   background: #fbbf24;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
 }
 
-.clock-in-btn:active {
-  transform: translateY(0);
+/* --- Load Game Section (New) --- */
+.load-game-section {
+  margin-top: 3rem;
+  text-align: center;
+  animation: subtitleFadeIn 1s ease-out 2s forwards;
+  opacity: 0;
 }
 
-.clock-in-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  animation: shine 3s infinite;
-}
-
-@keyframes shine {
-  0% { left: -100%; }
-  20% { left: 100%; }
-  100% { left: 100%; }
-}
-
-.desk-transition-view {
-  position: fixed;
-  inset: 0;
-  background: #1c1917;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: deskSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.desk-surface {
-  width: 100%;
-  height: 100%;
-  background: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='wood'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='2' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%235D4037' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23wood)'/%3E%3C/svg%3E");
-  box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.desk-message {
+.load-btn {
+  background: transparent;
+  border: 1px solid #78716c;
+  color: #78716c;
+  padding: 0.75rem 2rem;
   font-family: 'Courier Prime', monospace;
-  font-size: 2rem;
-  color: #d6d3d1;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  margin-top: 2rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+}
+
+.load-btn:hover {
+  border-color: #f5f5f4;
+  color: #f5f5f4;
+  background: rgba(255,255,255,0.05);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .main-title { font-size: 2.5rem; }
+  .philosophy-selection { gap: 1rem; margin-top: 1rem; }
+  .personnel-file { width: 100%; max-width: 320px; }
+  .personnel-file:nth-child(n) { transform: rotate(0deg); }
 }
