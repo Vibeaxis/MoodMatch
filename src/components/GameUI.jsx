@@ -374,6 +374,8 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
     let count = 0;
     
     history.forEach(shift => {
+      // Use finalGPA if it exists, otherwise convert rank
+      const points = shift.finalGPA !== undefined ? shift.finalGPA : gradeToPoint(shift.finalRank || shift.grade);
       if (!shift.ignored) {
         totalPoints += gradeToPoint(shift.grade);
         count++;
@@ -390,7 +392,11 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
     if (gpa >= 3.0) newPerks.push('COFFEE_REFILL');
     
     setUnlockedPerks(newPerks);
-    
+    // Update Profile object so GPA persists if you save to cloud/localstorage
+    updateProfile({ 
+        gpa: newGPA,
+        unlockedPerks: newPerks 
+    });
     if (newPerks.includes('COFFEE_REFILL')) {
       setCoffeeMaxUses(2);
     }
