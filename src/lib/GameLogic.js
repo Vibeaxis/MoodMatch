@@ -246,11 +246,10 @@ export const ACTIVITY_CARDS = {
     { id: 'extracurricular-assembly', name: 'School Assembly', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social'], description: 'Whole school gathering.', xpReward: 75 }
   ]
 };
-
 export const MOOD_SOLUTION_MATRIX = {
+  // --- Existing Moods ---
   HighEnergy: {
     solution: 'Kinetic',
-    description: 'needs physical activity to channel energy',
     behaviors: [
       "Students are bouncing off the walls.",
       "The class is vibrating at a frequency that threatens the windows.",
@@ -260,7 +259,6 @@ export const MOOD_SOLUTION_MATRIX = {
   },
   LowEnergy: {
     solution: 'Media',
-    description: 'needs passive engagement',
     behaviors: [
       "Everyone is yawning and struggling to keep their eyes open.",
       "Students are melting into their chairs like warm cheese.",
@@ -270,7 +268,6 @@ export const MOOD_SOLUTION_MATRIX = {
   },
   Rebellious: {
     solution: 'Discipline',
-    description: 'needs structure and boundaries',
     behaviors: [
       "There is open defiance and systematic rule-breaking occurring.",
       "Students have begun dismantling the furniture to build a fort.",
@@ -280,7 +277,6 @@ export const MOOD_SOLUTION_MATRIX = {
   },
   Distracted: {
     solution: 'Lecture',
-    description: 'needs focused attention and guidance',
     behaviors: [
       "Attention is scattered and side conversations are rampant.",
       "Students are attempting to communicate via complex blinking codes.",
@@ -290,7 +286,6 @@ export const MOOD_SOLUTION_MATRIX = {
   },
   Existential: {
     solution: 'Lecture',
-    description: 'needs deep intellectual engagement',
     behaviors: [
       "Students are staring into the abyss and questioning reality.",
       "The curriculum is being met with sighs of profound nihilism.",
@@ -300,30 +295,79 @@ export const MOOD_SOLUTION_MATRIX = {
   },
   Hungover: {
     solution: 'Media',
-    description: 'needs minimal effort and gentle content',
     behaviors: [
       "The room smells of regret and cheap beverages.",
       "Any sudden movement causes audible groaning from the students.",
       "Light sensitivity is at an all-time high; everyone is wearing shades.",
       "The class is moving in slow motion and avoiding eye contact."
     ]
+  },
+
+  // --- NEW MOODS ---
+  Anxious: {
+    solution: 'Discipline', // Needs structure/routine to feel safe
+    behaviors: [
+      "Fidgeting is reaching a frantic, synchronized rhythm.",
+      "Students are asking for the daily schedule every thirty seconds.",
+      "The sound of a pencil dropping causes half the class to jump.",
+      "Nervous whispers about 'The Big Test' are circulating rapidly."
+    ]
+  },
+  Apathetic: {
+    solution: 'Kinetic', // Needs movement to snap them out of it
+    behaviors: [
+      "The collective 'meh' is palpable and heavy.",
+      "Students are staring at their shoes with intense indifference.",
+      "Every instruction is met with a synchronized, soul-crushing shrug.",
+      "The class is moving like they are underwater and hate the water."
+    ]
+  },
+  Paranoid: {
+    solution: 'Lecture', // Needs hard facts and data to ground them
+    behaviors: [
+      "Students are checking the ceiling for hidden surveillance.",
+      "Every hallway noise is being interpreted as a secret inspection.",
+      "Whispering has reached a level of feverish conspiracy.",
+      "Students are refusing to write anything down 'for the record'."
+    ]
+  },
+  Whimsical: {
+    solution: 'Extracurricular', // Perfect time for Assemblies/Field Trips
+    behaviors: [
+      "Spontaneous rhyming has broken out in the third row.",
+      "Students are making elaborate paper hats instead of taking notes.",
+      "The class has decided to communicate only through interpretive dance.",
+      "Whimsy levels are exceeding safe administrative limits."
+    ]
+  },
+  BurnedOut: {
+    solution: 'Sabbatical', // Needs Sick Days / Half Days
+    behaviors: [
+      "Heads are resting on desks in a display of total exhaustion.",
+      "The students look like they haven't slept since the midterms.",
+      "Drool is beginning to threaten the integrity of the worksheets.",
+      "The class has the thousand-yard stare of a defeated army."
+    ]
   }
 };
 export const GRADE_LEVEL_CONFIG = {
   Kindergarten: {
-    availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted'],
+    // Added Anxious and Whimsical
+    availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted', 'Anxious', 'Whimsical'],
     availableConstraints: ['Indoor', 'Outdoor', 'Active', 'Passive'],
     maxXP: 300,
     unlockStreak: 0
   },
   HighSchool: {
-    availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted', 'Existential'],
+    // Added Apathetic
+    availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted', 'Existential', 'Anxious', 'Apathetic'],
     availableConstraints: ['Loud', 'Quiet', 'Active', 'Passive', 'Social', 'Individual'],
     maxXP: 500,
     unlockStreak: 3
   },
   College: {
-    availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted', 'Existential', 'Hungover'],
+    // Added Paranoid and BurnedOut
+    availableMoods: ['HighEnergy', 'LowEnergy', 'Rebellious', 'Distracted', 'Existential', 'Hungover', 'Apathetic', 'Paranoid', 'BurnedOut'],
     availableConstraints: ['Loud', 'Quiet', 'Active', 'Passive', 'Social', 'Individual', 'Serious', 'Playful'],
     maxXP: 1000,
     unlockStreak: 6
