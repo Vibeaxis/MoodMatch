@@ -329,32 +329,36 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
     if (crisisActive) {
       stipendSystem.updateProgress('COMPLETE_DURING_CRISIS', { duringCrisis: true });
     }
+const finalRank = shiftData.rank || 'C';
+  const finalGPA = gradeToPoint(finalRank);
 
-    const finalRank = shiftData.rank || 'C';
-    const finalGPA = gradeToPoint(finalRank);
-    const xpEarned = shiftData.xpEarned || 0;
-    const crisisEncountered = (crisisActive && activeCrisis) ? activeCrisis.name : null;
-    const requestsDenied = shiftData.denied || 0;
-    const requestsApproved = shiftData.approved || 0;
-    const cardsPlayed = shiftData.cardsPlayed || 0;
-
-    shiftHistory.saveShift({
-      dayNumber: dayCount,
-      gradeLevel: currentGradeLevel,
-      finalRank,
-      finalGPA,
-      xpEarned,
-      crisisEncountered,
-      requestsApproved,
-      requestsDenied,
-      cardsPlayed,
-      comboStreak: shiftData.maxStreak || streak,
-      moraleFinal: 100,
-      notes: generateShiftNotes(finalRank, crisisEncountered, requestsDenied),
-      philosophy: playerProfile.philosophy
-    });
+  const shiftObject = {
+    dayNumber: dayCount,
+    gradeLevel: currentGradeLevel,
+    finalRank,
+    finalGPA,
+    xpEarned: shiftData.xpEarned || 0,
+    crisisEncountered: (crisisActive && activeCrisis) ? activeCrisis.name : null,
+    requestsApproved: shiftData.approved || 0,
+    requestsDenied: shiftData.denied || 0,
+    cardsPlayed: shiftData.cardsPlayed || 0,
+    comboStreak: shiftData.maxStreak || streak,
+    moraleFinal: 100,
+    notes: generateShiftNotes(finalRank, (crisisActive && activeCrisis), shiftData.denied),
+    philosophy: playerProfile.philosophy,
+    ignored: false // Important for the GPA calculation
   };
-  
+
+  // 1. Save to persistent storage
+  shiftHistory.saveShift(shiftObject);
+
+  // 2. Update local history state immediately
+  const updatedHistory = shiftHistory.getHistory();
+  setPerformanceHistory(updatedHistory);
+
+  // 3. Recalculate GPA and Perks immediately
+  recalculateStats(updatedHistory);
+};
   useEffect(() => {
      const correctRankIndex = getCurrentRankIndex(xpTotal);
      if (correctRankIndex !== currentRank) {
@@ -364,43 +368,52 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
 
 
   const recalculateStats = (history) => {
-    if (!history || history.length === 0) {
-      setCareerGPA(0);
-      setUnlockedPerks([]);
-      return;
-    }
+  if (!history || history.length === 0) {
+    setCareerGPA(0);
+    setUnlockedPerks([]);
+    return;
+  }
 
-    let totalPoints = 0;
-    let count = 0;
-    
-    history.forEach(shift => {
-      // Use finalGPA if it exists, otherwise convert rank
-      const points = shift.finalGPA !== undefined ? shift.finalGPA : gradeToPoint(shift.finalRank || shift.grade);
-      if (!shift.ignored) {
-        totalPoints += gradeToPoint(shift.grade);
-        count++;
-      }
-    });
-
-    const gpa = count > 0 ? totalPoints / count : 0;
-    setCareerGPA(gpa);
-    
-    const newPerks = [];
-    if (gpa >= 3.8) newPerks.push('TENURE');
-    if (gpa >= 3.5) newPerks.push('EARLY_MEMO_PEEK');
-    if (gpa >= 3.0) newPerks.push('UNION_DISCOUNTS');
-    if (gpa >= 3.0) newPerks.push('COFFEE_REFILL');
-    
-    setUnlockedPerks(newPerks);
-    // Update Profile object so GPA persists if you save to cloud/localstorage
-    updateProfile({ 
-        gpa: newGPA,
-        unlockedPerks: newPerks 
-    });
-    if (newPerks.includes('COFFEE_REFILL')) {
-      setCoffeeMaxUses(2);
+  let totalPoints = 0;
+  let count = 0;
+  
+  history.forEach(shift => {
+    if (!shift.ignored) {
+      // Determine points safely from either finalGPA or a string grade
+      const points = shift.finalGPA !== undefined 
+        ? shift.finalGPA 
+        : gradeToPoint(shift.finalRank || shift.grade || 'C');
+      
+      totalPoints += points;
+      count++;
     }
-  };
+  });
+
+  const calculatedGPA = count > 0 ? totalPoints / count : 0;
+  
+  // Update local states
+  setCareerGPA(calculatedGPA);
+  
+  const newPerks = [];
+  if (calculatedGPA >= 3.8) newPerks.push('TENURE');
+  if (calculatedGPA >= 3.5) newPerks.push('EARLY_MEMO_PEEK');
+  if (calculatedGPA >= 3.0) {
+    newPerks.push('UNION_DISCOUNTS');
+    newPerks.push('COFFEE_REFILL');
+  }
+  
+  setUnlockedPerks(newPerks);
+
+  // Sync back to the profile object
+  updateProfile({ 
+      gpa: calculatedGPA,
+      unlockedPerks: newPerks 
+  });
+
+  if (newPerks.includes('COFFEE_REFILL')) {
+    setCoffeeMaxUses(2);
+  }
+};
 
   const handleReadMemo = () => {
     if (dailyMemo && dailyMemo.type !== 'FLAVOR' && !activeModifier) {
