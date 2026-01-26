@@ -135,9 +135,9 @@ const PerformanceTab = ({ playerProfile, unlockedPerks = [], shiftHistory }) => 
                 </div>
                 <div className="stat-item">
                   <span className="stat-label">CAREER GPA</span>
-           <span className="stat-value highlight">
-    {/* Try the profile first, fallback to the shiftHistory object stats */}
-    {(playerProfile.gpa || shiftStats.averageGPA || 0).toFixed(2)}
+          <span className="stat-value highlight">
+    {/* Force conversion to Number to prevent .toFixed string crash */}
+    {Number(playerProfile.gpa || shiftStats.averageGPA || 0).toFixed(2)}
   </span>
                 </div>
                 <div className="stat-item">
