@@ -3,12 +3,14 @@ import GameUI from '@/components/GameUI';
 import TitleScreen from '@/components/TitleScreen';
 
 const DEFAULT_PROFILE = {
-  name: "Teacher",
-  philosophy: "Pragmatist", 
-  currentRank: 0,
+  name: 'Teacher',
   xpTotal: 0,
+  currentRank: 0,
   streak: 0,
-  supplies: []
+  gpa: 4.0,              // Ensure this is here
+  unlockedPerks: [],     // Ensure this is here
+  supplies: [],
+  philosophy: 'Pragmatist'
 };
 
 function App() {
