@@ -288,12 +288,12 @@ function ClassroomLogic({
     <div 
       className="min-h-screen w-full p-8 relative overflow-hidden"
       style={{
-        background: 'radial-gradient(circle at center, #78350f 0%, #0c0a09 100%)', 
+        // LIGHTER BACKGROUND: Changed to a warmer, flatter wood tone
+        background: '#5D4037',
       }}
     >
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.6)_100%)] z-0" />
-      <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay wood-texture z-0" />
-      <div className="absolute top-1/4 right-10 w-32 h-32 border-[12px] border-[#3f2e18]/20 rounded-full z-0 pointer-events-none transform rotate-12 blur-[1px]" />
+     {/* Wood Texture (Optional - Keep this one if you want texture but no darkness) */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply url('data:image/svg+xml;base64,...') z-0" />
       
       <div className="combo-indicator morale-meter-container">
         <div className="combo-counter">
