@@ -101,7 +101,7 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
   const [isHandbookOpen, setIsHandbookOpen] = useState(false);
   const [dailyMemo, setDailyMemo] = useState(null);
   const [activeModifier, setActiveModifier] = useState(null);
-  const [feedbackModal, setFeedbackModal] = useState(null);
+
   
   const [dailyDirective, setDailyDirective] = useState(null);
 
@@ -825,35 +825,7 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
           onTopple={handleTopple} 
         />
 
-        {/* Feedback Modal */}
-        {feedbackModal && (
-            <>
-                <div className="feedback-modal-overlay" onClick={() => setFeedbackModal(null)} />
-                <div className="feedback-modal">
-                    <div className="feedback-modal-header">
-                        <h3>ASSESSMENT</h3>
-                    </div>
-                    <div className="feedback-modal-content">
-                        <h2 className={feedbackModal.isCorrect ? "text-green-700" : "text-red-700"}>
-                            {feedbackModal.isCorrect ? "✓ CORRECT" : "✗ INCORRECT"}
-                        </h2>
-                        <p className="feedback-message">{feedbackModal.message}</p>
-                        {feedbackModal.details && <p className="feedback-details">{feedbackModal.details}</p>}
-                        {feedbackModal.xpChange !== undefined && (
-                            <div className={`feedback-xp ${feedbackModal.xpChange >= 0 ? 'positive' : 'negative'}`}>
-                                {feedbackModal.xpChange >= 0 ? '+' : ''}{feedbackModal.xpChange} XP
-                            </div>
-                        )}
-                        <button 
-                            className="feedback-btn acknowledge"
-                            onClick={() => setFeedbackModal(null)}
-                        >
-                            RESUME DUTY
-                        </button>
-                    </div>
-                </div>
-            </>
-        )}
+       
 
         <Toaster />
       </div>
