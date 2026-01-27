@@ -736,31 +736,21 @@ const finalRank = shiftData.rank || 'C';
             </motion.div>
           )}
         </AnimatePresence>
+{/* POLAROID OVERLAY LAYER */}
 <div className="absolute inset-0 pointer-events-none z-30">
-   <AnimatePresence>
-     {dailyPolaroids.map((p, index) => (
-       <motion.div
-         key={p.id}
-         /* We re-enable pointer events so the card is clickable */
-         className="absolute inset-0 pointer-events-auto cursor-pointer group"
-         onClick={() => setShowAchievementGallery(true)}
-         whileHover={{ scale: 1.05, zIndex: 100 }}
-         whileTap={{ scale: 0.95 }}
-       >
-         <Polaroid 
-           grade={p.grade} 
-           timestamp={p.timestamp} 
-           index={index} 
-           isVisible={p.visible}
-         />
-         
-         {/* Subtle hover tooltip to hint at the Achievement Gallery */}
-         <div className="absolute bottom-10 right-10 opacity-0 group-hover:opacity-100 transition-opacity bg-stone-900 text-white text-[10px] px-2 py-1 rounded-sm font-bold uppercase tracking-widest pointer-events-none shadow-xl">
-           View Career Records
-         </div>
-       </motion.div>
-     ))}
-   </AnimatePresence>
+  <AnimatePresence>
+    {dailyPolaroids.map((p, index) => (
+      <Polaroid 
+        key={p.id} 
+        grade={p.grade} 
+        timestamp={p.timestamp} 
+        index={index} 
+        isVisible={p.visible}
+        // Pass the function directly
+        onClick={() => setShowAchievementGallery(true)}
+      />
+    ))}
+  </AnimatePresence>
 </div>
 
         <CoffeeMug 

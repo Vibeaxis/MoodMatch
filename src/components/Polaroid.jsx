@@ -10,7 +10,7 @@ const GRADE_CONFIG = {
   'F': { icon: <AlertTriangle className="w-16 h-16 text-red-600" />, label: 'Chaos!', color: 'bg-red-50' }
 };
 
-function Polaroid({ grade, timestamp, index, isVisible }) {
+function Polaroid({ grade, timestamp, index, isVisible, onClick }) {
   const config = GRADE_CONFIG[grade] || GRADE_CONFIG['F'];
   // Keep rotation stable for a given index
   const [rotation] = useState(Math.random() * 6 - 3 + (index * 2)); 
@@ -19,12 +19,22 @@ function Polaroid({ grade, timestamp, index, isVisible }) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ x: 300, opacity: 0, rotate: 15 }}
+         initial={{ x: 300, opacity: 0, rotate: 15 }}
           animate={{ x: 0, opacity: 1, rotate: rotation }}
           exit={{ x: -300, opacity: 0, rotate: -15 }}
-          transition={{ type: 'spring', stiffness: 100, damping: 15, delay: index * 0.1 }}
-          className="absolute top-20 right-4 md:right-10 w-48 bg-white p-3 pb-8 shadow-xl transform origin-top-right border border-stone-200"
+          
+          // 2. Add the onClick handler here
+          onClick={onClick}
+          
+          // 3. Add 'cursor-pointer' and 'pointer-events-auto' to ensure it captures clicks
+          // 'pointer-events-auto' is crucial because the parent container is 'pointer-events-none'
+          className="absolute top-20 right-4 md:right-10 w-48 bg-white p-3 pb-8 shadow-xl transform origin-top-right border border-stone-200 cursor-pointer pointer-events-auto hover:z-50 transition-all"
+          
           style={{ zIndex: 30 + index }}
+          
+          // Optional: Add a subtle hover effect
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           {/* Photo Area */}
           <div className={`w-full aspect-square ${config.color} border border-stone-100 shadow-inner flex flex-col items-center justify-center mb-2 overflow-hidden relative`}>
