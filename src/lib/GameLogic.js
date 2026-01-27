@@ -235,26 +235,49 @@ export const ACTIVITY_CARDS = {
     { id: 'l12', name: 'Debate Prep', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Evidence gathering.' },
     { id: 'l13', name: 'Career Day', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Future planning.' }
   ],
-  Sabbatical: [
-    { id: 'sabbatical-sick-day', name: 'Sick Day', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual'], description: 'Take a break to recover.' },
-    { id: 'sabbatical-half-day', name: 'Half-Day', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Quiet'], description: 'Shortened schedule.' },
-    { id: 'sabbatical-substitute', name: 'Substitute Teacher', lessonType: 'Sabbatical', tags: ['Indoor', 'Active', 'Social'], description: 'Call in a sub.' }
+ Sabbatical: [
+    { id: 's1', name: 'Sick Day', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual', 'Quiet'], description: 'Take a break to recover.' },
+    { id: 's2', name: 'Half-Day', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Quiet', 'Playful'], description: 'Shortened schedule.' },
+    { id: 's3', name: 'Substitute', lessonType: 'Sabbatical', tags: ['Indoor', 'Active', 'Social', 'Serious'], description: 'Call in a sub.' },
+    { id: 's4', name: 'Grading Marathon', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Catch up on paperwork.' },
+    { id: 's5', name: 'Coffee Break', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual', 'Quiet', 'Playful'], description: 'Caffeine recharge.' },
+    { id: 's6', name: 'PD Workshop', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Professional development.' },
+    { id: 's7', name: 'Planning Period', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Prep next week.' },
+    { id: 's8', name: 'Staff Meeting', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Loud'], description: 'Faculty announcements.' },
+    { id: 's9', name: 'Supply Run', lessonType: 'Sabbatical', tags: ['Outdoor', 'Active', 'Individual', 'Serious'], description: 'Restocking essentials.' },
+    { id: 's10', name: 'Mental Health Day', lessonType: 'Sabbatical', tags: ['Outdoor', 'Passive', 'Individual', 'Quiet', 'Playful'], description: 'Total disconnect.' },
+    { id: 's11', name: 'Parent Conference', lessonType: 'Sabbatical', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Discuss progress.' },
+    { id: 's12', name: 'Desk Nap', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual', 'Quiet', 'Playful'], description: 'Quick power snooze.' },
+    { id: 's13', name: 'Union Rep Chat', lessonType: 'Sabbatical', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Know your rights.' }
   ],
   Extracurricular: [
-    { id: 'extracurricular-guest-speaker', name: 'Guest Speaker', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social'], description: 'Invite an expert.', xpReward: 50 },
-    { id: 'extracurricular-field-trip', name: 'Field Trip', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social'], description: 'Learning outside.', xpReward: 100 },
-    { id: 'extracurricular-assembly', name: 'School Assembly', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social'], description: 'Whole school gathering.', xpReward: 75 }
+    { id: 'e1', name: 'Guest Speaker', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Serious'], description: 'Invite an expert.', xpReward: 50 },
+    { id: 'e2', name: 'Field Trip', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social', 'Playful'], description: 'Learning outside.', xpReward: 100 },
+    { id: 'e3', name: 'School Assembly', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Loud'], description: 'Whole school gathering.', xpReward: 75 },
+    { id: 'e4', name: 'Science Fair', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Student experiments.', xpReward: 120 },
+    { id: 'e5', name: 'Talent Show', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Loud'], description: 'Showcase skills.', xpReward: 90 },
+    { id: 'e6', name: 'Spelling Bee', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Vocabulary contest.', xpReward: 60 },
+    { id: 'e7', name: 'Bake Sale', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Fundraising event.', xpReward: 40 },
+    { id: 'e8', name: 'Robotics Club', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud'], description: 'Build and battle.', xpReward: 110 },
+    { id: 'e9', name: 'School Play', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Drama production.', xpReward: 150 },
+    { id: 'e10', name: 'Pep Rally', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'School spirit.', xpReward: 80 },
+    { id: 'e11', name: 'Yearbook Staff', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Document memories.', xpReward: 70 },
+    { id: 'e12', name: 'Chess Tournament', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Strategic battles.', xpReward: 85 },
+    { id: 'e13', name: 'Garden Club', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Growing vegetables.', xpReward: 65 }
   ]
 };
 export const MOOD_SOLUTION_MATRIX = {
-  // --- Existing Moods ---
+  // --- Existing Moods (Expanded) ---
   HighEnergy: {
     solution: 'Kinetic',
     behaviors: [
       "Students are bouncing off the walls.",
       "The class is vibrating at a frequency that threatens the windows.",
       "A small group is attempting to start a mosh pit near the cubbies.",
-      "Students are running laps around their desks in tight, frantic circles."
+      "Students are running laps around their desks in tight, frantic circles.",
+      "Someone just tried to parkour off the smartboard.",
+      "The floor is shaking because everyone is tapping their feet in unison.",
+      "They are passing notes at the speed of sound."
     ]
   },
   LowEnergy: {
@@ -263,7 +286,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "Everyone is yawning and struggling to keep their eyes open.",
       "Students are melting into their chairs like warm cheese.",
       "The collective energy levels have dropped into a catatonic state.",
-      "Half the class is using their textbooks as makeshift pillows."
+      "Half the class is using their textbooks as makeshift pillows.",
+      "Breathing seems to have become a voluntary group effort.",
+      "A student is trying to learn by osmosis by resting their head on the book.",
+      "The blinking rate has slowed to once per minute."
     ]
   },
   Rebellious: {
@@ -272,7 +298,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "There is open defiance and systematic rule-breaking occurring.",
       "Students have begun dismantling the furniture to build a fort.",
       "A formal list of demands has been taped to your coffee mug.",
-      "Instructions are being ignored with professional-grade intensity."
+      "Instructions are being ignored with professional-grade intensity.",
+      "They have declared the reading corner an 'Autonomous Zone'.",
+      "Someone is shredding the syllabus while maintaining eye contact.",
+      "The class mascot has been taken hostage until demands are met."
     ]
   },
   Distracted: {
@@ -281,7 +310,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "Attention is scattered and side conversations are rampant.",
       "Students are attempting to communicate via complex blinking codes.",
       "Most of the back row is currently trading crypto-currency.",
-      "Everyone is focusing on literally anything except the whiteboard."
+      "Everyone is focusing on literally anything except the whiteboard.",
+      "A pigeon outside has captured 100% of the class's mental bandwidth.",
+      "They are intensely debating the flavor profile of glue.",
+      "Someone is live-streaming the lecture to zero viewers."
     ]
   },
   Existential: {
@@ -290,7 +322,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "Students are staring into the abyss and questioning reality.",
       "The curriculum is being met with sighs of profound nihilism.",
       "A student just asked if the grading scale is 'merely a social construct'.",
-      "The class has collectively decided that nothing matters."
+      "The class has collectively decided that nothing matters.",
+      "Someone asked if the bell dismissal is just a metaphor for death.",
+      "They are refusing to sit, claiming chairs are 'oppressive constructs'.",
+      "The vibe is less 'Classroom' and more 'Waiting for Godot'."
     ]
   },
   Hungover: {
@@ -299,18 +334,24 @@ export const MOOD_SOLUTION_MATRIX = {
       "The room smells of regret and cheap beverages.",
       "Any sudden movement causes audible groaning from the students.",
       "Light sensitivity is at an all-time high; everyone is wearing shades.",
-      "The class is moving in slow motion and avoiding eye contact."
+      "The class is moving in slow motion and avoiding eye contact.",
+      "The sound of the marker on the whiteboard is causing physical pain.",
+      "Hydration levels are critical; water bottles are being clutched like idols.",
+      "A student is wearing two pairs of sunglasses simultaneously."
     ]
   },
 
-  // --- NEW MOODS ---
+  // --- NEW MOODS (Expanded) ---
   Anxious: {
     solution: 'Discipline', // Needs structure/routine to feel safe
     behaviors: [
       "Fidgeting is reaching a frantic, synchronized rhythm.",
       "Students are asking for the daily schedule every thirty seconds.",
       "The sound of a pencil dropping causes half the class to jump.",
-      "Nervous whispers about 'The Big Test' are circulating rapidly."
+      "Nervous whispers about 'The Big Test' are circulating rapidly.",
+      "The clicking of ballpoint pens sounds like a swarm of angry cicadas.",
+      "Someone is pre-panicking about an assignment due in 2028.",
+      "The collective heart rate of the room is audible."
     ]
   },
   Apathetic: {
@@ -319,7 +360,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "The collective 'meh' is palpable and heavy.",
       "Students are staring at their shoes with intense indifference.",
       "Every instruction is met with a synchronized, soul-crushing shrug.",
-      "The class is moving like they are underwater and hate the water."
+      "The class is moving like they are underwater and hate the water.",
+      "You just offered free candy and nobody moved.",
+      "The enthusiasm bar is so low it is currently underground.",
+      "They are physically present but spiritually buffering."
     ]
   },
   Paranoid: {
@@ -328,7 +372,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "Students are checking the ceiling for hidden surveillance.",
       "Every hallway noise is being interpreted as a secret inspection.",
       "Whispering has reached a level of feverish conspiracy.",
-      "Students are refusing to write anything down 'for the record'."
+      "Students are refusing to write anything down 'for the record'.",
+      "They think the fire alarm strobe is a mind-control device.",
+      "Notes are being written in invisible ink (lemon juice).",
+      "A student asked if you are 'wearing a wire'."
     ]
   },
   Whimsical: {
@@ -337,7 +384,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "Spontaneous rhyming has broken out in the third row.",
       "Students are making elaborate paper hats instead of taking notes.",
       "The class has decided to communicate only through interpretive dance.",
-      "Whimsy levels are exceeding safe administrative limits."
+      "Whimsy levels are exceeding safe administrative limits.",
+      "Someone is trying to pay for lunch with 'dream coins'.",
+      "The floor is lava, but emotionally.",
+      "They are blowing bubbles and chasing them around the room."
     ]
   },
   BurnedOut: {
@@ -346,7 +396,10 @@ export const MOOD_SOLUTION_MATRIX = {
       "Heads are resting on desks in a display of total exhaustion.",
       "The students look like they haven't slept since the midterms.",
       "Drool is beginning to threaten the integrity of the worksheets.",
-      "The class has the thousand-yard stare of a defeated army."
+      "The class has the thousand-yard stare of a defeated army.",
+      "The coffee maker is the only thing keeping society intact.",
+      "A student is crying softly over a dropped eraser.",
+      "They have accepted their fate as academic zombies."
     ]
   }
 };
