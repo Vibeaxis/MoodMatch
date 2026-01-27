@@ -357,10 +357,6 @@ export const useInboxSystem = () => {
     setRequests(prev => prev.filter(r => r.id !== id));
   };
 
-  const handleDeny = (id) => {
-    setRequests(prev => prev.filter(r => r.id !== id));
-  };
-
   const handleTopple = () => {
     setIsToppled(true);
     setTimeout(() => {
