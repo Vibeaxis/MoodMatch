@@ -92,19 +92,39 @@ export const GRADE_LEVELS = [
     nextThreshold: Infinity 
   }
 ];
-
 export const DISTRICT_DIRECTIVES = [
+  // --- EXISTING ---
   { id: 'dd1', title: 'Diversity Mandate', description: 'Use cards from at least 3 different categories this shift.', type: 'diversity', targetDiversity: 3, xpBonus: 200, difficulty: 'Medium' },
   { id: 'dd2', title: 'Kinetic Focus', description: 'Successfully use a Kinetic card.', type: 'category-target', category: 'Kinetic', xpBonus: 200, difficulty: 'Easy' },
   { id: 'dd3', title: 'Media Integration', description: 'Successfully use a Media card.', type: 'category-target', category: 'Media', xpBonus: 200, difficulty: 'Easy' },
   { id: 'dd4', title: 'Discipline Enforcement', description: 'Successfully use a Discipline card.', type: 'category-target', category: 'Discipline', xpBonus: 200, difficulty: 'Easy' },
   { id: 'dd5', title: 'Lecture Series', description: 'Successfully use a Lecture card.', type: 'category-target', category: 'Lecture', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd6', title: 'Excellence Initiative', description: 'Achieve an S-Rank result.', type: 'grade-target', targetGrade: 'S', xpBonus: 200, difficulty: 'Hard' },
+  { id: 'dd6', title: 'Excellence Initiative', description: 'Achieve an S-Rank result.', type: 'grade-target', targetGrade: 'S', xpBonus: 300, difficulty: 'Hard' },
   { id: 'dd7', title: 'Consistency Check', description: 'Maintain a streak of at least 3.', type: 'streak-target', targetStreak: 3, xpBonus: 200, difficulty: 'Medium' },
   { id: 'dd8', title: 'No Incidents', description: 'Complete the shift without getting an F-Rank.', type: 'no-fail', xpBonus: 200, difficulty: 'Medium' },
   { id: 'dd9', title: 'High Energy Handler', description: 'Solve a High Energy mood problem.', type: 'mood-target', targetMood: 'HighEnergy', xpBonus: 200, difficulty: 'Easy' },
   { id: 'dd10', title: 'Quiet Time', description: 'Use a card with the "Quiet" tag.', type: 'constraint-target', targetConstraint: 'Quiet', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd11', title: 'Active Learning', description: 'Use a card with the "Active" tag.', type: 'constraint-target', targetConstraint: 'Active', xpBonus: 200, difficulty: 'Easy' }
+  { id: 'dd11', title: 'Active Learning', description: 'Use a card with the "Active" tag.', type: 'constraint-target', targetConstraint: 'Active', xpBonus: 200, difficulty: 'Easy' },
+
+  // --- NEW TAG TARGETS ---
+  { id: 'dd12', title: 'Group Dynamics', description: 'Use a card with the "Social" tag.', type: 'constraint-target', targetConstraint: 'Social', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd13', title: 'Independent Study', description: 'Use a card with the "Individual" tag.', type: 'constraint-target', targetConstraint: 'Individual', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd14', title: 'The Great Outdoors', description: 'Use a card with the "Outdoor" tag.', type: 'constraint-target', targetConstraint: 'Outdoor', xpBonus: 250, difficulty: 'Medium' }, // Harder as fewer cards have this
+  { id: 'dd15', title: 'Serious Business', description: 'Use a card with the "Serious" tag.', type: 'constraint-target', targetConstraint: 'Serious', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd16', title: 'Mandatory Fun', description: 'Use a card with the "Playful" tag.', type: 'constraint-target', targetConstraint: 'Playful', xpBonus: 200, difficulty: 'Easy' },
+
+  // --- NEW MOOD TARGETS ---
+  { id: 'dd17', title: 'Wake Up Call', description: 'Solve a Low Energy mood problem.', type: 'mood-target', targetMood: 'LowEnergy', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd18', title: 'Rebellion Quashed', description: 'Solve a Rebellious mood problem.', type: 'mood-target', targetMood: 'Rebellious', xpBonus: 250, difficulty: 'Medium' },
+  { id: 'dd19', title: 'Focus Group', description: 'Solve a Distracted mood problem.', type: 'mood-target', targetMood: 'Distracted', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd20', title: 'Reality Check', description: 'Solve an Existential mood problem.', type: 'mood-target', targetMood: 'Existential', xpBonus: 300, difficulty: 'Hard' },
+  { id: 'dd21', title: 'Hydration Station', description: 'Solve a Hungover mood problem.', type: 'mood-target', targetMood: 'Hungover', xpBonus: 300, difficulty: 'Hard' },
+  { id: 'dd22', title: 'Calm the Panic', description: 'Solve an Anxious mood problem.', type: 'mood-target', targetMood: 'Anxious', xpBonus: 250, difficulty: 'Medium' },
+
+  // --- NEW HIGH DIFFICULTY CHALLENGES ---
+  { id: 'dd23', title: 'Streak Master', description: 'Reach a streak of 5 during the shift.', type: 'streak-target', targetStreak: 5, xpBonus: 400, difficulty: 'Hard' },
+  { id: 'dd24', title: 'Double Excellence', description: 'Achieve at least 2 S-Rank results this shift.', type: 'grade-count-target', targetGrade: 'S', count: 2, xpBonus: 500, difficulty: 'Expert' },
+  { id: 'dd25', title: 'Total Lockdown', description: 'Use 2 Discipline cards in a single shift.', type: 'category-count-target', category: 'Discipline', count: 2, xpBonus: 300, difficulty: 'Medium' }
 ];
 
 export const SUPPLY_SYNERGIES = {
@@ -151,7 +171,15 @@ export const CONSTRAINT_TAGS = {
   Individual: { pair: 'Social', label: 'Solo' },
   // Tone
   Serious: { pair: 'Playful', label: 'Serious' },
-  Playful: { pair: 'Serious', label: 'Fun' }
+  Playful: { pair: 'Serious', label: 'Fun' },
+  
+  // --- NEW ADDITIONS ---
+  // Technology
+  Digital: { pair: 'Analog', label: 'Tech' },
+  Analog: { pair: 'Digital', label: 'Lo-Fi' },
+  // Brain Type
+  Creative: { pair: 'Logic', label: 'Artsy' },
+  Logic: { pair: 'Creative', label: 'Facts' }
 };
 
 export const LESSON_TYPES = {
@@ -204,69 +232,68 @@ export const LESSON_TYPES = {
     description: 'Bonus Activities' 
   }
 };
-
 export const ACTIVITY_CARDS = {
   Kinetic: [
-    { id: 'k1', name: 'Playground Run', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Loud', 'Social', 'Playful'], description: 'Burn energy outside.' },
-    { id: 'k2', name: 'Chair Yoga', lessonType: 'Kinetic', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Stretch quietly at desks.' },
-    { id: 'k3', name: 'Dance Freeze', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Playful'], description: 'Stop when music stops.' },
-    { id: 'k4', name: 'Sensory Bin', lessonType: 'Kinetic', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Playful'], description: 'Tactile exploration.' },
-    { id: 'k5', name: 'Dodgeball', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Playful'], description: 'Competitive team sport.' },
-    { id: 'k6', name: 'Nature Walk', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Quiet', 'Social', 'Serious'], description: 'Observing environment.' },
-    { id: 'k7', name: 'Relay Race', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Loud', 'Social', 'Playful'], description: 'Team speed competition.' },
-    { id: 'k8', name: 'Silent Stretching', lessonType: 'Kinetic', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Focus and flexibility.' },
-    { id: 'k9', name: 'Balloon Volleyball', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Quiet', 'Social', 'Playful'], description: 'Keep it off the floor.' },
-    { id: 'k10', name: 'Gardening', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Quiet', 'Social', 'Serious'], description: 'Planting and caring.' },
-    { id: 'k11', name: 'Scavenger Hunt', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Find hidden items.' },
-    { id: 'k12', name: 'Yoga Flow', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Quiet', 'Individual', 'Serious'], description: 'Continuous movement.' },
-    { id: 'k13', name: 'Obstacle Course', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Loud', 'Social', 'Playful'], description: 'Agility challenge.' }
+    { id: 'k1', name: 'Playground Run', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Loud', 'Social', 'Playful', 'Analog'], description: 'Burn energy outside.' },
+    { id: 'k2', name: 'Chair Yoga', lessonType: 'Kinetic', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Analog', 'Logic'], description: 'Stretch quietly at desks.' },
+    { id: 'k3', name: 'Dance Freeze', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Playful', 'Analog', 'Creative'], description: 'Stop when music stops.' },
+    { id: 'k4', name: 'Sensory Bin', lessonType: 'Kinetic', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Playful', 'Analog', 'Creative'], description: 'Tactile exploration.' },
+    { id: 'k5', name: 'Dodgeball', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Playful', 'Analog'], description: 'Competitive team sport.' },
+    { id: 'k6', name: 'Nature Walk', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Quiet', 'Social', 'Serious', 'Analog', 'Logic'], description: 'Observing environment.' },
+    { id: 'k7', name: 'Relay Race', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Loud', 'Social', 'Playful', 'Analog'], description: 'Team speed competition.' },
+    { id: 'k8', name: 'Silent Stretching', lessonType: 'Kinetic', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Analog', 'Logic'], description: 'Focus and flexibility.' },
+    { id: 'k9', name: 'Balloon Volleyball', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Quiet', 'Social', 'Playful', 'Analog'], description: 'Keep it off the floor.' },
+    { id: 'k10', name: 'Gardening', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Quiet', 'Social', 'Serious', 'Analog', 'Logic'], description: 'Planting and caring.' },
+    { id: 'k11', name: 'Scavenger Hunt', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog', 'Creative'], description: 'Find hidden items.' },
+    { id: 'k12', name: 'Yoga Flow', lessonType: 'Kinetic', tags: ['Indoor', 'Active', 'Quiet', 'Individual', 'Serious', 'Analog', 'Logic'], description: 'Continuous movement.' },
+    { id: 'k13', name: 'Obstacle Course', lessonType: 'Kinetic', tags: ['Outdoor', 'Active', 'Loud', 'Social', 'Playful', 'Analog'], description: 'Agility challenge.' }
   ],
   Media: [
-    { id: 'm1', name: 'Nature Doc', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Serious', 'Individual'], description: 'Calming visuals.' },
-    { id: 'm2', name: 'Pop Music Vid', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Loud', 'Playful', 'Social'], description: 'Upbeat sing-along.' },
-    { id: 'm3', name: 'Audiobook', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Listen and visualize.' },
-    { id: 'm4', name: 'Virtual AR Tour', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Playful'], description: 'Digital field trip.' },
-    { id: 'm5', name: 'Interactive Quiz', lessonType: 'Media', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Gamified learning.' },
-    { id: 'm6', name: 'Silent Film', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Visual storytelling.' },
-    { id: 'm7', name: 'Podcast Session', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Audio learning.' },
-    { id: 'm8', name: 'News Broadcast', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Loud'], description: 'Current events.' },
-    { id: 'm9', name: 'Coding Lab', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Logic puzzles.' },
-    { id: 'm10', name: 'Student Radio', lessonType: 'Media', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Creative broadcasting.' },
-    { id: 'm11', name: 'Newsreel', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Historical footage.' },
-    { id: 'm12', name: 'Music History', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Genre appreciation.' },
-    { id: 'm13', name: 'Video Editing', lessonType: 'Media', tags: ['Indoor', 'Active', 'Individual', 'Serious', 'Quiet'], description: 'Creative tech skill.' }
+    { id: 'm1', name: 'Nature Doc', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Serious', 'Individual', 'Digital', 'Logic'], description: 'Calming visuals.' },
+    { id: 'm2', name: 'Pop Music Vid', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Loud', 'Playful', 'Social', 'Digital', 'Creative'], description: 'Upbeat sing-along.' },
+    { id: 'm3', name: 'Audiobook', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Digital', 'Creative'], description: 'Listen and visualize.' },
+    { id: 'm4', name: 'Virtual AR Tour', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Playful', 'Digital', 'Logic'], description: 'Digital field trip.' },
+    { id: 'm5', name: 'Interactive Quiz', lessonType: 'Media', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Digital', 'Logic'], description: 'Gamified learning.' },
+    { id: 'm6', name: 'Silent Film', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Digital', 'Creative'], description: 'Visual storytelling.' },
+    { id: 'm7', name: 'Podcast Session', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Digital', 'Logic'], description: 'Audio learning.' },
+    { id: 'm8', name: 'News Broadcast', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Loud', 'Digital', 'Logic'], description: 'Current events.' },
+    { id: 'm9', name: 'Coding Lab', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Digital', 'Logic'], description: 'Logic puzzles.' },
+    { id: 'm10', name: 'Student Radio', lessonType: 'Media', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog', 'Creative'], description: 'Creative broadcasting.' },
+    { id: 'm11', name: 'Newsreel', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet', 'Digital', 'Logic'], description: 'Historical footage.' },
+    { id: 'm12', name: 'Music History', lessonType: 'Media', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Digital', 'Creative'], description: 'Genre appreciation.' },
+    { id: 'm13', name: 'Video Editing', lessonType: 'Media', tags: ['Indoor', 'Active', 'Individual', 'Serious', 'Quiet', 'Digital', 'Creative'], description: 'Creative tech skill.' }
   ],
   Discipline: [
-    { id: 'd1', name: 'Pop Quiz', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Surprise assessment.' },
-    { id: 'd2', name: 'Class Debate', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Serious'], description: 'Structured argument.' },
-    { id: 'd3', name: 'Silent Time', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious'], description: 'Heads down, no talking.' },
-    { id: 'd4', name: 'Peer Mediation', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Conflict resolution.' },
-    { id: 'd5', name: 'Desk Audit', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Organization check.' },
-    { id: 'd6', name: 'Restorative Circle', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Group discussion.' },
-    { id: 'd7', name: 'Behavior Contract', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Written agreement.' },
-    { id: 'd8', name: 'Hallway Lines', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Orderly movement.' },
-    { id: 'd9', name: 'Roleplay Rules', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Acting out scenarios.' },
-    { id: 'd10', name: 'Detention Study', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Focused catch-up.' },
-    { id: 'd11', name: 'Uniform Check', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Standard enforcement.' },
-    { id: 'd12', name: 'Clean Up', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud'], description: 'Community service.' },
-    { id: 'd13', name: 'Silent Lunch', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Peaceful eating.' }
+    { id: 'd1', name: 'Pop Quiz', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Analog', 'Logic'], description: 'Surprise assessment.' },
+    { id: 'd2', name: 'Class Debate', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Serious', 'Analog', 'Logic'], description: 'Structured argument.' },
+    { id: 'd3', name: 'Silent Time', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Quiet', 'Individual', 'Serious', 'Analog'], description: 'Heads down, no talking.' },
+    { id: 'd4', name: 'Peer Mediation', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Conflict resolution.' },
+    { id: 'd5', name: 'Desk Audit', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Organization check.' },
+    { id: 'd6', name: 'Restorative Circle', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet', 'Analog', 'Creative'], description: 'Group discussion.' },
+    { id: 'd7', name: 'Behavior Contract', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Written agreement.' },
+    { id: 'd8', name: 'Hallway Lines', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet', 'Analog'], description: 'Orderly movement.' },
+    { id: 'd9', name: 'Roleplay Rules', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog', 'Creative'], description: 'Acting out scenarios.' },
+    { id: 'd10', name: 'Detention Study', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Focused catch-up.' },
+    { id: 'd11', name: 'Uniform Check', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog'], description: 'Standard enforcement.' },
+    { id: 'd12', name: 'Clean Up', lessonType: 'Discipline', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud', 'Analog'], description: 'Community service.' },
+    { id: 'd13', name: 'Silent Lunch', lessonType: 'Discipline', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet', 'Analog'], description: 'Peaceful eating.' }
   ],
   Lecture: [
-    { id: 'l1', name: 'Chalkboard', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Quiet', 'Serious', 'Individual'], description: 'Copy notes from board.' },
-    { id: 'l2', name: 'Socratic Circle', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Serious'], description: 'Student-led discussion.' },
-    { id: 'l3', name: 'Guest Speaker', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Quiet', 'Social', 'Serious'], description: 'Listen to expert.' },
-    { id: 'l4', name: 'Flashcards', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Quick recall.' },
-    { id: 'l5', name: 'Lab Demo', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Scientific observation.' },
-    { id: 'l6', name: 'Storytelling', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Quiet'], description: 'Narrative engagement.' },
-    { id: 'l7', name: 'Peer Teaching', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud'], description: 'Students teach students.' },
-    { id: 'l8', name: 'Outdoor Seminar', lessonType: 'Lecture', tags: ['Outdoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Fresh air discussion.' },
-    { id: 'l9', name: 'Brainstorm Wall', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Quiet'], description: 'Collective ideation.' },
-    { id: 'l10', name: 'Textbook Dive', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Deep reading.' },
-    { id: 'l11', name: 'Pop Culture Analysis', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Loud'], description: 'Relatable learning.' },
-    { id: 'l12', name: 'Debate Prep', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Evidence gathering.' },
-    { id: 'l13', name: 'Career Day', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet'], description: 'Future planning.' }
+    { id: 'l1', name: 'Chalkboard', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Quiet', 'Serious', 'Individual', 'Analog', 'Logic'], description: 'Copy notes from board.' },
+    { id: 'l2', name: 'Socratic Circle', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Loud', 'Social', 'Serious', 'Analog', 'Logic'], description: 'Student-led discussion.' },
+    { id: 'l3', name: 'Guest Speaker', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Quiet', 'Social', 'Serious', 'Analog'], description: 'Listen to expert.' },
+    { id: 'l4', name: 'Flashcards', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog', 'Logic'], description: 'Quick recall.' },
+    { id: 'l5', name: 'Lab Demo', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Scientific observation.' },
+    { id: 'l6', name: 'Storytelling', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Quiet', 'Analog', 'Creative'], description: 'Narrative engagement.' },
+    { id: 'l7', name: 'Peer Teaching', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud', 'Analog', 'Logic'], description: 'Students teach students.' },
+    { id: 'l8', name: 'Outdoor Seminar', lessonType: 'Lecture', tags: ['Outdoor', 'Passive', 'Social', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Fresh air discussion.' },
+    { id: 'l9', name: 'Brainstorm Wall', lessonType: 'Lecture', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Quiet', 'Analog', 'Creative'], description: 'Collective ideation.' },
+    { id: 'l10', name: 'Textbook Dive', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Deep reading.' },
+    { id: 'l11', name: 'Pop Culture Analysis', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Loud', 'Digital', 'Creative'], description: 'Relatable learning.' },
+    { id: 'l12', name: 'Debate Prep', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Evidence gathering.' },
+    { id: 'l13', name: 'Career Day', lessonType: 'Lecture', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Quiet', 'Analog'], description: 'Future planning.' }
   ],
- Sabbatical: [
+  Sabbatical: [
     { id: 's1', name: 'Sick Day', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Individual', 'Quiet'], description: 'Take a break to recover.' },
     { id: 's2', name: 'Half-Day', lessonType: 'Sabbatical', tags: ['Indoor', 'Passive', 'Quiet', 'Playful'], description: 'Shortened schedule.' },
     { id: 's3', name: 'Substitute', lessonType: 'Sabbatical', tags: ['Indoor', 'Active', 'Social', 'Serious'], description: 'Call in a sub.' },
@@ -282,19 +309,19 @@ export const ACTIVITY_CARDS = {
     { id: 's13', name: 'Union Rep Chat', lessonType: 'Sabbatical', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Know your rights.' }
   ],
   Extracurricular: [
-    { id: 'e1', name: 'Guest Speaker', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Serious'], description: 'Invite an expert.', xpReward: 50 },
-    { id: 'e2', name: 'Field Trip', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social', 'Playful'], description: 'Learning outside.', xpReward: 100 },
-    { id: 'e3', name: 'School Assembly', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Loud'], description: 'Whole school gathering.', xpReward: 75 },
-    { id: 'e4', name: 'Science Fair', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Student experiments.', xpReward: 120 },
-    { id: 'e5', name: 'Talent Show', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Loud'], description: 'Showcase skills.', xpReward: 90 },
-    { id: 'e6', name: 'Spelling Bee', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Vocabulary contest.', xpReward: 60 },
-    { id: 'e7', name: 'Bake Sale', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Fundraising event.', xpReward: 40 },
-    { id: 'e8', name: 'Robotics Club', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud'], description: 'Build and battle.', xpReward: 110 },
-    { id: 'e9', name: 'School Play', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'Drama production.', xpReward: 150 },
-    { id: 'e10', name: 'Pep Rally', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud'], description: 'School spirit.', xpReward: 80 },
-    { id: 'e11', name: 'Yearbook Staff', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Document memories.', xpReward: 70 },
-    { id: 'e12', name: 'Chess Tournament', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet'], description: 'Strategic battles.', xpReward: 85 },
-    { id: 'e13', name: 'Garden Club', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social', 'Serious', 'Quiet'], description: 'Growing vegetables.', xpReward: 65 }
+    { id: 'e1', name: 'Guest Speaker', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Serious', 'Analog'], description: 'Invite an expert.', xpReward: 50 },
+    { id: 'e2', name: 'Field Trip', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social', 'Playful', 'Analog'], description: 'Learning outside.', xpReward: 100 },
+    { id: 'e3', name: 'School Assembly', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Loud', 'Analog'], description: 'Whole school gathering.', xpReward: 75 },
+    { id: 'e4', name: 'Science Fair', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Student experiments.', xpReward: 120 },
+    { id: 'e5', name: 'Talent Show', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Social', 'Playful', 'Loud', 'Analog', 'Creative'], description: 'Showcase skills.', xpReward: 90 },
+    { id: 'e6', name: 'Spelling Bee', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Vocabulary contest.', xpReward: 60 },
+    { id: 'e7', name: 'Bake Sale', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog'], description: 'Fundraising event.', xpReward: 40 },
+    { id: 'e8', name: 'Robotics Club', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Loud', 'Digital', 'Logic'], description: 'Build and battle.', xpReward: 110 },
+    { id: 'e9', name: 'School Play', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog', 'Creative'], description: 'Drama production.', xpReward: 150 },
+    { id: 'e10', name: 'Pep Rally', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Playful', 'Loud', 'Analog'], description: 'School spirit.', xpReward: 80 },
+    { id: 'e11', name: 'Yearbook Staff', lessonType: 'Extracurricular', tags: ['Indoor', 'Active', 'Social', 'Serious', 'Quiet', 'Digital', 'Creative'], description: 'Document memories.', xpReward: 70 },
+    { id: 'e12', name: 'Chess Tournament', lessonType: 'Extracurricular', tags: ['Indoor', 'Passive', 'Individual', 'Serious', 'Quiet', 'Analog', 'Logic'], description: 'Strategic battles.', xpReward: 85 },
+    { id: 'e13', name: 'Garden Club', lessonType: 'Extracurricular', tags: ['Outdoor', 'Active', 'Social', 'Serious', 'Quiet', 'Analog'], description: 'Growing vegetables.', xpReward: 65 }
   ]
 };
 export const MOOD_SOLUTION_MATRIX = {
@@ -463,7 +490,6 @@ export const RANK_XP_REWARDS = {
   'A': 80,
   'F': 10
 };
-
 export const MODULAR_CONSTRAINTS = {
   Indoor: {
     causes: [
@@ -753,6 +779,113 @@ export const MODULAR_CONSTRAINTS = {
       "Put on the red nose or get out.",
       "Life is a carnival.",
       "Logic has left the building."
+    ]
+  },
+
+  // --- NEW ADDITIONS ---
+  
+  Digital: {
+    causes: [
+      "a sponsorship by a shady tech conglomerate",
+      "paper being declared 'obsolete' by the board",
+      "the Wi-Fi gaining sentience",
+      "a surplus of electricity that must be used",
+      "the sudden disappearance of all pencils",
+      "a hologram replacing the principal"
+    ],
+    restrictions: [
+      "all work must be submitted via hologram",
+      "analog tools are strictly forbidden",
+      "screens are mandatory for eye contact",
+      "learning must be 100% virtual (even in person)",
+      "paper is considered contraband",
+      "students must speak in binary"
+    ],
+    fluff: [
+      "The future is now.",
+      "Buffer your expectations.",
+      "If it doesn't plug in, throw it out.",
+      "Loading learning modules...",
+      "Papercuts are a thing of the past.",
+      "We are all just data points."
+    ]
+  },
+  Analog: {
+    causes: [
+      "a localized electromagnetic pulse",
+      "the IT guy quitting in a blaze of glory",
+      "a return to 'traditional values'",
+      "a severe shortage of charging ports",
+      "the robots attempting an uprising",
+      "screens causing collective hypnosis"
+    ],
+    restrictions: [
+      "technology is banned within 50 feet",
+      "unplug everything immediately",
+      "work must be done on stone tablets or paper",
+      "calculators are considered cheating",
+      "Wi-Fi signals have been jammed",
+      "electricity is for lighting only"
+    ],
+    fluff: [
+      "The cloud has evaporated.",
+      "Return to monke.",
+      "Smell the ink.",
+      "Error 404: Computer Not Found.",
+      "Hand cramps build character.",
+      "Disconnect to reconnect."
+    ]
+  },
+  Creative: {
+    causes: [
+      "a muse escaping captivity",
+      "logic being outlawed by the art department",
+      "a collective fever dream",
+      "the curriculum becoming too rigid",
+      "a surplus of glitter",
+      "interpretive dance becoming mandatory"
+    ],
+    restrictions: [
+      "answers must be painted, not written",
+      "facts are optional, feelings are mandatory",
+      "structure is the enemy",
+      "think outside the box (the box is gone)",
+      "logic will be penalized",
+      "express yourself or face detention"
+    ],
+    fluff: [
+      "There are no mistakes, only happy accidents.",
+      "Color outside the lines.",
+      "2 + 2 = Blue.",
+      "Feel the algebra.",
+      "Glitter is forever.",
+      "Make it weird."
+    ]
+  },
+  Logic: {
+    causes: [
+      "a visit from the Vulcans",
+      "an emotional suppression field",
+      "the art room being converted to storage",
+      "chaos levels reaching critical mass",
+      "a shortage of imagination",
+      "standardized testing preparations"
+    ],
+    restrictions: [
+      "creativity is inefficient",
+      "facts only, no feelings",
+      "art is subjective and therefore banned",
+      "answers must be mathematically proven",
+      "imagination is a distraction",
+      "whimsy will be cited"
+    ],
+    fluff: [
+      "Does not compute.",
+      "Feelings are irrelevant.",
+      "Show your work.",
+      "The answer is absolute.",
+      "Color is a distraction.",
+      "Order must be maintained."
     ]
   }
 };
