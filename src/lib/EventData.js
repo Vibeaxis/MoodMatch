@@ -599,14 +599,25 @@ export const FLAVOR_MEMOS = [
 ];
 
 export const MINOR_BOONS = [
+  // Categories
   { id: 'KINETIC_BOOST', type: 'BOON', text: 'Kinetic Boost', description: 'All Kinetic activities get a grade bump today.', targetType: 'Kinetic' },
   { id: 'MEDIA_BOOST', type: 'BOON', text: 'Media Boost', description: 'All Media activities get a grade bump today.', targetType: 'Media' },
   { id: 'DISCIPLINE_BOOST', type: 'BOON', text: 'Discipline Boost', description: 'All Discipline activities get a grade bump today.', targetType: 'Discipline' },
   { id: 'LECTURE_BOOST', type: 'BOON', text: 'Lecture Boost', description: 'All Lecture activities get a grade bump today.', targetType: 'Lecture' },
+  
+  // Standard Tags
   { id: 'INDOOR_BOOST', type: 'BOON', text: 'Indoor Expert', description: 'All Indoor activities get a grade bump today.', targetTag: 'Indoor' },
   { id: 'OUTDOOR_BOOST', type: 'BOON', text: 'Outdoor Expert', description: 'All Outdoor activities get a grade bump today.', targetTag: 'Outdoor' },
   { id: 'ACTIVE_BOOST', type: 'BOON', text: 'High Energy', description: 'All Active activities get a grade bump today.', targetTag: 'Active' },
-  { id: 'QUIET_BOOST', type: 'BOON', text: 'Shhh!', description: 'All Quiet activities get a grade bump today.', targetTag: 'Quiet' }
+  { id: 'QUIET_BOOST', type: 'BOON', text: 'Shhh!', description: 'All Quiet activities get a grade bump today.', targetTag: 'Quiet' },
+  { id: 'SOCIAL_BOOST', type: 'BOON', text: 'Social Butterfly', description: 'All Social activities get a grade bump today.', targetTag: 'Social' },
+  { id: 'INDIVIDUAL_BOOST', type: 'BOON', text: 'Lone Wolf', description: 'All Individual activities get a grade bump today.', targetTag: 'Individual' },
+
+  // New Tech & Brain Tags
+  { id: 'DIGITAL_BOOST', type: 'BOON', text: 'Tech Support', description: 'All Digital activities get a grade bump today.', targetTag: 'Digital' },
+  { id: 'ANALOG_BOOST', type: 'BOON', text: 'Old School', description: 'All Analog activities get a grade bump today.', targetTag: 'Analog' },
+  { id: 'CREATIVE_BOOST', type: 'BOON', text: 'Inspiration', description: 'All Creative activities get a grade bump today.', targetTag: 'Creative' },
+  { id: 'LOGIC_BOOST', type: 'BOON', text: 'Big Brain', description: 'All Logic activities get a grade bump today.', targetTag: 'Logic' }
 ];
 
 export const JACKPOT_EVENTS = [

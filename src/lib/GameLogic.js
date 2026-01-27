@@ -92,8 +92,9 @@ export const GRADE_LEVELS = [
     nextThreshold: Infinity 
   }
 ];
+// --- DISTRICT DIRECTIVES (Quests) ---
 export const DISTRICT_DIRECTIVES = [
-  // --- EXISTING ---
+  // --- EXISTING & EASY ---
   { id: 'dd1', title: 'Diversity Mandate', description: 'Use cards from at least 3 different categories this shift.', type: 'diversity', targetDiversity: 3, xpBonus: 200, difficulty: 'Medium' },
   { id: 'dd2', title: 'Kinetic Focus', description: 'Successfully use a Kinetic card.', type: 'category-target', category: 'Kinetic', xpBonus: 200, difficulty: 'Easy' },
   { id: 'dd3', title: 'Media Integration', description: 'Successfully use a Media card.', type: 'category-target', category: 'Media', xpBonus: 200, difficulty: 'Easy' },
@@ -102,18 +103,9 @@ export const DISTRICT_DIRECTIVES = [
   { id: 'dd6', title: 'Excellence Initiative', description: 'Achieve an S-Rank result.', type: 'grade-target', targetGrade: 'S', xpBonus: 300, difficulty: 'Hard' },
   { id: 'dd7', title: 'Consistency Check', description: 'Maintain a streak of at least 3.', type: 'streak-target', targetStreak: 3, xpBonus: 200, difficulty: 'Medium' },
   { id: 'dd8', title: 'No Incidents', description: 'Complete the shift without getting an F-Rank.', type: 'no-fail', xpBonus: 200, difficulty: 'Medium' },
+  
+  // --- MOOD TARGETS (Reactive Gameplay) ---
   { id: 'dd9', title: 'High Energy Handler', description: 'Solve a High Energy mood problem.', type: 'mood-target', targetMood: 'HighEnergy', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd10', title: 'Quiet Time', description: 'Use a card with the "Quiet" tag.', type: 'constraint-target', targetConstraint: 'Quiet', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd11', title: 'Active Learning', description: 'Use a card with the "Active" tag.', type: 'constraint-target', targetConstraint: 'Active', xpBonus: 200, difficulty: 'Easy' },
-
-  // --- NEW TAG TARGETS ---
-  { id: 'dd12', title: 'Group Dynamics', description: 'Use a card with the "Social" tag.', type: 'constraint-target', targetConstraint: 'Social', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd13', title: 'Independent Study', description: 'Use a card with the "Individual" tag.', type: 'constraint-target', targetConstraint: 'Individual', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd14', title: 'The Great Outdoors', description: 'Use a card with the "Outdoor" tag.', type: 'constraint-target', targetConstraint: 'Outdoor', xpBonus: 250, difficulty: 'Medium' }, // Harder as fewer cards have this
-  { id: 'dd15', title: 'Serious Business', description: 'Use a card with the "Serious" tag.', type: 'constraint-target', targetConstraint: 'Serious', xpBonus: 200, difficulty: 'Easy' },
-  { id: 'dd16', title: 'Mandatory Fun', description: 'Use a card with the "Playful" tag.', type: 'constraint-target', targetConstraint: 'Playful', xpBonus: 200, difficulty: 'Easy' },
-
-  // --- NEW MOOD TARGETS ---
   { id: 'dd17', title: 'Wake Up Call', description: 'Solve a Low Energy mood problem.', type: 'mood-target', targetMood: 'LowEnergy', xpBonus: 200, difficulty: 'Easy' },
   { id: 'dd18', title: 'Rebellion Quashed', description: 'Solve a Rebellious mood problem.', type: 'mood-target', targetMood: 'Rebellious', xpBonus: 250, difficulty: 'Medium' },
   { id: 'dd19', title: 'Focus Group', description: 'Solve a Distracted mood problem.', type: 'mood-target', targetMood: 'Distracted', xpBonus: 200, difficulty: 'Easy' },
@@ -121,7 +113,22 @@ export const DISTRICT_DIRECTIVES = [
   { id: 'dd21', title: 'Hydration Station', description: 'Solve a Hungover mood problem.', type: 'mood-target', targetMood: 'Hungover', xpBonus: 300, difficulty: 'Hard' },
   { id: 'dd22', title: 'Calm the Panic', description: 'Solve an Anxious mood problem.', type: 'mood-target', targetMood: 'Anxious', xpBonus: 250, difficulty: 'Medium' },
 
-  // --- NEW HIGH DIFFICULTY CHALLENGES ---
+  // --- TAG TARGETS (Constraints) ---
+  { id: 'dd10', title: 'Quiet Time', description: 'Use a card with the "Quiet" tag.', type: 'constraint-target', targetConstraint: 'Quiet', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd11', title: 'Active Learning', description: 'Use a card with the "Active" tag.', type: 'constraint-target', targetConstraint: 'Active', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd12', title: 'Group Dynamics', description: 'Use a card with the "Social" tag.', type: 'constraint-target', targetConstraint: 'Social', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd13', title: 'Independent Study', description: 'Use a card with the "Individual" tag.', type: 'constraint-target', targetConstraint: 'Individual', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd14', title: 'The Great Outdoors', description: 'Use a card with the "Outdoor" tag.', type: 'constraint-target', targetConstraint: 'Outdoor', xpBonus: 250, difficulty: 'Medium' },
+  { id: 'dd15', title: 'Serious Business', description: 'Use a card with the "Serious" tag.', type: 'constraint-target', targetConstraint: 'Serious', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd16', title: 'Mandatory Fun', description: 'Use a card with the "Playful" tag.', type: 'constraint-target', targetConstraint: 'Playful', xpBonus: 200, difficulty: 'Easy' },
+
+  // --- NEW TECH & BRAIN TARGETS ---
+  { id: 'dd_tech_1', title: 'Digital Transformation', description: 'Use a card with the "Digital" tag.', type: 'constraint-target', targetConstraint: 'Digital', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd_tech_2', title: 'Analog Revival', description: 'Use a card with the "Analog" tag.', type: 'constraint-target', targetConstraint: 'Analog', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd_brain_1', title: 'Right Brain Workout', description: 'Use a card with the "Creative" tag.', type: 'constraint-target', targetConstraint: 'Creative', xpBonus: 200, difficulty: 'Easy' },
+  { id: 'dd_brain_2', title: 'Left Brain Logic', description: 'Use a card with the "Logic" tag.', type: 'constraint-target', targetConstraint: 'Logic', xpBonus: 200, difficulty: 'Easy' },
+
+  // --- HIGH DIFFICULTY CHALLENGES ---
   { id: 'dd23', title: 'Streak Master', description: 'Reach a streak of 5 during the shift.', type: 'streak-target', targetStreak: 5, xpBonus: 400, difficulty: 'Hard' },
   { id: 'dd24', title: 'Double Excellence', description: 'Achieve at least 2 S-Rank results this shift.', type: 'grade-count-target', targetGrade: 'S', count: 2, xpBonus: 500, difficulty: 'Expert' },
   { id: 'dd25', title: 'Total Lockdown', description: 'Use 2 Discipline cards in a single shift.', type: 'category-count-target', category: 'Discipline', count: 2, xpBonus: 300, difficulty: 'Medium' }
