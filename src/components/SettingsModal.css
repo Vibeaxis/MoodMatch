@@ -270,15 +270,76 @@ input[type=range]::-webkit-slider-thumb {
   gap: 6px;
 }
 
-/* ABOUT */
-.about-panel { text-align: center; }
-.about-logo { margin-bottom: 2rem; color: #D4AF37; }
-.about-logo h1 { color: #333; margin: 0.5rem 0; font-family: 'Courier Prime', monospace; }
+/* --- FIX 2: ABOUT SECTION TEXT --- */
+.about-panel h1 {
+  color: #2d2d2d; /* Almost black */
+  margin: 0.5rem 0;
+  font-family: 'Courier Prime', monospace;
+}
+
+.about-panel p {
+  color: #555; /* Medium dark grey */
+  font-weight: 500;
+}
+
 .credits-scroll { 
   margin-top: 2rem; 
-  padding: 1rem; 
-  background: #f9f9f9; 
+  padding: 1.5rem; 
+  background: #f4f4f4; /* Slightly darker background */
   border-radius: 8px;
   max-height: 200px;
   overflow-y: auto;
+  border: 1px solid #e0e0e0;
+}
+
+.credits-scroll h4 {
+  color: #D4AF37; /* Gold headers */
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.credits-scroll h4:first-child {
+  margin-top: 0;
+}
+
+.credits-scroll p {
+  color: #333; /* Dark text for names */
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+/* --- FIX 1: DIFFICULTY BUTTONS --- */
+.segment-control {
+  display: flex;
+  background: #eee;
+  padding: 4px;
+  border-radius: 6px;
+  gap: 4px;
+}
+
+.segment-control button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #666; /* Darker grey for inactive */
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+
+.segment-control button:hover {
+  color: #333;
+  background: rgba(0,0,0,0.05);
+}
+
+.segment-control button.active {
+  background: #fff;
+  color: #D4AF37; /* Gold for active */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }

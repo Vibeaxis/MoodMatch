@@ -309,17 +309,22 @@ const SettingsModal = ({ isOpen, onClose, gameState, onSettingsChange, onLoadGam
               </div>
             )}
 
-            {/* --- ABOUT --- */}
+        {/* --- ABOUT --- */}
             {activeTab === 'ABOUT' && (
               <div className="settings-panel about-panel">
                 <div className="about-logo">
                   <div className="logo-icon"><Monitor size={32}/></div>
-                  <h1>Mood Matcher</h1>
+                  {/* CHANGED TITLE HERE 👇 */}
+                  <h1>Mood: Mandate</h1>
                 </div>
                 <p>Version 1.0.4 (Retail Beta)</p>
                 <div className="credits-scroll">
                   <h4>Development Team</h4>
                   <p>VibeAxis • Core Systems</p>
+                  
+                  <h4>Narrative Design</h4>
+                  <p>District Board of Education</p>
+
                   <h4>Special Thanks</h4>
                   <p>Faculty Beta Testers</p>
                 </div>
