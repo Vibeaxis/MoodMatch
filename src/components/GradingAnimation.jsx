@@ -1,30 +1,47 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Check, X, Sparkles } from 'lucide-react';
 
 function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, onAnimationComplete, shouldRender }) {
-  // Use a ref to prevent the timer from resetting if the parent re-renders
+  // 1. Local Active State: Keeps the window open even if parent turns off 'shouldRender'
+  const [isVisible, setIsVisible] = useState(false);
+  
+  // 2. Data Snapshot: Saves the card info so it doesn't crash when parent clears 'selectedActivity'
+  const [dataSnapshot, setDataSnapshot] = useState(null);
+  
   const timerRef = useRef(null);
 
+  // TRIGGER: When parent says "Go", we lock the state and save the data
   useEffect(() => {
     if (shouldRender && selectedActivity) {
-      // Clear any existing timers
+      setIsVisible(true);
+      setDataSnapshot(selectedActivity); // Capture the data immediately
+      
+      // Clear any running timers
       if (timerRef.current) clearTimeout(timerRef.current);
 
-      // Start the 3.5s delay
+      // Start the 3.5s countdown
       timerRef.current = setTimeout(() => {
-        if (onAnimationComplete) onAnimationComplete();
+        handleClose();
       }, 3500);
     }
+  }, [shouldRender, selectedActivity]);
 
+  const handleClose = () => {
+    setIsVisible(false);
+    // Slight delay to allow exit animation if needed, or clear immediately
+    if (onAnimationComplete) onAnimationComplete();
+  };
+
+  // CLEANUP: specific to unmounting
+  useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-    // CRITICAL: Only watch 'shouldRender'. 
-    // Do NOT put onAnimationComplete here or it will reset the timer constantly.
-  }, [shouldRender]);
+  }, []);
 
-  if (!shouldRender || !selectedActivity) return null;
+  // RENDER CONDITION: Rely on local 'isVisible' and the saved 'dataSnapshot'
+  if (!isVisible || !dataSnapshot) return null;
 
   const isSuccess = rank === 'S' || rank === 'A';
   const isPerfect = rank === 'S';
@@ -34,7 +51,7 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
       className="fixed inset-0 z-[100] flex items-center justify-center cursor-pointer"
       onClick={() => {
         if (timerRef.current) clearTimeout(timerRef.current);
-        if (onAnimationComplete) onAnimationComplete();
+        handleClose();
       }}
     >
       <div className="relative w-full max-w-lg flex flex-col items-center justify-center pointer-events-none">
@@ -43,21 +60,18 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
         <motion.div
           initial={{ y: 200, opacity: 0, rotate: 10, scale: 0.8 }}
           animate={{ y: 0, opacity: 1, rotate: -2, scale: 1 }}
-          /* REMOVED: onAnimationComplete={onAnimationComplete} 
-             This was the "Machine Gun" trigger. 
-          */
           transition={{ type: 'spring', stiffness: 120, damping: 20 }}
           className="bg-[#FDFBF7] w-64 h-80 rounded-sm shadow-2xl p-6 relative flex flex-col items-center border border-stone-200 paper-texture pointer-events-auto"
         >
           <div className="border-b-2 border-stone-300 w-full pb-2 mb-4 text-center">
             <h2 className="font-mono-typewriter font-bold text-xl text-stone-900 leading-tight">
-              {selectedActivity.name}
+              {dataSnapshot.name}
             </h2>
-            <p className="text-xs text-stone-500 font-serif italic mt-1">{selectedActivity.lessonType}</p>
+            <p className="text-xs text-stone-500 font-serif italic mt-1">{dataSnapshot.lessonType}</p>
           </div>
 
           <div className="flex-grow flex items-center justify-center text-center">
-            <p className="font-serif text-sm text-stone-600 leading-snug">{selectedActivity.description}</p>
+            <p className="font-serif text-sm text-stone-600 leading-snug">{dataSnapshot.description}</p>
           </div>
 
           {modifierApplied && (
@@ -88,7 +102,7 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
             </div>
           </div>
           
-          {/* Progress bar to show the 3.5s countdown */}
+          {/* Progress bar */}
           <div className="h-1 bg-stone-800 mt-4 rounded-full overflow-hidden">
              <motion.div 
                className="h-full bg-stone-500"
