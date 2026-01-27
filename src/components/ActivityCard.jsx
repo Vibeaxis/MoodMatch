@@ -2,30 +2,28 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// Inside ActivityCard.jsx
-
-const getTagColor = (tag) => {
-  const colors = {
-    // ... existing colors ...
-    Indoor: 'bg-stone-200 text-stone-700',
-    Outdoor: 'bg-green-100 text-green-800',
-    Active: 'bg-red-100 text-red-800',
-    Passive: 'bg-blue-100 text-blue-800',
-    Loud: 'bg-orange-100 text-orange-800',
-    Quiet: 'bg-purple-100 text-purple-800',
-    Social: 'bg-pink-100 text-pink-800',
-    Individual: 'bg-gray-100 text-gray-800',
-    Serious: 'bg-slate-200 text-slate-800',
-    Playful: 'bg-yellow-100 text-yellow-800',
-    
-    // --- NEW TAG COLORS ---
+function ActivityCard({ activity, onSelect, isSelected }) {
+  // Map tags to colors for badges
+  const getTagColor = (tag) => {
+    const colors = {
+      Indoor: 'bg-stone-200 text-stone-700',
+      Outdoor: 'bg-green-100 text-green-800',
+      Active: 'bg-red-100 text-red-800',
+      Passive: 'bg-blue-100 text-blue-800',
+      Loud: 'bg-orange-100 text-orange-800',
+      Quiet: 'bg-purple-100 text-purple-800',
+      Social: 'bg-pink-100 text-pink-800',
+      Individual: 'bg-gray-100 text-gray-800',
+      Serious: 'bg-slate-200 text-slate-800',
+      Playful: 'bg-yellow-100 text-yellow-800',
+   // --- NEW TAG COLORS ---
     Digital: 'bg-cyan-100 text-cyan-800',     // Tech vibe
     Analog: 'bg-amber-100 text-amber-900',    // Paper/Old school vibe
     Creative: 'bg-fuchsia-100 text-fuchsia-800', // Artsy vibe
     Logic: 'bg-indigo-100 text-indigo-800'    // Math/Science vibe
   };
-  return colors[tag] || 'bg-stone-100 text-stone-600';
-};
+    return colors[tag] || 'bg-stone-100 text-stone-600';
+  };
 
   return (
     <motion.div
