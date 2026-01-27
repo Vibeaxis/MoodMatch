@@ -285,10 +285,14 @@ input[type=range]::-webkit-slider-thumb {
 .credits-scroll { 
   margin-top: 2rem; 
   padding: 1.5rem; 
-  background: #f4f4f4; /* Slightly darker background */
+  background: #f4f4f4;
   border-radius: 8px;
-  max-height: 200px;
-  overflow-y: auto;
+  
+  /* --- DELETE OR COMMENT OUT THESE TWO LINES --- */
+  /* max-height: 200px; */
+  /* overflow-y: auto; */
+  /* --------------------------------------------- */
+  
   border: 1px solid #e0e0e0;
 }
 
