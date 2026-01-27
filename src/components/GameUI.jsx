@@ -678,9 +678,10 @@ const finalRank = shiftData.rank || 'C';
            </div>
         </div>
 
-        <div className="supplies-container">
-          <SupplyDisplay unlockedSupplies={unlockedSupplies} />
-        </div>
+       {/* Add z-50 and relative positioning to force it above the gradient background */}
+<div className="supplies-container relative z-50 pointer-events-none">
+  <SupplyDisplay unlockedSupplies={unlockedSupplies} />
+</div>
 
         <div className="modifier-display">
           <DailyMemo 
@@ -774,7 +775,7 @@ const finalRank = shiftData.rank || 'C';
           onUse={handleCoffeeUse} 
         />
 
-        <div className="sticky top-0 z-40 pt-4 px-4 bg-gradient-to-b from-stone-900 to-transparent pointer-events-none">
+       <div className="sticky top-0 z-40 pt-12 px-4 bg-gradient-to-b from-stone-900 to-transparent pointer-events-none">
           <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
             <ProgressionBar
               xp={xpTotal}
