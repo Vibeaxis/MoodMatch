@@ -27,17 +27,16 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
     setExpandedFolder(null);
     onActivitySelect(activity);
   };
-
-  return (
+return (
     <>
       <div className={`w-full max-w-md relative p-4 transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
-        {/* FIX 1: Responsive Margin (mb-2 on mobile, mb-6 on desktop) */}
-        <h2 className="text-xl font-bold text-stone-200/50 mb-2 md:mb-6 text-center uppercase tracking-widest font-mono-typewriter">
+        
+        {/* FIX 1: Increased margin to 'mb-5' on mobile so the header doesn't touch the folders */}
+        <h2 className="text-xl font-bold text-stone-200/50 mb-5 md:mb-8 text-center uppercase tracking-widest font-mono-typewriter">
           Strategy Files
         </h2>
         
-        {/* FIX 2: Responsive Gap (gap-3 on mobile, gap-10 on desktop) */}
-        {/* Also tightened horizontal gap (gap-x-4) on mobile so they don't push off edges */}
+        {/* FIX 2: Kept the tight 'gap-y-3' on mobile so the folders stay shifted up */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-3 md:gap-x-8 md:gap-y-10">
           {folders.map(([type, config], index) => {
             const colors = {
@@ -100,14 +99,12 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
                   flex flex-col items-start justify-center p-4
                   wood-texture
                 `}>
-                  {/* Lock Overlay */}
                   {isLocked && (
                       <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 rounded-md">
                         <Lock className="w-12 h-12 text-white opacity-80" />
                       </div>
                   )}
 
-                  {/* Paper inside peeking out */}
                   <div className="absolute top-2 right-2 w-11/12 h-5/6 bg-white opacity-10 rotate-1 rounded-sm pointer-events-none" />
 
                   <div className="relative z-20 text-left">
@@ -121,7 +118,6 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
                     </div>
                   </div>
 
-                  {/* Decorative label holder */}
                   <div className="absolute bottom-3 right-3 w-8 h-8 border-2 border-white/30 rounded-full opacity-50" />
                 </div>
               </motion.button>
@@ -130,7 +126,6 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
         </div>
       </div>
 
-      {/* Expanded View Overlay */}
       <FolderExpansion 
         isOpen={!!expandedFolder}
         activities={expandedFolder ? ACTIVITY_CARDS[expandedFolder] : []}
