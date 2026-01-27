@@ -21,7 +21,7 @@ import { useStipendSystem } from '../hooks/useStipendSystem';
 import { useShiftHistory } from '../hooks/useShiftHistory';
 import { SaveManager } from '@/lib/SaveSystem';
 import { useAutoSave } from '@/hooks/useAutoSave';
-
+import { ACHIEVEMENTS } from '../data/ExpansionData';
 import { 
   GRADE_LEVEL_CONFIG, 
   canUnlockNextLevel, 
