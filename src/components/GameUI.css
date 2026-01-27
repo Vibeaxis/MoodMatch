@@ -1,13 +1,15 @@
 .game-ui-header {
   position: absolute;
-  top: 2rem; /* Pushes the whole unit down so the post-it doesn't clip */
+  top: 0; /* Flush to the top */
   right: 1.5rem;
   z-index: 100;
   display: flex;
-  align-items: center; /* Keeps the Meter, Combo box, and Settings gear aligned */
-  gap: 1.2rem;
-  /* Optional: filter to make the whole header pop against dark backgrounds */
-  drop-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+  align-items: flex-start; /* Align to top so the ruler hits the edge */
+  padding-top: 1rem;
+  /* Add a stronger shadow to give it depth (Z-axis) */
+  filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5)); 
+  transform: perspective(500px) rotateX(-5deg);
+  transform-origin: top;
 }
 
 /* Ensure the settings button stays a perfect circle and doesn't shrink */
