@@ -1,12 +1,15 @@
 .daily-memo-container {
   position: fixed;
-  /* CHANGED from 100px to 160px to clear the header */
-  top: 160px; 
-  left: 1rem;
-  z-index: 30; /* Keeps it accessible but under the header when scrolling */
+  /* CHANGED: Pushed way down to 240px to definitely clear the header */
+  top: 240px; 
+  left: 1.5rem;
+  z-index: 30;
   cursor: pointer;
-  width: 200px;
-  height: 260px;
+  
+  /* CHANGED: Shrunk dimensions significantly */
+  width: 150px; 
+  height: 210px;
+  
   perspective: 1000px;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -19,66 +22,67 @@
 .handbook-cover {
   width: 100%;
   height: 100%;
-  background: #3e2723; /* Deep Leather Brown */
-  border-radius: 4px 12px 12px 4px;
+  background: #3e2723;
+  border-radius: 3px 8px 8px 3px; /* Slightly tighter radius */
   box-shadow: 
-    -2px 0 0 #2d1b18, /* Spine depth */
-    5px 10px 20px rgba(0,0,0,0.5), /* Deep shadow */
-    inset 2px 2px 10px rgba(255,255,255,0.05); /* Leather sheen */
+    -2px 0 0 #2d1b18, 
+    4px 8px 15px rgba(0,0,0,0.4),
+    inset 2px 2px 10px rgba(255,255,255,0.05);
   position: relative;
   z-index: 2;
   display: flex;
 }
 
-/* The Spine (Left Edge) */
+/* The Spine */
 .handbook-spine {
-  width: 24px;
+  width: 18px; /* Thinner spine */
   height: 100%;
   background: linear-gradient(to right, #2d1b18 0%, #4e342e 40%, #2d1b18 100%);
-  border-radius: 4px 0 0 4px;
+  border-radius: 3px 0 0 3px;
   border-right: 1px solid #1a0f0d;
-  box-shadow: inset 1px 0 2px rgba(0,0,0,0.5);
 }
 
 /* The Front Cover Face */
 .handbook-face {
   flex: 1;
-  padding: 20px;
+  padding: 12px; /* Less padding */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: 
     radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%),
-    #3e2723; /* Leather texture base */
-  border-radius: 0 12px 12px 0;
+    #3e2723;
+  border-radius: 0 8px 8px 0;
 }
 
 /* --- GOLD FOIL EMBOSSING --- */
 .gold-border {
   border: 2px solid #cfaa56;
-  padding: 15px 10px;
+  padding: 10px 5px;
   width: 100%;
-  height: 80%;
+  height: 85%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 1px rgba(0,0,0,0.5); /* Emboss depth */
+  box-shadow: 0 0 1px rgba(0,0,0,0.5);
 }
 
 .handbook-seal {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   filter: drop-shadow(0 1px 0 rgba(0,0,0,0.5));
+  transform: scale(0.8); /* Shrink the icon */
 }
 
 .handbook-title {
-  font-family: 'Playfair Display', serif; /* Or your serif font */
-  color: #cfaa56; /* Gold Leaf */
-  font-size: 1.2rem;
+  font-family: 'Playfair Display', serif;
+  color: #cfaa56;
+  /* CHANGED: Smaller font size */
+  font-size: 0.9rem; 
   text-align: center;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   line-height: 1.2;
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
   background: linear-gradient(45deg, #cfaa56 0%, #e8d596 50%, #cfaa56 100%);
@@ -87,63 +91,64 @@
 }
 
 .handbook-edition {
-  margin-top: 15px;
+  margin-top: 10px;
   font-family: 'Courier Prime', monospace;
-  font-size: 0.6rem;
+  font-size: 0.5rem; /* Smaller text */
   color: #cfaa56;
   opacity: 0.8;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 
 .handbook-footer {
   margin-top: auto;
-  font-size: 0.55rem;
+  font-size: 0.45rem; /* Tiny text */
   color: #8d6e63;
   letter-spacing: 1px;
   font-weight: bold;
   text-transform: uppercase;
-  padding-top: 10px;
+  padding-top: 8px;
 }
 
 /* --- THE DIRECTIVE SLIP (Bookmark) --- */
 .directive-bookmark {
   position: absolute;
-  top: -15px;
-  right: 20px;
-  width: 120px;
-  min-height: 60px;
+  top: -12px;
+  right: 15px; /* Moved slightly */
+  /* CHANGED: Smaller bookmark */
+  width: 90px; 
+  min-height: 50px;
   background: #f4f1ea;
   border: 1px solid #d7d3cb;
   border-bottom: none;
   border-radius: 2px 2px 0 0;
-  z-index: 1; /* Behind the book cover */
+  z-index: 1; 
   box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-  padding: 8px;
+  padding: 6px;
   font-family: 'Courier Prime', monospace;
   transition: transform 0.3s ease;
   transform: translateY(0);
 }
 
 .daily-memo-container:hover .directive-bookmark {
-  transform: translateY(-25px); /* Slides up on hover to reveal info */
+  transform: translateY(-20px);
 }
 
 .bookmark-header {
   display: flex;
   justify-content: space-between;
   border-bottom: 2px solid #b71c1c;
-  padding-bottom: 4px;
-  margin-bottom: 4px;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
 }
 
 .date-stamp {
-  font-size: 0.6rem;
+  font-size: 0.5rem;
   color: #666;
   font-weight: bold;
 }
 
 .urgency-stamp {
-  font-size: 0.6rem;
+  font-size: 0.5rem;
   color: #b71c1c;
   font-weight: 900;
   border: 1px solid #b71c1c;
@@ -152,7 +157,7 @@
 }
 
 .directive-name {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: bold;
   line-height: 1.1;
   color: #2c2c2c;
@@ -161,14 +166,14 @@
 /* Tooltip */
 .hover-tooltip {
   position: absolute;
-  bottom: -30px;
+  bottom: -25px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.8);
   color: white;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 4px;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   opacity: 0;
   transition: opacity 0.2s;
   pointer-events: none;
@@ -179,13 +184,20 @@
   opacity: 1;
 }
 
+/* Mobile Adjustments */
 @media (max-width: 768px) {
   .daily-memo-container {
-    top: 160px;
-    width: 140px;
-    height: 190px;
+    /* Push it further down on mobile too if needed, but 240px is usually safe */
+    top: 140px; 
+    left: 10px;
+    width: 120px;
+    height: 160px;
   }
   .handbook-title {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
+  }
+  .directive-bookmark {
+    width: 70px;
+    right: 10px;
   }
 }
