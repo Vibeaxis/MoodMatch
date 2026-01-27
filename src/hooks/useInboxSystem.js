@@ -216,7 +216,7 @@ export const useInboxSystem = () => {
     if (requests.length === 0) {
       const timer = setTimeout(() => {
          setRequests([generateRequest()]);
-      }, 3000);
+      }, 12000);
       return () => clearTimeout(timer);
     }
 
