@@ -775,7 +775,7 @@ const finalRank = shiftData.rank || 'C';
           onUse={handleCoffeeUse} 
         />
 
-       <div className="sticky top-0 z-40 pt-12 px-4 bg-gradient-to-b from-stone-900 to-transparent pointer-events-none">
+     <div className="sticky top-0 z-40 pt-10 px-4 bg-stone-900 border-b border-stone-800 shadow-xl">
           <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
             <ProgressionBar
               xp={xpTotal}
