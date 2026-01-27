@@ -662,45 +662,21 @@ const finalRank = shiftData.rank || 'C';
       <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
 >
         
-      {/* --- FLOATING HUD HEADER --- */}
-{/* The CSS class .game-ui-header handles the gradient and spacing now */}
-<div className="game-ui-header">
-  
-  {/* Left: Spacer to keep ruler centered (hidden on mobile) */}
-  <div className="w-12 hidden md:block"></div>
-
-  {/* Center: The XP Ruler */}
-  {/* Added 'mt-2' to push it down slightly more so the sticky note clears the top */}
-  <div className="flex-1 flex justify-center xp-bar-container px-2 mt-2">
-      <ProgressionBar
-        xp={xpTotal}
-        maxXp={maxXp}
-        streak={streak}
-        gradeLevel={currentGradeLevel}
-        nextUnlockAt={getNextUnlockStreak()}
-        onPlannerClick={() => setIsPlannerOpen(true)}
-      />
-  </div>
-
-  {/* Right: Settings Button */}
-  <div className="w-12 flex flex-col items-end gap-2">
-      <button 
-        className="settings-button" 
-        onClick={() => setShowSettings(true)} 
-        aria-label="Settings"
-      >
-        <SettingsIcon size={24} />
-      </button>
-      
-      {/* Saving Indicator */}
-      {autoSaveStatus.isSaving && (
-         <span className="text-[10px] text-stone-500 animate-pulse font-mono bg-stone-900/80 px-2 py-1 rounded">
-           SAVING...
-         </span>
-      )}
-  </div>
-</div>
-{/* --- END HEADER --- */}
+        {/* Settings Button Header */}
+        <div className="game-ui-header">
+           <div className="flex items-center gap-2">
+              <button 
+                className="settings-button" 
+                onClick={() => setShowSettings(true)} 
+                aria-label="Settings"
+              >
+                <SettingsIcon size={24} className="text-stone-400 hover:text-white transition-colors"/>
+              </button>
+              {autoSaveStatus.isSaving && (
+                 <span className="text-xs text-stone-500 animate-pulse font-mono">SAVING...</span>
+              )}
+           </div>
+        </div>
 
        {/* Add z-50 and relative positioning to force it above the gradient background */}
 <div className="supplies-container fixed inset-0 z-50 pointer-events-none">
