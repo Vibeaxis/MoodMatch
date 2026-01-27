@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Zap, Check, GraduationCap, X, Settings as SettingsIcon } from 'lucide-react';
+import { AlertTriangle, Zap, Check, GraduationCap, X, Award, Settings as SettingsIcon } from 'lucide-react';
 import ClassroomLogic from '@/components/ClassroomLogic';
 import ProgressionBar from '@/components/ProgressionBar';
 import TeacherPlanner from '@/components/TeacherPlanner';
