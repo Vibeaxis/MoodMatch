@@ -1,50 +1,83 @@
+/* --- TOP BAR / RULER STYLES --- */
 
-.game-ui-header {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 100;
-  display: flex;
-  gap: 0.5rem;
+/* 1. The Container for the Ruler Graphic */
+/* Apply this class to your <header> or top <div> instead of the long Tailwind string */
+.ruler-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px; /* Matches h-16 */
+  z-index: 40;
+  
+  /* The Background */
+  background-image: url('/assets/ruler-bg.png'); /* Ensure path is correct */
+  background-repeat: repeat-x; /* repeat horizontally if it's a tile */
+  background-size: contain;    /* or 'cover' depending on your image */
+  background-position: center bottom;
+  
+  /* THE CROP FIX: Nudge it down so the top tick marks aren't cut off */
+  transform: translateY(4px); 
+  
+  /* Shadow for depth */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #3e2723; /* Dark wood trim at bottom */
 }
 
+/* 2. The Button Container (Settings, etc.) */
+.game-ui-header {
+  position: fixed; /* Changed from absolute to fixed to stay with the ruler */
+  top: 12px;       /* Adjusted to vertically center within the 64px ruler (moved down due to the 4px nudge) */
+  right: 1.5rem;   /* Gave it a bit more breathing room from the edge */
+  z-index: 100;
+  display: flex;
+  gap: 0.75rem;    /* Slightly more space between buttons */
+}
+
+/* --- BUTTON STYLES --- */
+
 .settings-button {
-  width: 48px;
-  height: 48px;
+  width: 44px; /* Slightly smaller to fit better inside the ruler height */
+  height: 44px;
   border-radius: 50%;
-  background: rgba(28, 25, 23, 0.6);
-  border: 1px solid rgba(245, 245, 244, 0.2);
+  
+  /* Glassmorphism to blend with the wood ruler */
+  background: rgba(62, 39, 35, 0.8); /* Dark wood tint */
+  border: 1px solid rgba(212, 175, 55, 0.3); /* Gold border */
+  
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  color: #f5f5f4;
   cursor: pointer;
+  
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   backdrop-filter: blur(4px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
 }
 
 .settings-button:hover {
   transform: rotate(90deg) scale(1.1);
-  background: rgba(28, 25, 23, 0.8);
-  border-color: rgba(245, 245, 244, 0.5);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  background: rgba(62, 39, 35, 1);
+  border-color: #d4af37; /* Bright Gold on hover */
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); /* Golden Glow */
 }
 
 .settings-button:active {
   transform: rotate(90deg) scale(0.95);
 }
 
-/* Feedback Modal Styles */
+/* --- FEEDBACK MODAL (Unchanged but cleaned up) --- */
 .feedback-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(3px);
-  z-index: 50;
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker for focus */
+  backdrop-filter: blur(4px);
+  z-index: 200; /* Ensure it's above the ruler (z-40) and buttons (z-100) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,20 +85,20 @@
 
 .feedback-modal {
   background: #fffcf5;
-  border: 3px solid #3e2723;
-  border-radius: 8px;
+  border: 4px solid #3e2723; /* Thicker border */
+  border-radius: 4px; /* Sharper corners for paper look */
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  z-index: 51;
+  max-width: 420px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 201;
   overflow: hidden;
   animation: feedbackSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .feedback-modal-header {
-  background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
-  padding: 12px;
-  border-bottom: 3px solid #d4af37;
+  background: #2a2620; /* Match game background */
+  padding: 1rem;
+  border-bottom: 2px solid #d4af37;
   text-align: center;
 }
 
@@ -73,114 +106,128 @@
   color: #d4af37;
   font-family: 'Courier Prime', monospace;
   margin: 0;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .feedback-modal-content {
-  padding: 25px;
+  padding: 2rem;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1rem;
 }
 
 .feedback-modal-content h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 900;
+  font-size: 2rem;
+  font-weight: 800;
   margin: 0;
+  line-height: 1;
 }
 
+/* Helper Text Colors */
 .text-green-700 { color: #15803d; }
 .text-red-700 { color: #b91c1c; }
 
 .feedback-message {
   font-size: 1.1rem;
-  color: #3e2723;
-  font-weight: bold;
+  color: #44403c;
+  font-weight: 600;
   margin: 0;
 }
 
 .feedback-details {
   font-family: 'Courier Prime', monospace;
-  font-size: 0.9rem;
-  color: #795548;
-  margin: 0;
+  font-size: 0.85rem;
+  color: #78716c;
 }
 
 .feedback-xp {
-  display: inline-block;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-weight: 900;
-  font-size: 1.2rem;
-  margin: 5px auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin: 0.5rem auto;
   font-family: 'Courier Prime', monospace;
 }
 
 .feedback-xp.positive {
-  background: #dcfce7;
-  color: #166534;
+  background: #ecfdf5;
+  color: #15803d;
   border: 2px solid #22c55e;
+  box-shadow: 0 2px 0 #15803d; /* 3D effect */
 }
 
 .feedback-xp.negative {
-  background: #fee2e2;
-  color: #991b1b;
+  background: #fef2f2;
+  color: #b91c1c;
   border: 2px solid #ef4444;
+  box-shadow: 0 2px 0 #b91c1c;
 }
 
 .feedback-btn {
   background: #3e2723;
-  color: #d4af37;
-  border: none;
-  padding: 12px;
+  color: #f5f5f4;
+  border: 2px solid #3e2723;
+  padding: 1rem;
   font-family: 'Courier Prime', monospace;
   font-weight: bold;
   font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.2s;
-  margin-top: 10px;
+  margin-top: 1rem;
   border-radius: 4px;
 }
 
 .feedback-btn:hover {
   background: #5d4037;
+  border-color: #d4af37;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 @keyframes feedbackSlideIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.9) translateY(20px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 
 @media (max-width: 768px) {
   .feedback-modal {
-    max-width: 320px;
+    width: 85%;
   }
   
-  .feedback-modal-content h2 {
-    font-size: 1.5rem;
+  .ruler-header {
+     /* On mobile, maybe shrink height slightly? */
+     height: 56px; 
+  }
+  
+  .game-ui-header {
+     top: 8px; /* Adjust button position for smaller ruler */
   }
 }
 
-/* Tutorial Disabled State */
+/* Tutorial & Spotlight Styles */
 .tutorial-disabled {
   pointer-events: none;
   opacity: 0.95;
   transition: opacity 0.5s;
 }
 
-/* Re-enable interactions for spotlighted elements */
+/* Spotlight z-index stack */
 .tutorial-disabled .learning-log-container,
 .tutorial-disabled .strategy-deck-container,
 .tutorial-disabled .stamper-button,
@@ -191,5 +238,5 @@
 .tutorial-disabled .performance-tab {
   pointer-events: auto;
   position: relative;
-  z-index: 10001; /* Higher than tutorial backdrop */
+  z-index: 10001; 
 }
