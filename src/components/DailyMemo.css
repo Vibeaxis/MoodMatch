@@ -1,8 +1,9 @@
 .daily-memo-container {
   position: fixed;
-  top: 100px; /* Adjusted position */
+  /* CHANGED from 100px to 160px to clear the header */
+  top: 160px; 
   left: 1rem;
-  z-index: 30;
+  z-index: 30; /* Keeps it accessible but under the header when scrolling */
   cursor: pointer;
   width: 200px;
   height: 260px;
@@ -180,7 +181,7 @@
 
 @media (max-width: 768px) {
   .daily-memo-container {
-    top: 60px;
+    top: 160px;
     width: 140px;
     height: 190px;
   }
