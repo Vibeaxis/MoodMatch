@@ -113,7 +113,7 @@ const [showGallery, setShowGallery] = useState(false);
   // Crisis State
   const [activeCrisis, setActiveCrisis] = useState(null);
   const [crisisActive, setCrisisActive] = useState(false);
-
+const [showAchievementGallery, setShowAchievementGallery] = useState(false);
   // Performance & Perks State
   const [performanceHistory, setPerformanceHistory] = useState([]);
   const [careerGPA, setCareerGPA] = useState(0);
