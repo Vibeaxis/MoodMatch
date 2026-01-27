@@ -947,14 +947,29 @@ export function getGradeRank(selectedActivity, targetMood, targetConstraint, act
 export function calculateXP(rank) {
   return RANK_XP_REWARDS[rank] || 0;
 }
-
-export function canUnlockNextLevel(currentLevel, streak) {
+// UPDATED: Now accepts totalXP to allow Rank-based promotion
+export function canUnlockNextLevel(currentLevel, streak, totalXP) {
   const levels = ['Kindergarten', 'HighSchool', 'College'];
   const currentIndex = levels.indexOf(currentLevel);
-  if (currentIndex === levels.length - 1) return null;
+  
+  if (currentIndex === levels.length - 1) return null; // Already Max Level
+
   const nextLevel = levels[currentIndex + 1];
   const nextLevelConfig = GRADE_LEVEL_CONFIG[nextLevel];
-  return streak >= nextLevelConfig.unlockStreak ? nextLevel : null;
+
+  // 1. Check Streak (The original method)
+  if (streak >= nextLevelConfig.unlockStreak) {
+    return nextLevel;
+  }
+
+  // 2. Check XP (The "Department Head" Override)
+  // If you have enough XP for the rank associated with the next level, unlock it.
+  // Example: High School unlocks at 2500 XP (Department Head)
+  // You can tune these numbers to match your RANK_CONFIG
+  if (nextLevel === 'HighSchool' && totalXP >= 2500) return 'HighSchool';
+  if (nextLevel === 'College' && totalXP >= 4500) return 'College';
+
+  return null;
 }
 
 // Helper Functions for Rank Progression
