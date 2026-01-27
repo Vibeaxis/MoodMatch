@@ -18,9 +18,10 @@ function App() {
     return localStorage.getItem('hasClockedIn') === 'true';
   });
 
-  const [playerProfile, setPlayerProfile] = useState(() => {
+ const [playerProfile, setPlayerProfile] = useState(() => {
     const saved = localStorage.getItem('playerProfile');
-    return saved ? JSON.parse(saved) : DEFAULT_PROFILE;
+    // FIX: Merge saved data with DEFAULT_PROFILE to ensure new keys (like gpa/unlockedPerks) exist
+    return saved ? { ...DEFAULT_PROFILE, ...JSON.parse(saved) } : DEFAULT_PROFILE;
   });
 
   const handleClockIn = (newProfile) => {

@@ -157,7 +157,23 @@ const [showAchievementGallery, setShowAchievementGallery] = useState(false);
   };
   
   const autoSaveStatus = useAutoSave(fullGameState, settings.autoSaveEnabled);
-
+// Add this inside GameUI function, near the top
+useEffect(() => {
+  // Check if player is overqualified for Kindergarten
+  if (playerProfile.xpTotal >= 2500 && gameState.gradeLevel === 'Kindergarten') {
+    
+    // Determine where they actually belong
+    const properLevel = playerProfile.xpTotal >= 4500 ? 'College' : 'HighSchool';
+    
+    // FORCE the update
+    setGameState(prev => ({
+      ...prev,
+      gradeLevel: properLevel,
+      // Sync difficulty to match the new level
+      difficultyMultiplier: properLevel === 'HighSchool' ? 1.5 : 2.0
+    }));
+  }
+}, []); // Run once on mount
   // Load saved state on mount if it exists (reconcile with props)
   useEffect(() => {
     const savedState = SaveManager.loadGame();
@@ -838,43 +854,82 @@ const finalRank = shiftData.rank || 'C';
           onTopple={handleTopple} 
         />
 
-       {/* --- ACHIEVEMENT GALLERY MODAL --- */}
+     {/* --- ACHIEVEMENT GALLERY MODAL --- */}
 <AnimatePresence>
   {showAchievementGallery && (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-      {/* Click outside (or on background) to close */}
+      {/* Click outside to close */}
       <div className="absolute inset-0" onClick={() => setShowAchievementGallery(false)} />
       
       <motion.div 
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="relative bg-[#FDFBF7] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
+        className="relative bg-[#FDFBF7] w-full max-w-5xl h-[85vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
       >
+        {/* Close Button */}
         <button 
           onClick={() => setShowAchievementGallery(false)}
-          className="absolute top-4 right-4 p-2 hover:bg-stone-200 rounded-full"
+          className="absolute top-6 right-6 p-2 hover:bg-stone-200 rounded-full z-50 transition-colors"
         >
-          <X className="w-6 h-6 text-stone-800" />
+          <X className="w-8 h-8 text-stone-800" />
         </button>
 
-        <h2 className="font-mono-typewriter text-3xl font-bold text-stone-800 mb-8 border-b-2 border-stone-800 pb-4 uppercase tracking-widest">
+        <h2 className="font-mono-typewriter text-4xl font-bold text-stone-800 mb-2 uppercase tracking-widest border-b-4 border-stone-800 pb-6">
           Hall of Records
         </h2>
+        
+        {/* DYNAMIC GRID START */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {ACHIEVEMENTS.map((ach) => {
+              // Check if unlocked (Safeguard: check if array exists)
+              const isUnlocked = playerProfile.unlockedAchievements?.includes(ach.id);
+              
+              return (
+                <div 
+                  key={ach.id} 
+                  className={`p-6 border-2 rounded-lg relative overflow-hidden transition-all ${
+                    isUnlocked 
+                      ? 'bg-white border-stone-800 shadow-md opacity-100' 
+                      : 'bg-stone-200 border-stone-300 opacity-60 grayscale'
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                     {/* Icon Badge */}
+                     <div className={`p-3 rounded-full flex items-center justify-center w-12 h-12 ${
+                       isUnlocked ? 'bg-amber-100 text-amber-600' : 'bg-stone-300 text-stone-500'
+                     }`}>
+                       {/* Using a generic Award icon for stability */}
+                       <Award size={24} />
+                     </div>
+                     
+                     {/* Unlocked Badge */}
+                     {isUnlocked && (
+                       <span className="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded uppercase tracking-wider border border-green-200">
+                         Unlocked
+                       </span>
+                     )}
+                  </div>
+                  
+                  <h3 className="font-bold text-lg font-mono-typewriter leading-tight mb-2 text-stone-900">
+                    {ach.name}
+                  </h3>
+                  
+                  {/* Description Logic: Hide if it's a "Hidden" achievement and not yet unlocked */}
+                  <p className="text-sm text-stone-600 font-serif leading-relaxed">
+                    {ach.hidden && !isUnlocked ? "???" : ach.description}
+                  </p>
 
-        {/* Example Grid of Achievements */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-           {/* We can map your ACHIEVEMENTS array here later */}
-           <div className="p-4 bg-stone-100 border border-stone-300 rounded text-center opacity-50">
-              <p className="font-bold text-stone-400">Survival Mode</p>
-              <p className="text-xs">Survived Week 1</p>
-           </div>
-           {/* Placeholder for now so you can see it works */}
-           <div className="p-4 bg-amber-100 border border-amber-300 rounded text-center">
-              <p className="font-bold text-amber-800">Current Rank</p>
-              <p className="text-2xl">{performanceHistory[0]?.finalRank || '-'}</p>
-           </div>
+                  {/* XP Reward Tag */}
+                  <div className="absolute bottom-3 right-3 text-xs font-mono font-bold text-stone-400">
+                    +{ach.xpReward} XP
+                  </div>
+                </div>
+              );
+           })}
         </div>
+        {/* DYNAMIC GRID END */}
+
       </motion.div>
     </div>
   )}
