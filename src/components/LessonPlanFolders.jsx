@@ -31,13 +31,15 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
   return (
     <>
       <div className={`w-full max-w-md relative p-4 transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
-        <h2 className="text-xl font-bold text-stone-200/50 mb-6 text-center uppercase tracking-widest font-mono-typewriter">
+        {/* FIX 1: Responsive Margin (mb-2 on mobile, mb-6 on desktop) */}
+        <h2 className="text-xl font-bold text-stone-200/50 mb-2 md:mb-6 text-center uppercase tracking-widest font-mono-typewriter">
           Strategy Files
         </h2>
         
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10">
+        {/* FIX 2: Responsive Gap (gap-3 on mobile, gap-10 on desktop) */}
+        {/* Also tightened horizontal gap (gap-x-4) on mobile so they don't push off edges */}
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 md:gap-x-8 md:gap-y-10">
           {folders.map(([type, config], index) => {
-            // Use config from GameLogic, with fallbacks to prevent crashes
             const colors = {
               base: config.base || 'bg-stone-700',
               tab: config.tab || 'bg-stone-600',
@@ -100,9 +102,9 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
                 `}>
                   {/* Lock Overlay */}
                   {isLocked && (
-                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 rounded-md">
+                      <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 rounded-md">
                         <Lock className="w-12 h-12 text-white opacity-80" />
-                     </div>
+                      </div>
                   )}
 
                   {/* Paper inside peeking out */}
