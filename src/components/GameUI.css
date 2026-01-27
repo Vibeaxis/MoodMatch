@@ -11,7 +11,7 @@
   z-index: 40;
   
   /* The Background */
-  background-image: url('/assets/ruler-bg.png'); /* Ensure path is correct */
+
   background-repeat: repeat-x; /* repeat horizontally if it's a tile */
   background-size: contain;    /* or 'cover' depending on your image */
   background-position: center bottom;
