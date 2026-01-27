@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Zap, Check, GraduationCap, Settings as SettingsIcon } from 'lucide-react';
+import { AlertTriangle, Zap, Check, GraduationCap, X, Settings as SettingsIcon } from 'lucide-react';
 import ClassroomLogic from '@/components/ClassroomLogic';
 import ProgressionBar from '@/components/ProgressionBar';
 import TeacherPlanner from '@/components/TeacherPlanner';
@@ -838,7 +838,47 @@ const finalRank = shiftData.rank || 'C';
           onTopple={handleTopple} 
         />
 
-       
+       {/* --- ACHIEVEMENT GALLERY MODAL --- */}
+<AnimatePresence>
+  {showAchievementGallery && (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+      {/* Click outside (or on background) to close */}
+      <div className="absolute inset-0" onClick={() => setShowAchievementGallery(false)} />
+      
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="relative bg-[#FDFBF7] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
+      >
+        <button 
+          onClick={() => setShowAchievementGallery(false)}
+          className="absolute top-4 right-4 p-2 hover:bg-stone-200 rounded-full"
+        >
+          <X className="w-6 h-6 text-stone-800" />
+        </button>
+
+        <h2 className="font-mono-typewriter text-3xl font-bold text-stone-800 mb-8 border-b-2 border-stone-800 pb-4 uppercase tracking-widest">
+          Hall of Records
+        </h2>
+
+        {/* Example Grid of Achievements */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {/* We can map your ACHIEVEMENTS array here later */}
+           <div className="p-4 bg-stone-100 border border-stone-300 rounded text-center opacity-50">
+              <p className="font-bold text-stone-400">Survival Mode</p>
+              <p className="text-xs">Survived Week 1</p>
+           </div>
+           {/* Placeholder for now so you can see it works */}
+           <div className="p-4 bg-amber-100 border border-amber-300 rounded text-center">
+              <p className="font-bold text-amber-800">Current Rank</p>
+              <p className="text-2xl">{performanceHistory[0]?.finalRank || '-'}</p>
+           </div>
+        </div>
+      </motion.div>
+    </div>
+  )}
+</AnimatePresence>
 
         <Toaster />
       </div>
