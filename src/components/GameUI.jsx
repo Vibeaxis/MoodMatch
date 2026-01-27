@@ -653,35 +653,71 @@ const finalRank = shiftData.rank || 'C';
     });
   };
 
-  return (
+return (
     <>
       <Helmet>
         <title>Classroom Mood Matcher</title>
       </Helmet>
 
-      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
->
+      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}>
         
-        {/* Settings Button Header */}
-        <div className="game-ui-header">
-           <div className="flex items-center gap-2">
-              <button 
-                className="settings-button" 
-                onClick={() => setShowSettings(true)} 
-                aria-label="Settings"
-              >
-                <SettingsIcon size={24} className="text-stone-400 hover:text-white transition-colors"/>
-              </button>
-              {autoSaveStatus.isSaving && (
-                 <span className="text-xs text-stone-500 animate-pulse font-mono">SAVING...</span>
-              )}
-           </div>
+        {/* --- REMOVED OLD .game-ui-header BLOCK FROM HERE --- */}
+
+        {/* 1. Supplies Layer (Keep z-50 so they float over the desk) */}
+        <div className="supplies-container relative z-50 pointer-events-none">
+          <SupplyDisplay unlockedSupplies={unlockedSupplies} />
         </div>
 
-       {/* Add z-50 and relative positioning to force it above the gradient background */}
-<div className="supplies-container relative z-50 pointer-events-none">
-  <SupplyDisplay unlockedSupplies={unlockedSupplies} />
-</div>
+        {/* 2. THE NEW CONSOLIDATED HEADER 
+             - Sticky: Stays at the top.
+             - bg-stone-900: Solid background prevents "ghosting" of text.
+             - Flexbox: Aligns the Spacer, Ruler, and Settings Button in one row.
+        */}
+        <div className="sticky top-0 z-40 bg-stone-900 border-b border-stone-800 shadow-2xl pt-8 pb-3 px-4 transition-all">
+          <div className="max-w-7xl mx-auto flex items-end justify-between relative">
+            
+            {/* Left Spacer: Balances the settings button so the ruler stays perfectly centered */}
+            <div className="w-12 hidden md:block"></div>
+
+            {/* Center: The XP Ruler */}
+            {/* We allow this to grow/shrink but stay centered */}
+            <div className="flex-1 flex justify-center xp-bar-container relative px-2">
+               <ProgressionBar
+                 xp={xpTotal}
+                 maxXp={maxXp}
+                 streak={streak}
+                 gradeLevel={currentGradeLevel}
+                 nextUnlockAt={getNextUnlockStreak()}
+                 onPlannerClick={() => setIsPlannerOpen(true)}
+               />
+            </div>
+
+            {/* Right: The Settings Button (Integrated!) */}
+            {/* Added 'mb-1' to align it visually with the bottom of the ruler */}
+            <div className="w-12 flex justify-end mb-1">
+               <button 
+                  className="settings-button transform scale-90 hover:scale-100 transition-all" 
+                  onClick={() => setShowSettings(true)} 
+                  aria-label="Settings"
+                >
+                  <SettingsIcon size={20} className="text-stone-400 hover:text-white"/>
+               </button>
+            </div>
+          </div>
+          
+          {/* Optional: Saving Indicator tucked under the settings button */}
+          {autoSaveStatus.isSaving && (
+             <div className="absolute bottom-1 right-4 text-[10px] text-stone-500 animate-pulse font-mono">
+               SAVING...
+             </div>
+          )}
+        </div>
+
+        {/* 3. SPACER FOR CONTENT 
+             This pushes the Daily Directive/Handbook down so the new header 
+             doesn't visually "crop" the top of the papers. 
+        */}
+        <div className="h-6 w-full"></div>
 
         <div className="modifier-display">
           <DailyMemo 
