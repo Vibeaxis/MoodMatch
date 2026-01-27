@@ -1,43 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Check, X, Sparkles } from 'lucide-react';
 
 function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, onAnimationComplete, shouldRender }) {
-  // Local latch to keep the animation alive even if parent updates
-  const [showLocal, setShowLocal] = useState(false);
+  // Use a ref to prevent the timer from resetting if the parent re-renders
   const timerRef = useRef(null);
 
-  // 1. WATCHER: When parent says "Go", we lock the local state to TRUE
   useEffect(() => {
     if (shouldRender && selectedActivity) {
-      setShowLocal(true);
-    }
-  }, [shouldRender, selectedActivity]);
-
-  // 2. TIMER: Only runs when local state is TRUE.
-  // This ignores the parent state entirely once the animation starts.
-  useEffect(() => {
-    if (showLocal) {
+      // Clear any existing timers
       if (timerRef.current) clearTimeout(timerRef.current);
 
+      // Start the 3.5s delay
       timerRef.current = setTimeout(() => {
-        handleComplete();
+        if (onAnimationComplete) onAnimationComplete();
       }, 3500);
     }
 
-    // Cleanup only on unmount (or if we manually force it)
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [showLocal]);
+    // CRITICAL: Only watch 'shouldRender'. 
+    // Do NOT put onAnimationComplete here or it will reset the timer constantly.
+  }, [shouldRender]);
 
-  const handleComplete = () => {
-    setShowLocal(false); // Unmount locally
-    if (onAnimationComplete) onAnimationComplete(); // Tell parent we're done
-  };
-
-  // Render based on local state, NOT parent state
-  if (!showLocal || !selectedActivity) return null;
+  if (!shouldRender || !selectedActivity) return null;
 
   const isSuccess = rank === 'S' || rank === 'A';
   const isPerfect = rank === 'S';
@@ -46,9 +33,8 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
     <div 
       className="fixed inset-0 z-[100] flex items-center justify-center cursor-pointer"
       onClick={() => {
-        // Allow user to skip by clicking
         if (timerRef.current) clearTimeout(timerRef.current);
-        handleComplete();
+        if (onAnimationComplete) onAnimationComplete();
       }}
     >
       <div className="relative w-full max-w-lg flex flex-col items-center justify-center pointer-events-none">
@@ -57,6 +43,9 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
         <motion.div
           initial={{ y: 200, opacity: 0, rotate: 10, scale: 0.8 }}
           animate={{ y: 0, opacity: 1, rotate: -2, scale: 1 }}
+          /* REMOVED: onAnimationComplete={onAnimationComplete} 
+             This was the "Machine Gun" trigger. 
+          */
           transition={{ type: 'spring', stiffness: 120, damping: 20 }}
           className="bg-[#FDFBF7] w-64 h-80 rounded-sm shadow-2xl p-6 relative flex flex-col items-center border border-stone-200 paper-texture pointer-events-auto"
         >
