@@ -659,9 +659,13 @@ const finalRank = shiftData.rank || 'C';
         <title>Classroom Mood Matcher</title>
       </Helmet>
 
-      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
->
-        
+      <div 
+        ref={gameContainerRef} 
+        className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden pt-24 ${showTutorial ? 'tutorial-disabled' : ''}`}
+      >
+        {/* CHANGE 2: The Visual Ruler Element */}
+        {/* This uses the .ruler-header CSS class to fix the crop issue */}
+        <header className="ruler-header" />
         {/* Settings Button Header */}
         <div className="game-ui-header">
            <div className="flex items-center gap-2">
