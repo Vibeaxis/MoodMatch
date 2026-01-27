@@ -762,35 +762,7 @@ const finalRank = shiftData.rank || 'C';
      ))}
    </AnimatePresence>
 </div>
-{showGallery && (
-  <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/90 backdrop-blur-md p-8">
-    <button onClick={() => setShowGallery(false)} className="absolute top-8 right-8 text-white"><X size={32} /></button>
-    
-    <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
-      {/* Category: Milestones */}
-      <div className="space-y-4">
-        <h3 className="text-amber-500 font-black uppercase tracking-tighter border-b border-amber-500/30 pb-2">Career Milestones</h3>
-        <div className="grid gap-2">
-          {ACHIEVEMENTS.filter(a => a.category === 'milestone').map(ach => (
-            <AchievementCard key={ach.id} data={ach} isUnlocked={unlockedAchievements.includes(ach.id)} />
-          ))}
-        </div>
-      </div>
 
-      {/* Category: Skills */}
-      <div className="space-y-4">
-        <h3 className="text-blue-400 font-black uppercase tracking-tighter border-b border-blue-400/30 pb-2">Professional Skills</h3>
-        {/* Map skill achievements like 'CRISIS_MANAGER' or 'COMBO_KING' */}
-      </div>
-
-      {/* Category: Philosophy & Secrets */}
-      <div className="space-y-4">
-        <h3 className="text-purple-400 font-black uppercase tracking-tighter border-b border-purple-400/30 pb-2">Personnel Secrets</h3>
-        {/* Map 'IRON_FIST' or 'BASEMENT_EXPLORER' */}
-      </div>
-    </div>
-  </div>
-)}
         <CoffeeMug 
           usesRemaining={coffeeUsesRemaining} 
           maxUses={coffeeMaxUses}
