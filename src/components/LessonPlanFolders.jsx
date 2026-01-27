@@ -27,18 +27,17 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
     setExpandedFolder(null);
     onActivitySelect(activity);
   };
-return (
+
+  return (
     <>
       <div className={`w-full max-w-md relative p-4 transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
-        
-        {/* FIX 1: Increased margin to 'mb-5' on mobile so the header doesn't touch the folders */}
-        <h2 className="text-xl font-bold text-stone-200/50 mb-5 md:mb-8 text-center uppercase tracking-widest font-mono-typewriter">
+        <h2 className="text-xl font-bold text-stone-200/50 mb-6 text-center uppercase tracking-widest font-mono-typewriter">
           Strategy Files
         </h2>
         
-        {/* FIX 2: Kept the tight 'gap-y-3' on mobile so the folders stay shifted up */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-3 md:gap-x-8 md:gap-y-10">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10">
           {folders.map(([type, config], index) => {
+            // Use config from GameLogic, with fallbacks to prevent crashes
             const colors = {
               base: config.base || 'bg-stone-700',
               tab: config.tab || 'bg-stone-600',
@@ -99,12 +98,14 @@ return (
                   flex flex-col items-start justify-center p-4
                   wood-texture
                 `}>
+                  {/* Lock Overlay */}
                   {isLocked && (
-                      <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 rounded-md">
+                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 rounded-md">
                         <Lock className="w-12 h-12 text-white opacity-80" />
-                      </div>
+                     </div>
                   )}
 
+                  {/* Paper inside peeking out */}
                   <div className="absolute top-2 right-2 w-11/12 h-5/6 bg-white opacity-10 rotate-1 rounded-sm pointer-events-none" />
 
                   <div className="relative z-20 text-left">
@@ -118,6 +119,7 @@ return (
                     </div>
                   </div>
 
+                  {/* Decorative label holder */}
                   <div className="absolute bottom-3 right-3 w-8 h-8 border-2 border-white/30 rounded-full opacity-50" />
                 </div>
               </motion.button>
@@ -126,6 +128,7 @@ return (
         </div>
       </div>
 
+      {/* Expanded View Overlay */}
       <FolderExpansion 
         isOpen={!!expandedFolder}
         activities={expandedFolder ? ACTIVITY_CARDS[expandedFolder] : []}
