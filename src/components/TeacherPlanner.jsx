@@ -52,8 +52,9 @@ function TeacherPlanner({
           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
         />
 
-        {/* --- BINDER HEADER --- */}
-        <div className="shrink-0 h-16 md:h-20 bg-[#4E342E] flex items-center justify-between px-6 border-b-4 border-[#3E2723] z-50">
+       {/* --- BINDER HEADER --- */}
+        {/* CHANGE 2: Added 'rounded-t-lg' here to maintain the corner shape */}
+        <div className="shrink-0 h-16 md:h-20 bg-[#4E342E] rounded-t-lg flex items-center justify-between px-6 border-b-4 border-[#3E2723] z-50 relative">
           
           {/* Binder Rings (Physically outside the frame) */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-12 md:gap-24 pointer-events-none z-50">
