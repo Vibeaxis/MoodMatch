@@ -40,26 +40,57 @@ export const PHILOSOPHY_CONFIG = {
     visualStyle: 'graph'
   }
 };
-
+// --- JOB TITLES (The Status) ---
 export const RANK_CONFIG = [
-  { index: 0, name: 'Substitute Teacher', minXP: 0 },
-  { index: 1, name: 'Elementary Teacher', minXP: 250 },
-  { index: 2, name: 'Middle School Teacher', minXP: 750 },
-  { index: 3, name: 'High School Teacher', minXP: 1500 },
-  { index: 4, name: 'Department Head', minXP: 3000 },
-  { index: 5, name: 'Assistant Principal', minXP: 6000 },
-  { index: 6, name: 'Principal', minXP: 10000 },
-  { index: 7, name: 'Superintendent', minXP: 15000 },
-  { index: 8, name: 'Dean of College', minXP: 25000 }
+  { index: 0, name: 'Substitute Teacher', minXP: 0 },       // Matches Kindergarten
+  { index: 1, name: 'Elementary Teacher', minXP: 600 },     // Matches Elementary Unlock
+  { index: 2, name: 'Middle School Teacher', minXP: 2200 }, // Matches Middle School Unlock
+  { index: 3, name: 'High School Teacher', minXP: 5000 },   // Matches High School Unlock
+  { index: 4, name: 'Department Head', minXP: 10000 },      // Matches Undergrad (Professors are Dept Heads)
+  { index: 5, name: 'Assistant Principal', minXP: 20000 },  // Matches Graduate School
+  { index: 6, name: 'Principal', minXP: 35000 },            // Endgame Prestige
+  { index: 7, name: 'Superintendent', minXP: 60000 },       // Endgame Prestige
+  { index: 8, name: 'Dean of College', minXP: 100000 }      // God Mode
 ];
 
+// --- ENVIRONMENTS (The Gameplay) ---
 export const GRADE_LEVELS = [
-  { id: 'kindergarten', name: 'Kindergarten', minXP: 0, nextThreshold: 1000 },
-  { id: 'elementary', name: 'Elementary School', minXP: 1000, nextThreshold: 2500 },
-  { id: 'middle', name: 'Middle School', minXP: 2500, nextThreshold: 5000 },
-  { id: 'high', name: 'High School', minXP: 5000, nextThreshold: 10000 },
-  { id: 'undergrad', name: 'Undergraduate', minXP: 10000, nextThreshold: 20000 },
-  { id: 'grad', name: 'Graduate School', minXP: 20000, nextThreshold: Infinity }
+  { 
+    id: 'kindergarten', 
+    name: 'Kindergarten', 
+    minXP: 0, 
+    nextThreshold: 600 
+  },
+  { 
+    id: 'elementary', 
+    name: 'Elementary School', 
+    minXP: 600, 
+    nextThreshold: 2200 
+  },
+  { 
+    id: 'middle', 
+    name: 'Middle School', 
+    minXP: 2200, 
+    nextThreshold: 5000 
+  },
+  { 
+    id: 'high', 
+    name: 'High School', 
+    minXP: 5000, 
+    nextThreshold: 10000 
+  },
+  { 
+    id: 'undergrad', 
+    name: 'Undergraduate', 
+    minXP: 10000, 
+    nextThreshold: 20000 
+  },
+  { 
+    id: 'grad', 
+    name: 'Graduate School', 
+    minXP: 20000, 
+    nextThreshold: Infinity 
+  }
 ];
 
 export const DISTRICT_DIRECTIVES = [
