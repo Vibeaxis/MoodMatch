@@ -157,49 +157,48 @@ const [showAchievementGallery, setShowAchievementGallery] = useState(false);
   };
   
   const autoSaveStatus = useAutoSave(fullGameState, settings.autoSaveEnabled);
-// Add this inside GameUI function, near the top
-useEffect(() => {
-  // Check if player is overqualified for Kindergarten
-  if (playerProfile.xpTotal >= 2500 && gameState.gradeLevel === 'Kindergarten') {
-    
-    // Determine where they actually belong
-    const properLevel = playerProfile.xpTotal >= 4500 ? 'College' : 'HighSchool';
-    
-    // FORCE the update
-    setGameState(prev => ({
-      ...prev,
-      gradeLevel: properLevel,
-      // Sync difficulty to match the new level
-      difficultyMultiplier: properLevel === 'HighSchool' ? 1.5 : 2.0
-    }));
-  }
-}, []); // Run once on mount
-  // Load saved state on mount if it exists (reconcile with props)
+// Load saved state on mount
   useEffect(() => {
     const savedState = SaveManager.loadGame();
+    
     if (savedState) {
       if (savedState.dayCount) setDayCount(savedState.dayCount);
-      if (savedState.currentGradeLevel) setCurrentGradeLevel(savedState.currentGradeLevel);
       if (savedState.unlockedGradeLevels) setUnlockedGradeLevels(savedState.unlockedGradeLevels);
       if (savedState.unlockedPerks) setUnlockedPerks(savedState.unlockedPerks);
       
+      // --- THE FIX: XP OVERRIDE CHECK ---
+      // 1. Default to what the save file says
+      let loadedLevel = savedState.currentGradeLevel || 'Kindergarten';
+      
+      // 2. Check the props (playerProfile) to see if we deserve a promotion
+      // Note: We use the prop 'xpTotal' because it is the source of truth for the profile
+      if (xpTotal >= 4500) {
+        loadedLevel = 'College'; 
+      } else if (xpTotal >= 2500) {
+        loadedLevel = 'HighSchool';
+      }
+
+      // 3. Set the corrected level
+      setCurrentGradeLevel(loadedLevel);
+      // ----------------------------------
+
       // Tutorial Check
       if (savedState.tutorialCompleted !== undefined) {
         setTutorialCompleted(savedState.tutorialCompleted);
       }
       
-      // Determine if tutorial should show
-      // Condition: Not completed AND (no history OR explictly first day)
-      // shiftHistory usually empty on first load if strictly following prompt logic
       const shiftsDone = savedState.shiftHistory ? savedState.shiftHistory.length : 0;
       if (!savedState.tutorialCompleted && shiftsDone === 0) {
         setShowTutorial(true);
       }
     } else {
       // New game defaults
-      setShowTutorial(true);
+      // Even for a "New Game", if the profile prop has XP (from a previous clock-in), we should sync it.
+      if (xpTotal >= 4500) setCurrentGradeLevel('College');
+      else if (xpTotal >= 2500) setCurrentGradeLevel('HighSchool');
+      else setShowTutorial(true);
     }
-  }, []);
+  }, []); // Only runs once on mount
 
   const handleTutorialComplete = () => {
     setShowTutorial(false);
