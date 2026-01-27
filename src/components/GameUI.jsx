@@ -104,7 +104,7 @@ function GameUI({ playerProfile, updateProfile, onClockOut }) {
 
   
   const [dailyDirective, setDailyDirective] = useState(null);
-
+const [showGallery, setShowGallery] = useState(false);
   // Final Exam State
   const [showFinalExam, setShowFinalExam] = useState(false);
   const [finalExamData, setFinalExamData] = useState({ previousLevel: null, nextLevel: null });

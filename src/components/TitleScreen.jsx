@@ -67,24 +67,16 @@ function TitleScreen({ onClockIn }) {
   ];
 
   if (isTransitioning) {
-
     return (
-
       <div className="desk-transition-view">
-
         <div className="desk-surface">
-
           <div className="animate-spin text-6xl mb-4">⏳</div>
-
           <div className="desk-message">REPORTING FOR DUTY...</div>
-
         </div>
-
       </div>
-
     );
-
   }
+
 
 
 
