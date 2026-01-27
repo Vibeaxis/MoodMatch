@@ -662,24 +662,55 @@ const finalRank = shiftData.rank || 'C';
       <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
 >
         
-        {/* Settings Button Header */}
-        <div className="game-ui-header">
-           <div className="flex items-center gap-2">
-              <button 
-                className="settings-button" 
-                onClick={() => setShowSettings(true)} 
-                aria-label="Settings"
-              >
-                <SettingsIcon size={24} className="text-stone-400 hover:text-white transition-colors"/>
-              </button>
-              {autoSaveStatus.isSaving && (
-                 <span className="text-xs text-stone-500 animate-pulse font-mono">SAVING...</span>
-              )}
-           </div>
-        </div>
+      {/* UNIFIED HEADER BLOCK start */}
+{/* 1. sticky top-0: Keeps it pinned.
+    2. bg-stone-900: Solid background stops text ghosting.
+    3. pt-8: CRITICAL. This provides the "Headroom" for the sticky note so it doesn't get cropped.
+*/}
+<div className="sticky top-0 z-40 w-full bg-stone-900 border-b border-stone-800 shadow-2xl pt-8 pb-2 px-4">
+  
+  <div className="max-w-7xl mx-auto flex items-end justify-between relative">
+    
+    {/* LEFT: Spacer (Matches right side width to keep ruler perfectly centered) */}
+    <div className="w-12 hidden md:block"></div>
 
+    {/* CENTER: The Ruler */}
+    <div className="flex-1 px-2 flex justify-center xp-bar-container">
+       <ProgressionBar
+         xp={xpTotal}
+         maxXp={maxXp}
+         streak={streak}
+         gradeLevel={currentGradeLevel}
+         nextUnlockAt={getNextUnlockStreak()}
+         onPlannerClick={() => setIsPlannerOpen(true)}
+       />
+    </div>
+
+    {/* RIGHT: Your Settings Block (Unified here) */}
+    <div className="w-12 flex flex-col items-end justify-end pb-1 gap-1">
+       <button 
+         className="settings-button flex items-center justify-center w-12 h-12 rounded-full bg-stone-800 border border-stone-700 hover:bg-stone-700 transition-all text-stone-400 hover:text-white shadow-lg" 
+         onClick={() => setShowSettings(true)} 
+         aria-label="Settings"
+       >
+         <SettingsIcon size={24} />
+       </button>
+       
+       {autoSaveStatus.isSaving && (
+          <span className="text-[10px] text-stone-500 animate-pulse font-mono whitespace-nowrap absolute -bottom-5 right-0">
+            SAVING...
+          </span>
+       )}
+    </div>
+
+  </div>
+</div>
+{/* UNIFIED HEADER BLOCK end */}
+
+{/* Spacer to prevent content from sliding under the header immediately */}
+<div className="h-8 w-full"></div>
        {/* Add z-50 and relative positioning to force it above the gradient background */}
-<div className="supplies-container relative z-50 pointer-events-none">
+<div className="supplies-container fixed inset-0 z-50 pointer-events-none">
   <SupplyDisplay unlockedSupplies={unlockedSupplies} />
 </div>
 
