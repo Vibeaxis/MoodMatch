@@ -1,30 +1,21 @@
-/* The Container: No fixed height, just a flex wrapper */
 .game-ui-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  width: 100%;
-  padding-top: 1.5rem; /* Space for the post-it to stick up */
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  
-  /* The Vignette: Fades from dark to transparent. 
-     This makes text readable at the very top but doesn't look like a solid bar. */
-  background: linear-gradient(to bottom, rgba(28, 25, 23, 0.95) 0%, rgba(28, 25, 23, 0) 100%);
-  
+  position: absolute;
+  top: 2rem; /* Pushes the whole unit down so the post-it doesn't clip */
+  right: 1.5rem;
+  z-index: 100;
   display: flex;
-  align-items: flex-start; /* Aligns items to the top area */
-  justify-content: space-between;
-  pointer-events: none; /* Lets clicks pass through the empty spaces */
+  align-items: center; /* Keeps the Meter, Combo box, and Settings gear aligned */
+  gap: 1.2rem;
+  /* Optional: filter to make the whole header pop against dark backgrounds */
+  drop-shadow: 0 4px 10px rgba(0,0,0,0.3); 
 }
 
-/* Ensure interactive elements inside the header are clickable */
-.game-ui-header > * {
-  pointer-events: auto;
+/* Ensure the settings button stays a perfect circle and doesn't shrink */
+.settings-button {
+  flex-shrink: 0; 
+  /* ... rest of your existing settings-button styles ... */
 }
 
-/* Your existing button styles (Keep these, they are great) */
 .settings-button {
   width: 48px;
   height: 48px;
@@ -34,7 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #a8a29e; /* stone-400 */
+  font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   backdrop-filter: blur(4px);
@@ -43,10 +34,9 @@
 
 .settings-button:hover {
   transform: rotate(90deg) scale(1.1);
-  background: rgba(28, 25, 23, 0.9);
-  border-color: rgba(245, 245, 244, 0.8);
-  color: white;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  background: rgba(28, 25, 23, 0.8);
+  border-color: rgba(245, 245, 244, 0.5);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
 }
 
 .settings-button:active {
