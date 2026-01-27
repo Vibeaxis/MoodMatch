@@ -39,7 +39,7 @@ const SUPPLY_POSITIONS = {
   goldfish:       { color: 'text-orange-500', pos: 'top-[65%] right-[8%]' },
   hamster:        { color: 'text-stone-500', pos: 'top-[75%] right-[8%]' },
   rock_pet:       { color: 'text-stone-600', pos: 'bottom-[35%] left-[8%]' },
-  cactus:         { color: 'text-green-800', pos: 'top-[15%] left-[8%]' },
+  cactus:         { color: 'text-green-800', pos: 'top-[25%] left-[8%]' },
   ant_farm:       { color: 'text-amber-900', pos: 'top-[55%] right-[8%]' },
   robo_dog:       { color: 'text-sky-500', pos: 'bottom-[5%] right-[2%]' },
   tamagotchi:     { color: 'text-pink-500', pos: 'bottom-[30%] left-[8%]' },
