@@ -72,3 +72,55 @@ html, body, #root {
   display: flex;
   flex-direction: column;
 }
+/* MOBILE ONLY: Handbook / Deck Fix */
+@media (max-width: 768px) {
+  
+  /* 1. Target the Handbook Card specifically */
+  /* Note: Ensure the class name matches your component. I am assuming .handbook-card or .deck-pile based on context. */
+  .handbook-card, .deck-pile, [data-id="handbook"] {
+    
+    /* STOP IT FROM BEING STICKY */
+    position: absolute !important; /* Moves with the scroll, doesn't stick to screen */
+    top: 10px !important;
+    left: 10px !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+
+    /* MAKE IT TINY */
+    width: 70px !important;
+    height: 90px !important;
+    min-height: 0 !important;
+    padding: 5px !important;
+    
+    /* HIDE THE TEXT (It's too small to read anyway) */
+    font-size: 0 !important;
+    line-height: 0 !important;
+    overflow: hidden !important;
+    
+    /* Keep the border/color so you know it's the deck */
+    border-width: 2px !important;
+    z-index: 1 !important; /* Lower priority than popups */
+  }
+
+  /* 2. Optional: Add a simple label so you know what it is */
+  .handbook-card::after, .deck-pile::after {
+    content: "DECK";
+    font-size: 10px;
+    font-family: monospace;
+    color: #D4AF37; /* Gold */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    letter-spacing: 1px;
+    display: block;
+    line-height: normal;
+  }
+  
+  /* 3. Disable any hover/transform effects on mobile so it stays put */
+  .handbook-card:hover, .deck-pile:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
