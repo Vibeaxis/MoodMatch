@@ -1,148 +1,122 @@
+/* CONTAINER */
 .title-screen-container {
-  position: fixed;
-  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #292524 0%, #0c0a09 100%);
-  color: #fafaf9;
-  font-family: 'Merriweather', serif;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  position: relative;
   overflow: hidden;
-  z-index: 50;
+  padding: 1rem; /* Added padding for mobile safety */
 }
 
-/* --- Animations --- */
-@keyframes titleFadeIn {
-  0% { opacity: 0; transform: translateY(-20px); filter: blur(10px); }
-  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-
-@keyframes subtitleFadeIn {
-  0% { opacity: 0; letter-spacing: 0em; }
-  100% { opacity: 0.6; letter-spacing: 0.2em; }
-}
-
-@keyframes cardSlideIn {
-  0% { opacity: 0; transform: translateY(100px) rotate(5deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
-}
-
-@keyframes stampAppear {
-  0% { opacity: 0; transform: scale(3) rotate(-20deg); }
-  30% { opacity: 1; transform: scale(0.8) rotate(-5deg); }
-  100% { transform: scale(1) rotate(-8deg); }
-}
-
-/* --- Header --- */
+/* HEADER */
 .title-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   z-index: 10;
-  position: relative;
 }
 
 .main-title {
   font-family: 'Courier Prime', monospace;
-  font-size: 5rem;
+  font-size: 3rem;
   font-weight: 700;
-  letter-spacing: -0.05em;
-  color: #e7e5e4;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  margin-bottom: 0.5rem;
-  animation: titleFadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  letter-spacing: 0.1em;
+  color: #D4AF37; /* Gold */
+  margin: 0;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 .sub-title {
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: #a8a29e;
+  color: #888;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  animation: subtitleFadeIn 1.5s ease-out 0.8s forwards;
-  opacity: 0;
+  margin-top: 0.5rem;
 }
 
-/* --- Philosophy Cards --- */
+/* PHILOSOPHY CARDS (THE CRITICAL PART) */
 .philosophy-selection {
   display: flex;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
   z-index: 10;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   justify-content: center;
-  flex-wrap: wrap;
   perspective: 1000px;
 }
 
 .personnel-file {
-  width: 280px;
-  background: #e7e5e4;
+  flex: 1;
+  background: #fdfbf7; /* Paper color */
+  color: #2d2d2d;
+  border-radius: 4px;
   padding: 1.5rem;
-  border-radius: 2px;
-  position: relative;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  opacity: 0;
-  animation: cardSlideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  border: 1px solid #d6d3d1;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  min-height: 280px;
+  border: 1px solid #d1d1d1;
+  /* Paper texture effect */
+  background-image: linear-gradient(#fdfbf7 2px, transparent 2px),
+  linear-gradient(90deg, #fdfbf7 2px, transparent 2px),
+  linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
 }
 
-.personnel-file:nth-child(1) { animation-delay: 0.2s; transform: rotate(-2deg); }
-.personnel-file:nth-child(2) { animation-delay: 0.4s; z-index: 5; }
-.personnel-file:nth-child(3) { animation-delay: 0.6s; transform: rotate(2deg); }
+/* File Tab Look */
+.file-tab {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 40%;
+  height: 15px;
+  background: #fdfbf7;
+  border-radius: 4px 4px 0 0;
+  border: 1px solid #d1d1d1;
+  border-bottom: none;
+}
 
 .personnel-file:hover {
-  transform: translateY(-20px) scale(1.05) rotate(0deg) !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  z-index: 50;
-  background: #fafaf9;
+  transform: translateY(-8px) rotateX(2deg);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.4);
+  border-color: #D4AF37;
 }
 
 .personnel-file.selected {
-  border: 2px solid #ea580c;
-  transform: translateY(-10px) scale(1.05) rotate(0deg) !important;
-  z-index: 40;
-  background: #fff;
+  transform: scale(1.05) translateY(-10px);
+  box-shadow: 0 0 0 4px #D4AF37, 0 20px 40px rgba(0,0,0,0.5);
+  border-color: #D4AF37;
+  z-index: 20;
 }
 
-.file-tab {
-  position: absolute;
-  top: -25px;
-  left: 0;
-  width: 120px;
-  height: 26px;
-  background: #d6d3d1;
-  border-radius: 4px 4px 0 0;
-  z-index: -1;
-  border-top: 1px solid #a8a29e;
-  border-left: 1px solid #a8a29e;
-  border-right: 1px solid #a8a29e;
-}
-
-.personnel-file:hover .file-tab { background: #e7e5e4; }
-.personnel-file.selected .file-tab { background: #ea580c; border-color: #ea580c; }
-
-.file-content h3 {
+.personnel-file h3 {
   font-family: 'Courier Prime', monospace;
-  color: #1c1917;
-  font-weight: 700;
   font-size: 1.25rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #a8a29e;
+  border-bottom: 2px solid #eee;
   padding-bottom: 0.5rem;
   text-transform: uppercase;
+  font-weight: bold;
 }
 
-.file-content p {
-  color: #44403c;
-  font-size: 0.85rem;
-  line-height: 1.6;
+.personnel-file p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
   margin-bottom: 1.5rem;
-  min-height: 60px;
 }
 
+/* Keywords */
 .keywords-list {
   display: flex;
   flex-wrap: wrap;
@@ -150,137 +124,172 @@
 }
 
 .keyword-tag {
-  background: #f5f5f4;
-  border: 1px solid #a8a29e;
-  color: #57534e;
-  padding: 0.25rem 0.5rem;
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 4px;
   font-size: 0.7rem;
-  border-radius: 2px;
-  font-family: 'Courier Prime', monospace;
   text-transform: uppercase;
+  font-weight: 600;
+  color: #666;
 }
 
-/* --- Stamp Effect --- */
+.personnel-file.selected .keyword-tag {
+  background: #D4AF37;
+  color: #1a1a1a;
+}
+
+/* STAMP */
 .stamp-overlay {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
-  width: 100%;
-  text-align: center;
-  transform: translate(-50%, -50%);
-  border: 4px solid #ef4444;
-  color: #ef4444;
-  padding: 0.5rem;
-  font-family: 'Courier Prime', monospace;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-size: 2rem;
   font-weight: 900;
-  font-size: 2.5rem;
+  color: rgba(212, 175, 55, 0.4); /* Faded Gold */
+  border: 4px solid rgba(212, 175, 55, 0.4);
+  padding: 0.5rem 1rem;
   text-transform: uppercase;
-  border-radius: 4px;
-  opacity: 0;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.9);
-  mix-blend-mode: multiply;
-  box-shadow: 0 0 0 4px rgba(255,255,255,0.5);
+  animation: stamp-in 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.personnel-file.selected .stamp-overlay {
-  animation: stampAppear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+@keyframes stamp-in {
+  from { transform: translate(-50%, -50%) scale(2) rotate(-15deg); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1) rotate(-15deg); opacity: 1; }
 }
 
-/* --- Input Section --- */
+/* INPUT SECTION */
 .input-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease;
-  z-index: 10;
-  height: 0;
-  overflow: hidden;
+  pointer-events: none;
+  width: 100%;
+  max-width: 400px;
 }
 
 .input-section.visible {
   opacity: 1;
   transform: translateY(0);
-  height: auto;
-  margin-top: 2rem;
+  pointer-events: all;
+}
+
+.name-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.name-input-container label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.8rem;
+  color: #888;
+  letter-spacing: 2px;
 }
 
 .name-input {
-  background: rgba(0,0,0,0.2);
+  background: transparent;
   border: none;
-  border-bottom: 2px solid #57534e;
-  color: #f5f5f4;
+  border-bottom: 2px solid #555;
+  color: #fff;
   font-family: 'Courier Prime', monospace;
   font-size: 1.5rem;
+  padding: 0.5rem;
   text-align: center;
-  padding: 0.75rem 1rem;
-  width: 320px;
   outline: none;
-  transition: all 0.3s;
+  transition: border-color 0.3s;
 }
 
 .name-input:focus {
-  border-bottom-color: #f59e0b;
-  background: rgba(0,0,0,0.4);
+  border-color: #D4AF37;
 }
 
 .clock-in-btn {
-  background: #f59e0b;
-  color: #292524;
+  margin-top: 1rem;
+  background: #D4AF37;
+  color: #1a1a1a;
   border: none;
-  padding: 1rem 4rem;
-  font-family: 'Courier Prime', monospace;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
   cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
+  width: 100%;
 }
 
 .clock-in-btn:hover {
+  background: #fff;
   transform: translateY(-2px);
-  background: #fbbf24;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
 }
 
-/* --- Load Game Section (New) --- */
+/* RESUME BUTTON */
 .load-game-section {
-  margin-top: 3rem;
+  margin-top: 2rem;
   text-align: center;
-  animation: subtitleFadeIn 1s ease-out 2s forwards;
-  opacity: 0;
+  animation: fade-in 1s ease-in;
 }
 
 .load-btn {
   background: transparent;
-  border: 1px solid #78716c;
-  color: #78716c;
+  border: 1px solid #555;
+  color: #888;
   padding: 0.75rem 2rem;
   font-family: 'Courier Prime', monospace;
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
   cursor: pointer;
-  transition: all 0.3s;
-  text-transform: uppercase;
+  transition: all 0.2s;
 }
 
 .load-btn:hover {
-  border-color: #f5f5f4;
-  color: #f5f5f4;
-  background: rgba(255,255,255,0.05);
+  border-color: #D4AF37;
+  color: #D4AF37;
+  background: rgba(212, 175, 55, 0.05);
 }
 
-/* --- Mobile Responsiveness --- */
+/* --- MOBILE SPECIFIC FIXES --- */
 @media (max-width: 768px) {
-  .main-title { font-size: 2.5rem; }
-  .philosophy-selection { gap: 1rem; margin-top: 1rem; }
-  .personnel-file { width: 100%; max-width: 320px; }
-  .personnel-file:nth-child(n) { transform: rotate(0deg); }
+  .title-screen-container {
+    padding: 2rem 1rem;
+    overflow-y: auto; /* Allow scrolling on small screens */
+    justify-content: flex-start; /* Start from top so nothing is cut off */
+  }
+
+  .main-title {
+    font-size: 2rem; /* Smaller title */
+  }
+
+  /* Stack cards vertically */
+  .philosophy-selection {
+    flex-direction: column; 
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .personnel-file {
+    width: 100%;
+    min-height: auto; /* Let content dictate height */
+  }
+
+  /* Make selected card look distinct without huge scaling */
+  .personnel-file.selected {
+    transform: scale(1.02);
+  }
+
+  /* Ensure settings button is easy to hit */
+  button[aria-label="Settings"] {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.2); /* Slight background for visibility */
+    border-radius: 50%;
+  }
 }
