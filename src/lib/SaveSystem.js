@@ -44,46 +44,6 @@ const getKeyForSlot = (slotId) => {
   if (!slotId || slotId === 'auto') return SAVE_KEY_AUTO;
   return `${SAVE_KEY_PREFIX}${slotId}`;
 };
-// --- Safe Storage Wrapper (prevents iOS Safari black-screen crashes) ---
-const getSafeStorage = () => {
-  try {
-    const ls = window.localStorage;
-    const k = "__cmm_storage_test__";
-    ls.setItem(k, "1");
-    ls.removeItem(k);
-    return ls;
-  } catch (e) {
-    return null; // storage unavailable (common on iOS private mode)
-  }
-};
-
-const SAFE_LS = getSafeStorage();
-const MEM_FALLBACK = new Map(); // lets the game boot even if storage is dead
-
-const safeGetItem = (key) => {
-  try {
-    if (SAFE_LS) return SAFE_LS.getItem(key);
-  } catch (e) {}
-  return MEM_FALLBACK.has(key) ? MEM_FALLBACK.get(key) : null;
-};
-
-const safeSetItem = (key, value) => {
-  try {
-    if (SAFE_LS) {
-      SAFE_LS.setItem(key, value);
-      return true;
-    }
-  } catch (e) {}
-  MEM_FALLBACK.set(key, value);
-  return false;
-};
-
-const safeRemoveItem = (key) => {
-  try {
-    if (SAFE_LS) SAFE_LS.removeItem(key);
-  } catch (e) {}
-  MEM_FALLBACK.delete(key);
-};
 
 export const SaveManager = {
   /**
