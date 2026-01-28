@@ -211,7 +211,7 @@ const SettingsModal = ({ isOpen, onClose, gameState, onSettingsChange, onLoadGam
                     <span className="value">{settings.uiScale}%</span>
                   </div>
                   <input 
-                    type="range" min="80" max="120" 
+                    type="range" min="50" max="120" 
                     value={settings.uiScale} 
                     onChange={(e) => updateSetting('uiScale', Number(e.target.value))} 
                   />
