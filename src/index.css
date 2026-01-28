@@ -124,3 +124,35 @@ html, body, #root {
     box-shadow: none !important;
   }
 }
+/* src/index.css - Mobile Fixes */
+
+@media (max-width: 768px) {
+  /* TARGET: The Brown "Faculty Handbook" Card/Deck
+     Using attribute selector to catch it if class names are generic 
+  */
+  div[class*="bg-[#2c1810]"], /* Target by background color if class is missing */
+  div[class*="handbook-deck"],
+  div:has(> .confidential-stamp), /* Modern browser trick */
+  .handbook-trigger { 
+    
+    /* 1. UNSTICK IT from the top */
+    position: fixed !important; 
+    top: auto !important;
+    left: auto !important;
+    
+    /* 2. MOVE TO BOTTOM RIGHT (Thumb Zone) */
+    bottom: 20px !important;
+    right: 20px !important;
+    
+    /* 3. SHRINK IT */
+    transform: scale(0.6) !important; /* Make it 60% size */
+    transform-origin: bottom right !important;
+    
+    /* 4. ENSURE Z-INDEX */
+    z-index: 50 !important;
+    margin: 0 !important;
+    
+    /* 5. ADD SHADOW so it pops over other elements */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+  }
+}
