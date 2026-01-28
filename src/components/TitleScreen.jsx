@@ -57,7 +57,7 @@ function TitleScreen({ onClockIn }) {
 
   const handleSettingsChange = (newSettings) => {
     setSettings(newSettings);
-    SaveManager.saveSettings(newSettings);
+    setHasSave(!!SaveManager.loadGame('auto'));
   };
 
   const cards = [
