@@ -1,27 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import GameUI from '@/components/GameUI';
 import TitleScreen from '@/components/TitleScreen';
+import ErrorBoundary from '@/components/ErrorBoundary'; // <--- 1. IMPORT IT
 
 const DEFAULT_PROFILE = {
   name: 'Teacher',
   xpTotal: 0,
   currentRank: 0,
   streak: 0,
-  gpa: 4.0,              // Ensure this is here
-  unlockedPerks: [],     // Ensure this is here
+  gpa: 4.0,
+  unlockedPerks: [],
   supplies: [],
   philosophy: 'Pragmatist'
 };
 
 function App() {
   const [hasClockedIn, setHasClockedIn] = useState(() => {
-    return localStorage.getItem('hasClockedIn') === 'true';
+    // FIX: Add try/catch for localStorage on mobile private mode
+    try {
+      return localStorage.getItem('hasClockedIn') === 'true';
+    } catch (e) {
+      return false;
+    }
   });
 
  const [playerProfile, setPlayerProfile] = useState(() => {
-    const saved = localStorage.getItem('playerProfile');
-    // FIX: Merge saved data with DEFAULT_PROFILE to ensure new keys (like gpa/unlockedPerks) exist
-    return saved ? { ...DEFAULT_PROFILE, ...JSON.parse(saved) } : DEFAULT_PROFILE;
+    try {
+      const saved = localStorage.getItem('playerProfile');
+      return saved ? { ...DEFAULT_PROFILE, ...JSON.parse(saved) } : DEFAULT_PROFILE;
+    } catch (e) {
+      return DEFAULT_PROFILE;
+    }
   });
 
   const handleClockIn = (newProfile) => {
@@ -29,31 +38,36 @@ function App() {
     setPlayerProfile(profile);
     setHasClockedIn(true);
     
-    localStorage.setItem('playerProfile', JSON.stringify(profile));
-    localStorage.setItem('hasClockedIn', 'true');
+    try {
+      localStorage.setItem('playerProfile', JSON.stringify(profile));
+      localStorage.setItem('hasClockedIn', 'true');
+    } catch (e) {
+      console.error("Save failed:", e);
+    }
   };
 
   const handleClockOut = () => {
-    // Reset local state
     setHasClockedIn(false);
     setPlayerProfile(DEFAULT_PROFILE);
-    
-    // Note: Local storage clearing is handled by the SettingsPanel before calling this
-    // but we can ensure key state items are gone here too for safety
-    localStorage.removeItem('hasClockedIn');
-    localStorage.removeItem('playerProfile');
+    try {
+      localStorage.removeItem('hasClockedIn');
+      localStorage.removeItem('playerProfile');
+    } catch (e) {}
   };
 
   const updateProfile = (updates) => {
     setPlayerProfile(prev => {
       const newState = { ...prev, ...updates };
-      localStorage.setItem('playerProfile', JSON.stringify(newState));
+      try {
+        localStorage.setItem('playerProfile', JSON.stringify(newState));
+      } catch (e) {}
       return newState;
     });
   };
 
+  // 2. WRAP THE RETURN WITH ERROR BOUNDARY
   return (
-    <>
+    <ErrorBoundary>
       {hasClockedIn ? (
         <GameUI 
           playerProfile={playerProfile} 
@@ -63,7 +77,7 @@ function App() {
       ) : (
         <TitleScreen onClockIn={handleClockIn} />
       )}
-    </>
+    </ErrorBoundary>
   );
 }
 
