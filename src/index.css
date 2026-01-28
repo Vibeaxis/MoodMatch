@@ -55,3 +55,20 @@ body {
   border: 2px solid #10b981;
   background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
 }
+/* index.css */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents scrolling bounce */
+  background-color: #2d2d2d;
+}
+
+/* Ensure the app container fills the screen */
+#root > div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
