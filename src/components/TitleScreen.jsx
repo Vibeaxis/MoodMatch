@@ -10,17 +10,27 @@ function TitleScreen({ onClockIn }) {
   const [playerName, setPlayerName] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [settings, setSettings] = useState(SaveManager.loadSettings());
+  
+  // Safe load for settings
+  const [settings, setSettings] = useState(() => {
+    return SaveManager.loadSettings ? SaveManager.loadSettings() : {};
+  });
+  
   const [hasSave, setHasSave] = useState(false);
 
-  // Check for save on mount to avoid hydration mismatches
+  // --- CRASH FIX IS HERE ---
   useEffect(() => {
-    setHasSave(SaveManager.hasSave());
+    // Check if the function exists before calling it
+    if (typeof SaveManager.hasSave === 'function') {
+      setHasSave(SaveManager.hasSave('auto'));
+    } else {
+      console.warn("⚠️ SaveManager.hasSave not found. Please update lib/SaveSystem.js");
+      setHasSave(false);
+    }
   }, []);
 
   const handleSelect = (id) => {
     if (isTransitioning) return;
-    // Toggle: if clicking selected, unselect it
     if (selectedPhilosophy === id) {
         setSelectedPhilosophy(null);
     } else {
@@ -46,18 +56,25 @@ function TitleScreen({ onClockIn }) {
   };
   
   const handleLoadGame = () => {
-    const saved = SaveManager.loadGame();
+    // Safe load call
+    if (typeof SaveManager.loadGame !== 'function') return;
+
+    const saved = SaveManager.loadGame('auto');
     if (saved) {
       setIsTransitioning(true);
       setTimeout(() => {
-        onClockIn(saved.playerProfile);
+        // Ensure we are passing the full profile
+        onClockIn(saved.playerProfile || saved);
       }, 1500);
     }
   };
 
   const handleSettingsChange = (newSettings) => {
     setSettings(newSettings);
-    setHasSave(!!SaveManager.loadGame('auto'));
+    // Re-check save status safely
+    if (typeof SaveManager.hasSave === 'function') {
+      setHasSave(SaveManager.hasSave('auto'));
+    }
   };
 
   const cards = [
@@ -76,9 +93,6 @@ function TitleScreen({ onClockIn }) {
       </div>
     );
   }
-
-
-
 
   return (
     <div className="title-screen-container">
@@ -153,10 +167,12 @@ function TitleScreen({ onClockIn }) {
          </div>
       )}
 
+      {/* Pass dummy handlers if SaveManager is broken to prevent modal crash */}
       <SettingsModal 
         isOpen={showSettings}
         onClose={() => setShowSettings(false)}
-        currentSettings={settings}
+        gameState={null} // Title screen doesn't have game state to save
+        onLoadGame={handleLoadGame} // Allow loading from modal
         onSettingsChange={handleSettingsChange}
       />
     </div>

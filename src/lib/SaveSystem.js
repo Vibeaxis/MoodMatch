@@ -2,11 +2,10 @@
  * SaveSystem.js
  * Comprehensive save management for Classroom Mood Matcher
  * Handles localStorage, backups, export/import, and metadata
- * UPDATED: Now supports Multiple Save Slots
  */
 
 const SAVE_KEY_AUTO = 'cmm_save_v1'; // Keeps backward compatibility
-const SAVE_KEY_PREFIX = 'cmm_save_slot_'; // cmm_save_slot_1, cmm_save_slot_2, etc.
+const SAVE_KEY_PREFIX = 'cmm_save_slot_'; 
 const BACKUP_KEY = 'cmm_save_backup';
 const SETTINGS_KEY = 'cmm_settings_v1';
 
@@ -15,7 +14,7 @@ const DEFAULT_SETTINGS = {
   soundEnabled: true,
   musicEnabled: true,
   animationsEnabled: true,
-  difficulty: 'NORMAL' // EASY, NORMAL, HARD
+  difficulty: 'NORMAL'
 };
 
 const DEFAULT_GAME_STATE = {
@@ -39,7 +38,7 @@ const DEFAULT_GAME_STATE = {
   tutorialCompleted: false
 };
 
-// Helper to determine the actual localStorage key based on slot ID
+// Helper to get key
 const getKeyForSlot = (slotId) => {
   if (!slotId || slotId === 'auto') return SAVE_KEY_AUTO;
   return `${SAVE_KEY_PREFIX}${slotId}`;
@@ -47,11 +46,13 @@ const getKeyForSlot = (slotId) => {
 
 export const SaveManager = {
   /**
-   * Saves the current game state to localStorage
-   * @param {Object} gameState - The complete game state object
-   * @param {string|number} slotId - 'auto' for autosave, or 1, 2, 3 for manual slots
-   * @returns {boolean} success status
+   * CRITICAL FIX: The missing function causing your crash
    */
+  hasSave: (slotId = 'auto') => {
+    const key = getKeyForSlot(slotId);
+    return !!localStorage.getItem(key);
+  },
+
   saveGame: (gameState, slotId = 'auto') => {
     try {
       const storageKey = getKeyForSlot(slotId);
@@ -60,7 +61,7 @@ export const SaveManager = {
         ...gameState,
         version: 1,
         timestamp: Date.now(),
-        slotId: slotId, // Track which slot this is
+        slotId: slotId, 
         meta: {
           playtime: gameState.meta?.playtime || 0,
           saveDate: new Date().toISOString(),
@@ -70,7 +71,7 @@ export const SaveManager = {
 
       const serialized = JSON.stringify(saveObject);
       
-      // Only backup the AutoSave to prevent blowing up storage limits
+      // Backup auto-save only
       if (slotId === 'auto') {
         const existing = localStorage.getItem(SAVE_KEY_AUTO);
         if (existing) {
@@ -86,25 +87,18 @@ export const SaveManager = {
     }
   },
 
-  /**
-   * Loads game state from localStorage
-   * @param {string|number} slotId - 'auto' or slot number
-   * @returns {Object|null} The game state or null if no save exists
-   */
   loadGame: (slotId = 'auto') => {
     try {
       const storageKey = getKeyForSlot(slotId);
       const serialized = localStorage.getItem(storageKey);
       
       if (!serialized) {
-        // If trying to load Auto and it fails, try backup
         if (slotId === 'auto') return SaveManager.recoverBackup();
         return null;
       }
 
       const saveObject = JSON.parse(serialized);
       
-      // Merge with default state to ensure new fields exist
       return {
         ...DEFAULT_GAME_STATE,
         ...saveObject,
@@ -119,9 +113,6 @@ export const SaveManager = {
     }
   },
 
-  /**
-   * Specifically tries to load the backup file
-   */
   recoverBackup: () => {
     try {
       const backup = localStorage.getItem(BACKUP_KEY);
@@ -135,24 +126,19 @@ export const SaveManager = {
     return null;
   },
 
-  /**
-   * Returns a list of all populated save slots with their metadata
-   * Used for the "Load Game" screen
-   */
   getAllSaves: () => {
     const slots = [];
     
-    // Check Auto Save
+    // Auto Save
     const autoMeta = SaveManager.getSlotMetadata('auto');
     if (autoMeta) slots.push({ ...autoMeta, id: 'auto', label: 'Auto Save' });
 
-    // Check Manual Slots (let's assume 3 slots for now)
+    // Manual Slots 1-3
     [1, 2, 3].forEach(num => {
       const meta = SaveManager.getSlotMetadata(num);
       if (meta) {
         slots.push({ ...meta, id: num, label: `Slot ${num}` });
       } else {
-        // Push empty slot info so UI knows it's available
         slots.push({ id: num, label: `Slot ${num}`, isEmpty: true });
       }
     });
@@ -160,9 +146,6 @@ export const SaveManager = {
     return slots;
   },
 
-  /**
-   * Gets metadata for a specific slot without full validation
-   */
   getSlotMetadata: (slotId) => {
     const key = getKeyForSlot(slotId);
     const data = localStorage.getItem(key);
@@ -175,7 +158,6 @@ export const SaveManager = {
         name: parsed.playerProfile?.name || 'Unknown Teacher',
         rank: parsed.playerProfile?.currentRank || 0,
         day: parsed.dayCount || 1,
-        week: parsed.playerProfile?.weekNumber || 1,
         timestamp: parsed.timestamp || Date.now(),
         dateString: parsed.meta?.saveDate || new Date().toISOString()
       };
@@ -184,23 +166,11 @@ export const SaveManager = {
     }
   },
 
-  /**
-   * Wipes save data for a specific slot
-   */
   deleteSlot: (slotId) => {
     const key = getKeyForSlot(slotId);
     localStorage.removeItem(key);
     if (slotId === 'auto') localStorage.removeItem(BACKUP_KEY);
   },
-
-  /**
-   * Returns a fresh game state object
-   */
-  getNewGameState: () => {
-    return JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
-  },
-
-  // --- Import/Export (Defaults to AutoSave for now) ---
 
   exportSave: (slotId = 'auto') => {
     try {
@@ -231,8 +201,6 @@ export const SaveManager = {
       return false;
     }
   },
-
-  // --- Settings (Shared across all saves) ---
 
   saveSettings: (settings) => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
