@@ -653,131 +653,43 @@ const finalRank = shiftData.rank || 'C';
     });
   };
 
-return (
+  return (
     <>
       <Helmet>
         <title>Classroom Mood Matcher</title>
       </Helmet>
 
-      {/* MAIN CONTAINER: The Viewport */}
-      <div 
-        ref={gameContainerRef} 
-        className={`game-ui-container h-[100dvh] w-full bg-stone-900 font-serif flex flex-col overflow-hidden relative ${showTutorial ? 'tutorial-disabled' : ''}`}
-      >
+      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
+>
         
-        {/* --- SCROLLABLE DESK SURFACE --- */}
-        {/* Everything inside here moves together like items on a real desk */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden relative w-full custom-scrollbar">
-            
-            {/* 1. THE RULER (Top of Desk) */}
-            {/* Changed from sticky to relative. It sits at the top of the wood. */}
-            <div className="relative z-10 pt-10 px-4 pointer-events-none">
-              <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
-                <ProgressionBar
-                  xp={xpTotal}
-                  maxXp={maxXp}
-                  streak={streak}
-                  gradeLevel={currentGradeLevel}
-                  nextUnlockAt={getNextUnlockStreak()}
-                  onPlannerClick={() => setIsPlannerOpen(true)}
-                />
-              </div>
-            </div>
-
-            {/* 2. THE BOOK & COFFEE (Desk Items) */}
-            {/* These are absolutely positioned relative to this SCROLLING container */}
-            <div className="absolute top-24 left-4 z-20">
-               <DailyMemo 
-                 memo={dailyMemo} 
-                 onOpenHandbook={() => setIsHandbookOpen(true)} 
-               />
-            </div>
-
-            <div className="absolute top-24 right-4 z-20">
-                <CoffeeMug 
-                  usesRemaining={coffeeUsesRemaining} 
-                  maxUses={coffeeMaxUses}
-                  onUse={handleCoffeeUse} 
-                />
-            </div>
-
-            {/* 3. GAMEPLAY AREA (Paper & Folders) */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`${currentGradeLevel}-${dayCount}`} 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="relative z-0 min-h-full pb-48 pt-4"
+        {/* Settings Button Header */}
+        <div className="game-ui-header">
+           <div className="flex items-center gap-2">
+              <button 
+                className="settings-button" 
+                onClick={() => setShowSettings(true)} 
+                aria-label="Settings"
               >
-                <ClassroomLogic
-                  currentGradeLevel={currentGradeLevel}
-                  onXPGained={handleXPGained}
-                  onStreakUpdate={(val) => updateProfile({ streak: val })} 
-                  onCorrectAnswer={handleCorrectAnswer}
-                  onWrongAnswer={handleWrongAnswer}
-                  streak={streak}
-                  activeModifier={activeModifier}
-                  hintActive={hintActive}
-                  onPolaroidCreated={handlePolaroidCreated}
-                  onGameNextDay={handleManualNextDay}
-                  playerPhilosophy={playerProfile.philosophy}
-                  playerSupplies={playerProfile.supplies}
-                  onShiftComplete={handleShiftComplete}
-                  onApplyBoon={handleApplyBoon}
-                  dayCount={dayCount}
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            {/* POLAROIDS (Scattered on Desk) */}
-            <div className="absolute inset-0 pointer-events-none z-30">
-              <AnimatePresence>
-                {dailyPolaroids.map((p, index) => (
-                  <Polaroid 
-                    key={p.id} 
-                    grade={p.grade} 
-                    timestamp={p.timestamp} 
-                    index={index} 
-                    isVisible={p.visible}
-                    onClick={() => setShowAchievementGallery(true)}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-
-        </div> 
-        {/* END SCROLLABLE DESK */}
-
-
-        {/* --- FIXED UI OVERLAYS (HUD) --- */}
-        {/* These float ABOVE the desk and stay put (Settings, Toast, Modals) */}
-        
-        {/* Settings Button (Top Right Fixed) */}
-        <div className="absolute top-4 right-4 z-50 pointer-events-auto">
-           <button 
-             className="settings-button w-10 h-10 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 flex items-center justify-center backdrop-blur-sm transition-colors" 
-             onClick={() => setShowSettings(true)} 
-             aria-label="Settings"
-           >
-             <SettingsIcon size={20} />
-           </button>
-        </div>
-
-        {/* Inbox Tray (Fixed to Bottom) */}
-        <div className="shrink-0 z-50 relative w-full bg-stone-900/0 pointer-events-none"> 
-           <div className="pointer-events-auto">
-             <InboxTray 
-                requests={requests} 
-                onApprove={handleRequestApproveWrapper} 
-                onDeny={handleDeny} 
-                onTopple={handleTopple} 
-              />
+                <SettingsIcon size={24} className="text-stone-400 hover:text-white transition-colors"/>
+              </button>
+              {autoSaveStatus.isSaving && (
+                 <span className="text-xs text-stone-500 animate-pulse font-mono">SAVING...</span>
+              )}
            </div>
         </div>
 
-        {/* Modals & Popups */}
+       {/* Add z-50 and relative positioning to force it above the gradient background */}
+<div className="supplies-container fixed inset-0 z-50 pointer-events-none">
+  <SupplyDisplay unlockedSupplies={unlockedSupplies} />
+</div>
+
+        <div className="modifier-display">
+          <DailyMemo 
+            memo={dailyMemo} 
+            onOpenHandbook={() => setIsHandbookOpen(true)} 
+          />
+        </div>
+
         <EmployeeHandbook 
           isOpen={isHandbookOpen} 
           onClose={() => setIsHandbookOpen(false)} 
@@ -810,7 +722,7 @@ return (
           currentSettings={settings}
           onSettingsChange={handleSettingsChange}
           onHardReset={() => {
-            onClockOut(); 
+            onClockOut(); // Use parent method to fully reset
             window.location.reload();
           }}
         />
@@ -826,7 +738,7 @@ return (
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 100 }}
-              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-4 pointer-events-none"
+              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-4"
             >
               <div className="bg-red-600 text-white rounded-lg shadow-2xl border-2 border-red-800 p-4 flex items-center gap-4">
                 <div className="bg-red-800 p-2 rounded-full animate-pulse">
@@ -839,6 +751,70 @@ return (
               </div>
             </motion.div>
           )}
+        </AnimatePresence>
+{/* POLAROID OVERLAY LAYER */}
+<div className="absolute inset-0 pointer-events-none z-30">
+  <AnimatePresence>
+    {dailyPolaroids.map((p, index) => (
+      <Polaroid 
+        key={p.id} 
+        grade={p.grade} 
+        timestamp={p.timestamp} 
+        index={index} 
+        isVisible={p.visible}
+        // Pass the function directly
+        onClick={() => setShowAchievementGallery(true)}
+      />
+    ))}
+  </AnimatePresence>
+</div>
+
+        <CoffeeMug 
+          usesRemaining={coffeeUsesRemaining} 
+          maxUses={coffeeMaxUses}
+          onUse={handleCoffeeUse} 
+        />
+
+    <div className="relative z-40 pt-10 px-4 pointer-events-none">
+  <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
+    <ProgressionBar
+      xp={xpTotal}
+      maxXp={maxXp}
+      streak={streak}
+      gradeLevel={currentGradeLevel}
+      nextUnlockAt={getNextUnlockStreak()}
+      onPlannerClick={() => setIsPlannerOpen(true)}
+    />
+  </div>
+</div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${currentGradeLevel}-${dayCount}`} 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative z-10"
+          >
+            <ClassroomLogic
+              currentGradeLevel={currentGradeLevel}
+              onXPGained={handleXPGained}
+              onStreakUpdate={(val) => updateProfile({ streak: val })} 
+              onCorrectAnswer={handleCorrectAnswer}
+              onWrongAnswer={handleWrongAnswer}
+              streak={streak}
+              activeModifier={activeModifier}
+              hintActive={hintActive}
+              onPolaroidCreated={handlePolaroidCreated}
+              onGameNextDay={handleManualNextDay}
+              playerPhilosophy={playerProfile.philosophy}
+              playerSupplies={playerProfile.supplies}
+              onShiftComplete={handleShiftComplete}
+              onApplyBoon={handleApplyBoon}
+              dayCount={dayCount}
+            />
+          </motion.div>
         </AnimatePresence>
 
         <AnimatePresence>
@@ -862,7 +838,7 @@ return (
                   weeklySchedule: weeklySchedule,
                   dayOfWeek: dayOfWeek,
                   weekNumber: weekNumber,
-                  shiftHistory: shiftHistory 
+                  shiftHistory: shiftHistory // Pass the hook object
                 }}
                 onReadMemo={handleReadMemo}
                 onRequisition={handleRequisition}
@@ -871,56 +847,94 @@ return (
           )}
         </AnimatePresence>
 
-        {/* Achievement Gallery Modal */}
-        <AnimatePresence>
-          {showAchievementGallery && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-              <div className="absolute inset-0" onClick={() => setShowAchievementGallery(false)} />
-              <motion.div 
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="relative bg-[#FDFBF7] w-full max-w-5xl h-[85vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
-              >
-                <button 
-                  onClick={() => setShowAchievementGallery(false)}
-                  className="absolute top-6 right-6 p-2 hover:bg-stone-200 rounded-full z-50 transition-colors"
-                >
-                  <X className="w-8 h-8 text-stone-800" />
-                </button>
-                <h2 className="font-mono-typewriter text-4xl font-bold text-stone-800 mb-2 uppercase tracking-widest border-b-4 border-stone-800 pb-6">
-                  Hall of Records
-                </h2>
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                   {ACHIEVEMENTS.map((ach) => {
-                      const isUnlocked = playerProfile.unlockedAchievements?.includes(ach.id);
-                      return (
-                        <div 
-                          key={ach.id} 
-                          className={`p-6 border-2 rounded-lg relative overflow-hidden transition-all ${
-                            isUnlocked ? 'bg-white border-stone-800 shadow-md opacity-100' : 'bg-stone-200 border-stone-300 opacity-60 grayscale'
-                          }`}
-                        >
-                          <div className="flex items-start justify-between mb-4">
-                              <div className={`p-3 rounded-full flex items-center justify-center w-12 h-12 ${isUnlocked ? 'bg-amber-100 text-amber-600' : 'bg-stone-300 text-stone-500'}`}>
-                                <Award size={24} />
-                              </div>
-                              {isUnlocked && (
-                                <span className="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded uppercase tracking-wider border border-green-200">Unlocked</span>
-                              )}
-                          </div>
-                          <h3 className="font-bold text-lg font-mono-typewriter leading-tight mb-2 text-stone-900">{ach.name}</h3>
-                          <p className="text-sm text-stone-600 font-serif leading-relaxed">{ach.hidden && !isUnlocked ? "???" : ach.description}</p>
-                          <div className="absolute bottom-3 right-3 text-xs font-mono font-bold text-stone-400">+{ach.xpReward} XP</div>
-                        </div>
-                      );
-                   })}
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
+        <InboxTray 
+          requests={requests} 
+          onApprove={handleRequestApproveWrapper} 
+          onDeny={handleDeny} 
+          onTopple={handleTopple} 
+        />
+
+     {/* --- ACHIEVEMENT GALLERY MODAL --- */}
+<AnimatePresence>
+  {showAchievementGallery && (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+      {/* Click outside to close */}
+      <div className="absolute inset-0" onClick={() => setShowAchievementGallery(false)} />
+      
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="relative bg-[#FDFBF7] w-full max-w-5xl h-[85vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
+      >
+        {/* Close Button */}
+        <button 
+          onClick={() => setShowAchievementGallery(false)}
+          className="absolute top-6 right-6 p-2 hover:bg-stone-200 rounded-full z-50 transition-colors"
+        >
+          <X className="w-8 h-8 text-stone-800" />
+        </button>
+
+        <h2 className="font-mono-typewriter text-4xl font-bold text-stone-800 mb-2 uppercase tracking-widest border-b-4 border-stone-800 pb-6">
+          Hall of Records
+        </h2>
         
+        {/* DYNAMIC GRID START */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {ACHIEVEMENTS.map((ach) => {
+              // Check if unlocked (Safeguard: check if array exists)
+              const isUnlocked = playerProfile.unlockedAchievements?.includes(ach.id);
+              
+              return (
+                <div 
+                  key={ach.id} 
+                  className={`p-6 border-2 rounded-lg relative overflow-hidden transition-all ${
+                    isUnlocked 
+                      ? 'bg-white border-stone-800 shadow-md opacity-100' 
+                      : 'bg-stone-200 border-stone-300 opacity-60 grayscale'
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                     {/* Icon Badge */}
+                     <div className={`p-3 rounded-full flex items-center justify-center w-12 h-12 ${
+                       isUnlocked ? 'bg-amber-100 text-amber-600' : 'bg-stone-300 text-stone-500'
+                     }`}>
+                       {/* Using a generic Award icon for stability */}
+                       <Award size={24} />
+                     </div>
+                     
+                     {/* Unlocked Badge */}
+                     {isUnlocked && (
+                       <span className="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded uppercase tracking-wider border border-green-200">
+                         Unlocked
+                       </span>
+                     )}
+                  </div>
+                  
+                  <h3 className="font-bold text-lg font-mono-typewriter leading-tight mb-2 text-stone-900">
+                    {ach.name}
+                  </h3>
+                  
+                  {/* Description Logic: Hide if it's a "Hidden" achievement and not yet unlocked */}
+                  <p className="text-sm text-stone-600 font-serif leading-relaxed">
+                    {ach.hidden && !isUnlocked ? "???" : ach.description}
+                  </p>
+
+                  {/* XP Reward Tag */}
+                  <div className="absolute bottom-3 right-3 text-xs font-mono font-bold text-stone-400">
+                    +{ach.xpReward} XP
+                  </div>
+                </div>
+              );
+           })}
+        </div>
+        {/* DYNAMIC GRID END */}
+
+      </motion.div>
+    </div>
+  )}
+</AnimatePresence>
+
         <Toaster />
       </div>
     </>
