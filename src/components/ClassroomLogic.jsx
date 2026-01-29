@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MorningReport from '@/components/MorningReport';
@@ -207,7 +206,7 @@ function ClassroomLogic({
         variant: "destructive"
       });
     } else {
-       toast({
+        toast({
         title: `Grade ${rank}! ${philosophyBonus > 0 ? `(+${philosophyBonus} Bonus)` : ''}`,
         description: bonusReason ? `${bonusReason} | Total: +${totalPuzzleXP} XP` : `+${totalPuzzleXP} XP`,
         variant: isSuccess ? "default" : "destructive"
@@ -260,6 +259,17 @@ function ClassroomLogic({
     setActiveBoon(null);
   };
 
+  const handleManualNextDay = () => {
+     // Reset shift state similar to handleShiftComplete without the summary logic for mid-game transitions
+      resetShiftState();
+      
+      // Call the prop function to advance the day in the parent component
+      if (onGameNextDay) {
+          onGameNextDay();
+      }
+  };
+
+
   const handleShiftComplete = () => {
     const shiftSummary = {
       puzzlesSolved: puzzlesSolvedInShift,
@@ -280,10 +290,8 @@ function ClassroomLogic({
       onShiftComplete(shiftSummary);
     }
     
-    if (onGameNextDay) {
-      resetShiftState();
-      onGameNextDay();
-    }
+    // Using handleManualNextDay for consistency if needed, or keeping direct call
+    handleManualNextDay(); 
   };
 
   return (
@@ -293,7 +301,7 @@ function ClassroomLogic({
         background: 'radial-gradient(circle at center, #78350f 0%, #0c0a09 100%)', 
       }}
     >
-     {/* Wood Texture (Optional - Keep this one if you want texture but no darkness) */}
+      {/* Wood Texture (Optional - Keep this one if you want texture but no darkness) */}
       <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply url('data:image/svg+xml;base64,...') z-0" />
       
       <div className="combo-indicator morale-meter-container">
@@ -334,7 +342,7 @@ function ClassroomLogic({
           `}
         >
           <p className={`${activeModifier.type === 'CRISIS' ? 'text-red-100' : 'text-blue-100'} font-bold text-xs uppercase tracking-wider text-center`}>
-             {activeModifier.type === 'CRISIS' ? '⚠️ CRISIS ACTIVE' : 'Active Effect'}
+              {activeModifier.type === 'CRISIS' ? '⚠️ CRISIS ACTIVE' : 'Active Effect'}
           </p>
           <p className="text-white font-mono-typewriter text-sm">{activeModifier.text}</p>
         </motion.div>
