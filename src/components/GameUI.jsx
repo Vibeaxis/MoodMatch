@@ -782,19 +782,20 @@ const finalRank = shiftData.rank || 'C';
           onUse={handleCoffeeUse} 
         />
 
-    <div className="relative z-40 pt-10 px-4 pointer-events-none">
-  <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
-    <ProgressionBar
-      xp={xpTotal}
-      maxXp={maxXp}
-      streak={streak}
-      gradeLevel={currentGradeLevel}
-      nextUnlockAt={getNextUnlockStreak()}
-      onPlannerClick={() => setIsPlannerOpen(true)}
-    />
-  </div>
-</div>
-
+{/* --- 1. THE RULER (Top Center) --- */}
+        {/* Absolute positioning kills the "Sticky Black Bar" effect immediately. */}
+        <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
+           <div className="w-full max-w-7xl pointer-events-auto">
+              <ProgressionBar
+                xp={xpTotal}
+                maxXp={maxXp}
+                streak={streak}
+                gradeLevel={currentGradeLevel}
+                nextUnlockAt={getNextUnlockStreak()}
+                onPlannerClick={() => setIsPlannerOpen(true)}
+              />
+           </div>
+        </div>
         <AnimatePresence mode="wait">
           <motion.div
             key={`${currentGradeLevel}-${dayCount}`} 
