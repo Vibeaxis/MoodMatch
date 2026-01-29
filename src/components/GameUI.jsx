@@ -689,17 +689,8 @@ const finalRank = shiftData.rank || 'C';
   <SupplyDisplay unlockedSupplies={unlockedSupplies} />
 </div>
 
-      {/* HANDBOOK: 
-            Mobile: Fixed Bottom Right (Floating Button style)
-            Desktop: Absolute Top Left (Sitting on desk) 
-        */}
-        <div className={`
-            z-40 pointer-events-auto
-            /* Mobile: Anchored to bottom right thumb zone */
-            fixed bottom-6 right-4 origin-bottom-right scale-75
-            /* Desktop: Sitting on the desk, top left */
-            md:absolute md:top-36 md:left-8 md:bottom-auto md:right-auto md:origin-top-left md:scale-90
-        `}>
+        {/* Left: Handbook (Scaled down so it's not huge) */}
+        <div className="absolute top-28 left-4 z-30 md:top-32 md:left-10 origin-top-left transform scale-75 md:scale-90">
             <DailyMemo 
               memo={dailyMemo} 
               onOpenHandbook={() => setIsHandbookOpen(true)} 
