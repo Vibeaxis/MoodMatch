@@ -787,9 +787,8 @@ const finalRank = shiftData.rank || 'C';
         </div>
 
 {/* --- 1. THE RULER (Top Z-Layer) --- */}
- <div className="absolute top-0 left-0 w-full z-20 pt-12 px-4 pb-2 flex justify-center pointer-events-none">
+        <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
            <div className="w-full max-w-7xl pointer-events-auto">
-       
               <ProgressionBar
                 xp={xpTotal}
                 maxXp={maxXp}
@@ -802,7 +801,7 @@ const finalRank = shiftData.rank || 'C';
         </div>
         {/* C. THE PAPER & FOLDERS (Gameplay) */}
                 {/* 'mt-4' gives just a little breathing room below the ruler */}
-  <div className="relative z-10 w-full max-w-7xl mx-auto pt-40 px-2 pb-32">
+    <div className="relative z-0 mt-5 md:mt-12 px-2">
                    <AnimatePresence mode="wait">
                       <motion.div
                         key={`${currentGradeLevel}-${dayCount}`} 
