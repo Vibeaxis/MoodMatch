@@ -653,17 +653,22 @@ const finalRank = shiftData.rank || 'C';
     });
   };
 
-  return (
+ return (
     <>
       <Helmet>
         <title>Classroom Mood Matcher</title>
       </Helmet>
 
-      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
->
+      {/* 1. APP SHELL CONTAINER: Flex Column, Fixed Height, No Global Scroll */}
+      <div 
+        ref={gameContainerRef} 
+        className={`game-ui-container h-[100dvh] w-full bg-stone-900 font-serif flex flex-col overflow-hidden relative ${showTutorial ? 'tutorial-disabled' : ''}`}
+      >
         
-        {/* Settings Button Header */}
-        <div className="game-ui-header">
+        {/* --- FIXED UI LAYER (Header, Settings, Supplies, Handbook Icon) --- */}
+        {/* These sit on top of everything absolutely or exist outside the scroll flow */}
+        
+        <div className="game-ui-header pointer-events-auto">
            <div className="flex items-center gap-2">
               <button 
                 className="settings-button" 
@@ -678,18 +683,80 @@ const finalRank = shiftData.rank || 'C';
            </div>
         </div>
 
-       {/* Add z-50 and relative positioning to force it above the gradient background */}
-<div className="supplies-container fixed inset-0 z-50 pointer-events-none">
-  <SupplyDisplay unlockedSupplies={unlockedSupplies} />
-</div>
+        <div className="supplies-container fixed inset-0 z-50 pointer-events-none">
+          <SupplyDisplay unlockedSupplies={unlockedSupplies} />
+        </div>
 
-        <div className="modifier-display">
+        <div className="modifier-display absolute top-20 left-4 z-40">
           <DailyMemo 
             memo={dailyMemo} 
             onOpenHandbook={() => setIsHandbookOpen(true)} 
           />
         </div>
 
+        {/* --- SCROLLABLE MIDDLE AREA (The Game Board) --- */}
+        {/* flex-1 makes it fill all available space between header and inbox */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden relative w-full custom-scrollbar">
+            
+            {/* Sticky XP Ruler inside the scroll area */}
+            <div className="sticky top-0 z-30 pt-10 px-4 pointer-events-none">
+              <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
+                <ProgressionBar
+                  xp={xpTotal}
+                  maxXp={maxXp}
+                  streak={streak}
+                  gradeLevel={currentGradeLevel}
+                  nextUnlockAt={getNextUnlockStreak()}
+                  onPlannerClick={() => setIsPlannerOpen(true)}
+                />
+              </div>
+            </div>
+
+            {/* The Classroom Logic (Paper + Folders) */}
+            {/* Added pb-40 to ensure the bottom folders can scroll up ABOVE the inbox tray */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`${currentGradeLevel}-${dayCount}`} 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="relative z-10 min-h-full pb-48 pt-4"
+              >
+                <ClassroomLogic
+                  currentGradeLevel={currentGradeLevel}
+                  onXPGained={handleXPGained}
+                  onStreakUpdate={(val) => updateProfile({ streak: val })} 
+                  onCorrectAnswer={handleCorrectAnswer}
+                  onWrongAnswer={handleWrongAnswer}
+                  streak={streak}
+                  activeModifier={activeModifier}
+                  hintActive={hintActive}
+                  onPolaroidCreated={handlePolaroidCreated}
+                  onGameNextDay={handleManualNextDay}
+                  playerPhilosophy={playerProfile.philosophy}
+                  playerSupplies={playerProfile.supplies}
+                  onShiftComplete={handleShiftComplete}
+                  onApplyBoon={handleApplyBoon}
+                  dayCount={dayCount}
+                />
+              </motion.div>
+            </AnimatePresence>
+        </div>
+
+        {/* --- FIXED BOTTOM LAYER (Inbox Tray) --- */}
+        {/* shrink-0 ensures it never gets squished. z-50 keeps it on top of folders. */}
+        <div className="shrink-0 z-50 relative w-full bg-stone-900/0"> 
+          {/* Note: If InboxTray has its own fixed positioning, remove 'fixed' from inside it and let this div handle placement */}
+           <InboxTray 
+              requests={requests} 
+              onApprove={handleRequestApproveWrapper} 
+              onDeny={handleDeny} 
+              onTopple={handleTopple} 
+            />
+        </div>
+
+        {/* --- MODALS & OVERLAYS --- */}
         <EmployeeHandbook 
           isOpen={isHandbookOpen} 
           onClose={() => setIsHandbookOpen(false)} 
@@ -722,7 +789,7 @@ const finalRank = shiftData.rank || 'C';
           currentSettings={settings}
           onSettingsChange={handleSettingsChange}
           onHardReset={() => {
-            onClockOut(); // Use parent method to fully reset
+            onClockOut(); 
             window.location.reload();
           }}
         />
@@ -752,70 +819,28 @@ const finalRank = shiftData.rank || 'C';
             </motion.div>
           )}
         </AnimatePresence>
-{/* POLAROID OVERLAY LAYER */}
-<div className="absolute inset-0 pointer-events-none z-30">
-  <AnimatePresence>
-    {dailyPolaroids.map((p, index) => (
-      <Polaroid 
-        key={p.id} 
-        grade={p.grade} 
-        timestamp={p.timestamp} 
-        index={index} 
-        isVisible={p.visible}
-        // Pass the function directly
-        onClick={() => setShowAchievementGallery(true)}
-      />
-    ))}
-  </AnimatePresence>
-</div>
+
+        {/* POLAROID OVERLAY LAYER */}
+        <div className="absolute inset-0 pointer-events-none z-30">
+          <AnimatePresence>
+            {dailyPolaroids.map((p, index) => (
+              <Polaroid 
+                key={p.id} 
+                grade={p.grade} 
+                timestamp={p.timestamp} 
+                index={index} 
+                isVisible={p.visible}
+                onClick={() => setShowAchievementGallery(true)}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
 
         <CoffeeMug 
           usesRemaining={coffeeUsesRemaining} 
           maxUses={coffeeMaxUses}
           onUse={handleCoffeeUse} 
         />
-
-     <div className="sticky top-0 z-40 pt-10 px-4 bg-stone-900 border-b border-stone-800 shadow-xl">
-          <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
-            <ProgressionBar
-              xp={xpTotal}
-              maxXp={maxXp}
-              streak={streak}
-              gradeLevel={currentGradeLevel}
-              nextUnlockAt={getNextUnlockStreak()}
-              onPlannerClick={() => setIsPlannerOpen(true)}
-            />
-          </div>
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${currentGradeLevel}-${dayCount}`} 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="relative z-10"
-          >
-            <ClassroomLogic
-              currentGradeLevel={currentGradeLevel}
-              onXPGained={handleXPGained}
-              onStreakUpdate={(val) => updateProfile({ streak: val })} 
-              onCorrectAnswer={handleCorrectAnswer}
-              onWrongAnswer={handleWrongAnswer}
-              streak={streak}
-              activeModifier={activeModifier}
-              hintActive={hintActive}
-              onPolaroidCreated={handlePolaroidCreated}
-              onGameNextDay={handleManualNextDay}
-              playerPhilosophy={playerProfile.philosophy}
-              playerSupplies={playerProfile.supplies}
-              onShiftComplete={handleShiftComplete}
-              onApplyBoon={handleApplyBoon}
-              dayCount={dayCount}
-            />
-          </motion.div>
-        </AnimatePresence>
 
         <AnimatePresence>
           {isPlannerOpen && (
@@ -838,7 +863,7 @@ const finalRank = shiftData.rank || 'C';
                   weeklySchedule: weeklySchedule,
                   dayOfWeek: dayOfWeek,
                   weekNumber: weekNumber,
-                  shiftHistory: shiftHistory // Pass the hook object
+                  shiftHistory: shiftHistory 
                 }}
                 onReadMemo={handleReadMemo}
                 onRequisition={handleRequisition}

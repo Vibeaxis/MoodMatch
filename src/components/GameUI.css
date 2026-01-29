@@ -203,3 +203,34 @@
   position: relative;
   z-index: 10001; /* Higher than tutorial backdrop */
 }
+/* Add this to gameui.css */
+
+/* TARGET THE STRATEGY FILES GRID */
+/* This assumes the folders are in a grid or flex container inside ClassroomLogic */
+.strategy-files-container, 
+[class*="grid-cols-2"] { 
+    /* Pull the folders UP towards the paper */
+    margin-top: -20px !important; 
+    position: relative;
+    z-index: 20; /* Ensure they float above the paper's bottom edge */
+}
+
+/* TARGET THE PAPER/LOG */
+.learning-log-container,
+[class*="bg-[#fdfbf7] shadow-xl"] {
+    /* Remove excessive bottom margin from the paper */
+    margin-bottom: 0 !important;
+    padding-bottom: 2rem !important;
+}
+
+/* Ensure the scrollbar looks nice inside the middle section */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1c1917; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #44403c; 
+  border-radius: 3px;
+}
