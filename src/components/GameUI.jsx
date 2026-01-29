@@ -785,23 +785,11 @@ const finalRank = shiftData.rank || 'C';
   </AnimatePresence>
 </div>
 
-       {/* COFFEE: 
-            Mobile: Fixed Top Right (Under settings button)
-            Desktop: Absolute Top Right (Sitting on desk)
-        */}
-        <div className={`
-            z-40 pointer-events-auto
-            /* Mobile: Tucked under the settings button */
-            fixed top-20 right-4 origin-top-right scale-75
-            /* Desktop: Sitting on the desk, top right */
-            md:absolute md:top-36 md:right-8 md:scale-90
-        `}>
-            <CoffeeMug 
-              usesRemaining={coffeeUsesRemaining} 
-              maxUses={coffeeMaxUses}
-              onUse={handleCoffeeUse} 
-            />
-        </div>
+        <CoffeeMug 
+          usesRemaining={coffeeUsesRemaining} 
+          maxUses={coffeeMaxUses}
+          onUse={handleCoffeeUse} 
+        />
 
 {/* --- 1. THE RULER (Top Z-Layer) --- */}
         <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
@@ -816,7 +804,6 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-        
         <AnimatePresence mode="wait">
           <motion.div
             key={`${currentGradeLevel}-${dayCount}`} 
