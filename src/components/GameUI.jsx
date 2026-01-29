@@ -689,16 +689,16 @@ const finalRank = shiftData.rank || 'C';
   <SupplyDisplay unlockedSupplies={unlockedSupplies} />
 </div>
 
-        {/* BOOK: 
-            Desktop: Absolute Left, below ruler.
-            Mobile: Fixed Bottom Right (Thumb reach, out of way). 
+      {/* HANDBOOK: 
+            Mobile: Fixed Bottom Right (Floating Button style)
+            Desktop: Absolute Top Left (Sitting on desk) 
         */}
         <div className={`
-            z-40
-            /* Mobile: Bottom Right Corner */
-            fixed bottom-24 right-4 scale-75 origin-bottom-right
-            /* Desktop: Top Left, pushing down from ruler */
-            md:absolute md:top-36 md:left-8 md:bottom-auto md:right-auto md:scale-90 md:origin-top-left
+            z-40 pointer-events-auto
+            /* Mobile: Anchored to bottom right thumb zone */
+            fixed bottom-6 right-4 origin-bottom-right scale-75
+            /* Desktop: Sitting on the desk, top left */
+            md:absolute md:top-36 md:left-8 md:bottom-auto md:right-auto md:origin-top-left md:scale-90
         `}>
             <DailyMemo 
               memo={dailyMemo} 
@@ -785,11 +785,23 @@ const finalRank = shiftData.rank || 'C';
   </AnimatePresence>
 </div>
 
-        <CoffeeMug 
-          usesRemaining={coffeeUsesRemaining} 
-          maxUses={coffeeMaxUses}
-          onUse={handleCoffeeUse} 
-        />
+       {/* COFFEE: 
+            Mobile: Fixed Top Right (Under settings button)
+            Desktop: Absolute Top Right (Sitting on desk)
+        */}
+        <div className={`
+            z-40 pointer-events-auto
+            /* Mobile: Tucked under the settings button */
+            fixed top-20 right-4 origin-top-right scale-75
+            /* Desktop: Sitting on the desk, top right */
+            md:absolute md:top-36 md:right-8 md:scale-90
+        `}>
+            <CoffeeMug 
+              usesRemaining={coffeeUsesRemaining} 
+              maxUses={coffeeMaxUses}
+              onUse={handleCoffeeUse} 
+            />
+        </div>
 
 {/* --- 1. THE RULER (Top Z-Layer) --- */}
         <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
@@ -804,6 +816,13 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
+        {/* --- 4. MAIN GAMEPLAY AREA (The Paper) --- */}
+        {/* CRITICAL FIX: 'pt-32' (mobile) and 'md:pt-48' (desktop) 
+            This pushes the paper DOWN so it starts clearly below the ruler.
+        */}
+        <div className="w-full h-full flex flex-col items-center justify-start pt-32 md:pt-48 relative z-10 overflow-y-auto custom-scrollbar pb-32">
+            <div className="w-full max-w-7xl mx-auto pointer-events-auto px-2 md:px-0">
+              
         <AnimatePresence mode="wait">
           <motion.div
             key={`${currentGradeLevel}-${dayCount}`} 
