@@ -776,8 +776,7 @@ const finalRank = shiftData.rank || 'C';
   </AnimatePresence>
 </div>
 
-      {/* Coffee */}
-                <div className="absolute top-24 right-0 z-20 origin-right transform scale-50 md:scale-90 md:top-32 md:right-8">
+      <div className="absolute top-24 right-2 z-30 origin-top-right transform scale-60 md:scale-90 md:top-36 md:right-8">
                     <CoffeeMug 
                       usesRemaining={coffeeUsesRemaining} 
                       maxUses={coffeeMaxUses}
@@ -800,7 +799,7 @@ const finalRank = shiftData.rank || 'C';
         </div>
         {/* C. THE PAPER & FOLDERS (Gameplay) */}
                 {/* 'mt-4' gives just a little breathing room below the ruler */}
-                <div className="relative z-0 mt-4 md:mt-12 px-2">
+                <div className="relative z-0 mt-5 md:mt-12 px-2">
                    <AnimatePresence mode="wait">
                       <motion.div
                         key={`${currentGradeLevel}-${dayCount}`} 
