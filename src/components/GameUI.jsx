@@ -801,7 +801,7 @@ const finalRank = shiftData.rank || 'C';
         </div>
         {/* C. THE PAPER & FOLDERS (Gameplay) */}
                 {/* 'mt-4' gives just a little breathing room below the ruler */}
-    <div className="relative z-0 mt-20 md:mt-12 px-2">
+    <div className="relative z-0 pt-32 md:pt-40 px-2 pb-20">
                    <AnimatePresence mode="wait">
                       <motion.div
                         key={`${currentGradeLevel}-${dayCount}`} 
