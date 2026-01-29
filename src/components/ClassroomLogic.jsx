@@ -240,19 +240,17 @@ function ClassroomLogic({
         description: "Clock out to review your performance.",
         className: "bg-green-100 border-green-500 text-green-900"
       });
-    } else {
-       toast({
-       title: "MANDATE FILED", 
-        description: `Progress: ${newSolvedCount}/${requiredPuzzles} dossiers completed.`,
-        
-        // 2. THE VISUALS: Cream paper background, dark ink text, and a heavy left border
-        className: "bg-[#f4f1ea] border-2 border-stone-800 border-l-8 text-stone-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] font-mono"
-      });
-      
-      setTimeout(() => {
-          generateNewPuzzle();
-      }, 500);
-    }
+  } else {
+   toast({
+    title: "MANDATE FILED", 
+    description: `Progress: ${newSolvedCount}/${requiredPuzzles} dossiers completed.`,
+    variant: "dossier", // <--- This triggers the new look
+  });
+  
+  setTimeout(() => {
+      generateNewPuzzle();
+  }, 500);
+}
   };
 
   const handleClaimBoon = () => {
