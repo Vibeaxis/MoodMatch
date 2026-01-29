@@ -1,10 +1,11 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GraduationCap } from 'lucide-react';
 
 function ProgressionBar({ xp, maxXp, streak, gradeLevel, nextUnlockAt, onPlannerClick }) {
-  const xpPercentage = Math.min((xp / maxXp) * 100, 100);
+  // FIX: Safeguard against division by zero. If maxXp is 0 or missing, default to 0%.
+  const safeMaxXp = maxXp || 1; 
+  const xpPercentage = Math.min((xp / safeMaxXp) * 100, 100);
 
   // Generate tick marks for the ruler
   const ticks = Array.from({ length: 41 }).map((_, i) => ({
