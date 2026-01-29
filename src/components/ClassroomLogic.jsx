@@ -399,7 +399,7 @@ function ClassroomLogic({
           
           {/* Top/Left side - Morning Report */}
           {/* Added negative margin bottom on mobile to pull folders up */}
-          <div className="flex justify-center lg:justify-end learning-log-container mb-[-2rem] md:mb-0 z-10 relative">
+          <div className="flex justify-center lg:justify-end learning-log-container mb-[-0.5rem] md:mb-0 z-10 relative">
             <MorningReport 
               ref={reportRef}
               clue={currentPuzzle.text} 

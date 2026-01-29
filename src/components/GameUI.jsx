@@ -775,18 +775,18 @@ const finalRank = shiftData.rank || 'C';
           onUse={handleCoffeeUse} 
         />
 
-     <div className="sticky top-0 z-40 pt-10 px-4 bg-stone-900 border-b border-stone-800 shadow-xl">
-          <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
-            <ProgressionBar
-              xp={xpTotal}
-              maxXp={maxXp}
-              streak={streak}
-              gradeLevel={currentGradeLevel}
-              nextUnlockAt={getNextUnlockStreak()}
-              onPlannerClick={() => setIsPlannerOpen(true)}
-            />
-          </div>
-        </div>
+    <div className="relative z-40 pt-10 px-4 pointer-events-none">
+  <div className="max-w-7xl mx-auto pointer-events-auto xp-bar-container">
+    <ProgressionBar
+      xp={xpTotal}
+      maxXp={maxXp}
+      streak={streak}
+      gradeLevel={currentGradeLevel}
+      nextUnlockAt={getNextUnlockStreak()}
+      onPlannerClick={() => setIsPlannerOpen(true)}
+    />
+  </div>
+</div>
 
         <AnimatePresence mode="wait">
           <motion.div
