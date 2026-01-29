@@ -659,23 +659,29 @@ const finalRank = shiftData.rank || 'C';
         <title>Classroom Mood Matcher</title>
       </Helmet>
 
-      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
->
-        
-        {/* Settings Button Header */}
-        <div className="game-ui-header">
-           <div className="flex items-center gap-2">
-              <button 
-                className="settings-button" 
-                onClick={() => setShowSettings(true)} 
-                aria-label="Settings"
-              >
-                <SettingsIcon size={24} className="text-stone-400 hover:text-white transition-colors"/>
-              </button>
-              {autoSaveStatus.isSaving && (
-                 <span className="text-xs text-stone-500 animate-pulse font-mono">SAVING...</span>
-              )}
-           </div>
+   {/* MASTER CONTAINER 
+          - Mobile: min-h-screen (Scrolls normally if content overflows)
+          - Desktop: h-screen + overflow-hidden (Locks everything in place like a game canvas) 
+      */}
+      <div 
+        ref={gameContainerRef} 
+        className={`
+          relative w-full bg-stone-900 font-serif
+          min-h-screen overflow-y-auto overflow-x-hidden
+          md:h-screen md:overflow-hidden 
+          ${showTutorial ? 'tutorial-disabled' : ''}
+        `}
+      >
+      {/* --- 2. SETTINGS BUTTON (Top Right) --- */}
+        {/* Floating freely, no header bar background */}
+        <div className="absolute top-4 right-4 z-50">
+           <button 
+             className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
+             onClick={() => setShowSettings(true)} 
+             aria-label="Settings"
+           >
+             <SettingsIcon size={24} />
+           </button>
         </div>
 
        {/* Add z-50 and relative positioning to force it above the gradient background */}
@@ -683,11 +689,12 @@ const finalRank = shiftData.rank || 'C';
   <SupplyDisplay unlockedSupplies={unlockedSupplies} />
 </div>
 
-        <div className="modifier-display">
-          <DailyMemo 
-            memo={dailyMemo} 
-            onOpenHandbook={() => setIsHandbookOpen(true)} 
-          />
+        {/* Left: Handbook (Scaled down so it's not huge) */}
+        <div className="absolute top-28 left-4 z-30 md:top-32 md:left-10 origin-top-left transform scale-75 md:scale-90">
+            <DailyMemo 
+              memo={dailyMemo} 
+              onOpenHandbook={() => setIsHandbookOpen(true)} 
+            />
         </div>
 
         <EmployeeHandbook 

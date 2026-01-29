@@ -6,10 +6,7 @@
   display: flex;
   align-items: flex-start; /* Align to top so the ruler hits the edge */
   padding-top: 1rem;
-  /* Add a stronger shadow to give it depth (Z-axis) */
-
-  transform: perspective(500px) rotateX(-5deg);
-  transform-origin: top;
+  
 }
 
 /* Ensure the settings button stays a perfect circle and doesn't shrink */
