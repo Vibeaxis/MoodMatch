@@ -689,8 +689,17 @@ const finalRank = shiftData.rank || 'C';
   <SupplyDisplay unlockedSupplies={unlockedSupplies} />
 </div>
 
-        {/* Left: Handbook (Scaled down so it's not huge) */}
-        <div className="absolute top-28 left-4 z-30 md:top-32 md:left-10 origin-top-left transform scale-75 md:scale-90">
+        {/* BOOK: 
+            Desktop: Absolute Left, below ruler.
+            Mobile: Fixed Bottom Right (Thumb reach, out of way). 
+        */}
+        <div className={`
+            z-40
+            /* Mobile: Bottom Right Corner */
+            fixed bottom-24 right-4 scale-75 origin-bottom-right
+            /* Desktop: Top Left, pushing down from ruler */
+            md:absolute md:top-36 md:left-8 md:bottom-auto md:right-auto md:scale-90 md:origin-top-left
+        `}>
             <DailyMemo 
               memo={dailyMemo} 
               onOpenHandbook={() => setIsHandbookOpen(true)} 
@@ -782,8 +791,7 @@ const finalRank = shiftData.rank || 'C';
           onUse={handleCoffeeUse} 
         />
 
-{/* --- 1. THE RULER (Top Center) --- */}
-        {/* Absolute positioning kills the "Sticky Black Bar" effect immediately. */}
+{/* --- 1. THE RULER (Top Z-Layer) --- */}
         <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
            <div className="w-full max-w-7xl pointer-events-auto">
               <ProgressionBar
