@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LESSON_TYPES, ACTIVITY_CARDS } from '@/lib/GameLogic';
@@ -32,12 +31,11 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
     <>
       <div className={`w-full max-w-md relative p-4 transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
         <h2 className="text-xl font-bold text-stone-200/50 mb-6 text-center uppercase tracking-widest font-mono-typewriter">
-          
+          Strategy Files
         </h2>
         
         <div className="grid grid-cols-2 gap-x-8 gap-y-10">
           {folders.map(([type, config], index) => {
-            // Use config from GameLogic, with fallbacks to prevent crashes
             const colors = {
               base: config.base || 'bg-stone-700',
               tab: config.tab || 'bg-stone-600',
@@ -128,13 +126,20 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
         </div>
       </div>
 
-      {/* Expanded View Overlay */}
-      <FolderExpansion 
-        isOpen={!!expandedFolder}
-        activities={expandedFolder ? ACTIVITY_CARDS[expandedFolder] : []}
-        onActivitySelect={handleCardSelection}
-        onClose={handleCloseExpansion}
-      />
+      {/* --- FIX: Fixed Positioning Wrapper --- 
+          This forces the popup to ignore the parent container's padding and width constraints. 
+          pointer-events-none ensures you can click through it when it's closed.
+      */}
+      <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+        <div className={`${expandedFolder ? 'pointer-events-auto' : ''}`}>
+          <FolderExpansion 
+            isOpen={!!expandedFolder}
+            activities={expandedFolder ? ACTIVITY_CARDS[expandedFolder] : []}
+            onActivitySelect={handleCardSelection}
+            onClose={handleCloseExpansion}
+          />
+        </div>
+      </div>
     </>
   );
 }
