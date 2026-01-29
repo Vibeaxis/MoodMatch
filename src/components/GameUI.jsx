@@ -776,13 +776,15 @@ const finalRank = shiftData.rank || 'C';
   </AnimatePresence>
 </div>
 
-      <div className="absolute top-24 right-2 z-30 origin-top-right transform scale-60 md:scale-90 md:top-36 md:right-8">
-                    <CoffeeMug 
-                      usesRemaining={coffeeUsesRemaining} 
-                      maxUses={coffeeMaxUses}
-                      onUse={handleCoffeeUse} 
-                    />
-                </div>
+ {/* --- COFFEE MUG (MOVED BACK TO BOTTOM RIGHT) --- */}
+        {/* Removed from top, pinned back to bottom right thumb zone */}
+        <div className="fixed bottom-32 right-4 z-50 md:bottom-12 md:right-12">
+            <CoffeeMug 
+              usesRemaining={coffeeUsesRemaining} 
+              maxUses={coffeeMaxUses}
+              onUse={handleCoffeeUse} 
+            />
+        </div>
 
 {/* --- 1. THE RULER (Top Z-Layer) --- */}
         <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
@@ -799,7 +801,7 @@ const finalRank = shiftData.rank || 'C';
         </div>
         {/* C. THE PAPER & FOLDERS (Gameplay) */}
                 {/* 'mt-4' gives just a little breathing room below the ruler */}
-                <div className="relative z-0 mt-5 md:mt-12 px-2">
+    <div className="relative z-10 pt-32 md:pt-48 px-2 pb-32">
                    <AnimatePresence mode="wait">
                       <motion.div
                         key={`${currentGradeLevel}-${dayCount}`} 
