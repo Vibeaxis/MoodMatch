@@ -48,20 +48,6 @@ const TUTORIAL_STEPS = [
     position: 'right'
   },
   {
-    id: 'supplies',
-    title: 'Inventory',
-    description: "Your unlocked supplies appear here. They unlock new specialized cards in your deck.",
-    target: '.supplies-container',
-    position: 'bottom-left'
-  },
-  {
-    id: 'crisis',
-    title: 'Daily Events',
-    description: "Check the Memo daily. It lists active modifiers or crises that alter gameplay rules.",
-    target: '.modifier-display',
-    position: 'bottom'
-  },
-  {
     id: 'final',
     title: 'Class Dismissed',
     description: "That's the basics. Keep your head down, grade fairly, and try not to let the chaos win. Good luck.",
