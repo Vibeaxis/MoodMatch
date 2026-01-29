@@ -1,7 +1,6 @@
-
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { X, ArrowRight } from 'lucide-react';
 import './TutorialOverlay.css';
 
 const TUTORIAL_STEPS = [
@@ -26,24 +25,12 @@ const TUTORIAL_STEPS = [
     target: '.strategy-deck-container',
     position: 'left'
   },
-  {
-    id: 'stamper',
-    title: 'Grading Tool',
-    description: "Once you select a card, drag this stamper onto the Morning Report to commit your choice. Grading is final!",
-    target: '.stamper-button', // Assuming DragStamp renders a button or container with this class
-    position: 'top-left'
-  },
-  {
-    id: 'xp-bar',
-    title: 'Progression',
-    description: "Earn XP to rank up. Higher ranks unlock new supplies, perks, and harder grade levels.",
-    target: '.xp-bar-container',
-    position: 'bottom'
-  },
+  // REMOVED: Stamper step (caused rendering issues)
+  // REMOVED: XP Bar step (target class often missing)
   {
     id: 'morale-meter',
     title: 'Momentum',
-    description: "Consecutive successes build your Combo Streak. High streaks yield massive XP bonuses.",
+    description: "Consecutive grading successes build your Combo Streak. High streaks yield massive XP bonuses.",
     target: '.morale-meter-container',
     position: 'right'
   },
@@ -102,7 +89,6 @@ const Spotlight = ({ target }) => {
       const el = document.querySelector(target);
       if (el) {
         const r = el.getBoundingClientRect();
-        // Add some padding
         setRect({
           top: r.top - 10,
           left: r.left - 10,
@@ -123,7 +109,12 @@ const Spotlight = ({ target }) => {
     };
   }, [target]);
 
-  if (!rect) return null;
+  // Fallback: If target exists in config but not on screen, render a full backdrop so text is readable
+  if (!rect) {
+      return (
+        <div className="tutorial-backdrop" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} />
+      );
+  }
 
   return (
     <svg className="tutorial-spotlight" width="100%" height="100%">
