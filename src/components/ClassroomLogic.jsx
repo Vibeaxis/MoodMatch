@@ -233,6 +233,8 @@ function ClassroomLogic({
     }
 
     if (newSolvedCount >= requiredPuzzles) {
+      // --- END OF SHIFT LOGIC ---
+      // We do NOT generate a new puzzle here. We wait for the user to ACK.
       setIsShiftComplete(true);
       toast({
         title: "Shift Complete!",
@@ -240,12 +242,14 @@ function ClassroomLogic({
         className: "bg-green-100 border-green-500 text-green-900"
       });
   } else {
+   // --- CONTINUE SHIFT LOGIC ---
    toast({
     title: "MANDATE FILED", 
     description: `Progress: ${newSolvedCount}/${requiredPuzzles} dossiers completed.`,
-    variant: "dossier", // <--- This triggers the new look
+    variant: "dossier",
   });
   
+  // Only generate new puzzle if the shift ISN'T over
   setTimeout(() => {
       generateNewPuzzle();
   }, 500);
@@ -259,16 +263,13 @@ function ClassroomLogic({
     setActiveBoon(null);
   };
 
+  // Define this to safely pass to the "End Shift" button
   const handleManualNextDay = () => {
-     // Reset shift state similar to handleShiftComplete without the summary logic for mid-game transitions
       resetShiftState();
-      
-      // Call the prop function to advance the day in the parent component
       if (onGameNextDay) {
           onGameNextDay();
       }
   };
-
 
   const handleShiftComplete = () => {
     const shiftSummary = {
@@ -290,7 +291,7 @@ function ClassroomLogic({
       onShiftComplete(shiftSummary);
     }
     
-    // Using handleManualNextDay for consistency if needed, or keeping direct call
+    // Proceed to next day
     handleManualNextDay(); 
   };
 
@@ -301,7 +302,7 @@ function ClassroomLogic({
         background: 'radial-gradient(circle at center, #78350f 0%, #0c0a09 100%)', 
       }}
     >
-      {/* Wood Texture (Optional - Keep this one if you want texture but no darkness) */}
+      {/* Wood Texture */}
       <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply url('data:image/svg+xml;base64,...') z-0" />
       
       <div className="combo-indicator morale-meter-container">
@@ -367,21 +368,19 @@ function ClassroomLogic({
                onClick={(e) => e.stopPropagation()} 
              >
               <div className="boon-modal-header">
-  {/* FIX: Use a tag < /> instead of braces { } */}
-  <activeBoon.icon size={48} className="w-12 h-12 mb-2" />
-  
-  <h2>{activeBoon.name}</h2>
-  <div className="boon-rarity-badge">{activeBoon.rarity}</div>
-</div>
-                <div className="boon-modal-content">
-                   <p className="boon-description">{activeBoon.description}</p>
-                   <p className="boon-flavor">"{activeBoon.flavor}"</p>
-                </div>
-                <div className="boon-modal-actions">
-                   <button className="boon-btn" onClick={handleClaimBoon}>
-                      CLAIM REWARD
-                   </button>
-                </div>
+                <activeBoon.icon size={48} className="w-12 h-12 mb-2" />
+                <h2>{activeBoon.name}</h2>
+                <div className="boon-rarity-badge">{activeBoon.rarity}</div>
+              </div>
+              <div className="boon-modal-content">
+                 <p className="boon-description">{activeBoon.description}</p>
+                 <p className="boon-flavor">"{activeBoon.flavor}"</p>
+              </div>
+              <div className="boon-modal-actions">
+                 <button className="boon-btn" onClick={handleClaimBoon}>
+                    CLAIM REWARD
+                 </button>
+              </div>
              </motion.div>
            </div>
         )}
@@ -402,11 +401,10 @@ function ClassroomLogic({
         )}
       </AnimatePresence>
 
-   <div className="relative z-10 max-w-7xl mx-auto pt-4 md:pt-8"> {/* Reduced top padding */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-12 lg:gap-24 items-start"> {/* Removed mobile gap */}
+   <div className="relative z-10 max-w-7xl mx-auto pt-4 md:pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-12 lg:gap-24 items-start">
           
           {/* Top/Left side - Morning Report */}
-          {/* Added negative margin bottom on mobile to pull folders up */}
           <div className="flex justify-center lg:justify-end learning-log-container mb-[-0.5rem] md:mb-0 z-10 relative">
             <MorningReport 
               ref={reportRef}
@@ -419,7 +417,6 @@ function ClassroomLogic({
           </div>
 
           {/* Bottom/Right side - Lesson Plan Folders */}
-          {/* Removed pt-12, added z-20 to ensure folders slide OVER the paper if they overlap */}
           <div className="flex justify-center lg:justify-start lg:pt-0 strategy-deck-container relative z-20 mt-4 md:mt-0">
             <LessonPlanFolders 
               onFolderSelect={() => {}} 
@@ -432,8 +429,6 @@ function ClassroomLogic({
           </div>
         </div>
 
-        {/* ... Grading Animation remains here ... */}
-
         <GradingAnimation
           shouldRender={showGrading}
           selectedActivity={selectedActivity}
@@ -442,9 +437,10 @@ function ClassroomLogic({
           activeModifier={activeModifier}
           modifierApplied={gradingResult?.modifierApplied}
           onAnimationComplete={() => {
+            // FIX: DO NOT advance the day here. 
+            // Just close the animation. The loop continues via handleGradingComplete logic.
             setShowGrading(false);       
             setSelectedActivity(null); 
-            handleManualNextDay();  
           }}
         />
       </div>
