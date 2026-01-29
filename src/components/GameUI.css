@@ -7,7 +7,7 @@
   align-items: flex-start; /* Align to top so the ruler hits the edge */
   padding-top: 1rem;
   /* Add a stronger shadow to give it depth (Z-axis) */
-  filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5)); 
+
   transform: perspective(500px) rotateX(-5deg);
   transform-origin: top;
 }
