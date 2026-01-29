@@ -1,27 +1,47 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* --- GLOBAL RESETS --- */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents bouncing */
+  background-color: #1c1917; /* stone-900 */
+}
+
 body {
-    @apply bg-stone-900 text-stone-100;
-    font-family: 'Merriweather', serif;
+  @apply bg-stone-900 text-stone-100;
+  font-family: 'Merriweather', serif;
+}
+
+#root > div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .font-mono-typewriter {
   font-family: 'Courier Prime', monospace;
 }
 
-/* Paper Texture */
+/* --- FIXED TEXTURES (Properly Encoded) --- */
+
+/* Paper Texture - Subtle Noise */
 .paper-texture {
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
-/* Wood Texture */
+/* Wood Texture - Darker Grain */
 .wood-texture {
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
 /* Folder Tab Shape */
@@ -29,6 +49,7 @@ body {
   clip-path: polygon(0 0, 40% 0, 45% 12px, 100% 12px, 100% 100%, 0 100%);
 }
 
+/* --- ANIMATIONS --- */
 @keyframes shake {
   0% { transform: translateX(0); }
   10%, 90% { transform: translateX(-5px); }
@@ -51,108 +72,17 @@ body {
   animation: fadeInStamp 2s ease-out forwards;
 }
 
+/* --- CARD STYLES --- */
 .card.unlocked {
   border: 2px solid #10b981;
   background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
 }
-/* index.css */
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* Prevents scrolling bounce */
-  background-color: #2d2d2d;
-}
 
-/* Ensure the app container fills the screen */
-#root > div {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-/* MOBILE ONLY: Handbook / Deck Fix */
+/* --- MOBILE TWEAKS --- */
+/* Consolidating your mobile fixes here to avoid conflicts */
 @media (max-width: 768px) {
-  
-  /* 1. Target the Handbook Card specifically */
-  /* Note: Ensure the class name matches your component. I am assuming .handbook-card or .deck-pile based on context. */
-  .handbook-card, .deck-pile, [data-id="handbook"] {
-    
-    /* STOP IT FROM BEING STICKY */
-    position: absolute !important; /* Moves with the scroll, doesn't stick to screen */
-    top: 10px !important;
-    left: 10px !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin: 0 !important;
-
-    /* MAKE IT TINY */
-    width: 70px !important;
-    height: 90px !important;
-    min-height: 0 !important;
-    padding: 5px !important;
-    
-    /* HIDE THE TEXT (It's too small to read anyway) */
-    font-size: 0 !important;
-    line-height: 0 !important;
-    overflow: hidden !important;
-    
-    /* Keep the border/color so you know it's the deck */
-    border-width: 2px !important;
-    z-index: 1 !important; /* Lower priority than popups */
-  }
-
-  /* 2. Optional: Add a simple label so you know what it is */
-  .handbook-card::after, .deck-pile::after {
-    content: "DECK";
-    font-size: 10px;
-    font-family: monospace;
-    color: #D4AF37; /* Gold */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    letter-spacing: 1px;
-    display: block;
-    line-height: normal;
-  }
-  
-  /* 3. Disable any hover/transform effects on mobile so it stays put */
-  .handbook-card:hover, .deck-pile:hover {
-    transform: none !important;
-    box-shadow: none !important;
-  }
-}
-/* src/index.css - Mobile Fixes */
-
-@media (max-width: 768px) {
-  /* TARGET: The Brown "Faculty Handbook" Card/Deck
-     Using attribute selector to catch it if class names are generic 
-  */
-  div[class*="bg-[#2c1810]"], /* Target by background color if class is missing */
-  div[class*="handbook-deck"],
-  div:has(> .confidential-stamp), /* Modern browser trick */
-  .handbook-trigger { 
-    
-    /* 1. UNSTICK IT from the top */
-    position: fixed !important; 
-    top: auto !important;
-    left: auto !important;
-    
-    /* 2. MOVE TO BOTTOM RIGHT (Thumb Zone) */
-    bottom: 20px !important;
-    right: 20px !important;
-    
-    /* 3. SHRINK IT */
-    transform: scale(0.6) !important; /* Make it 60% size */
-    transform-origin: bottom right !important;
-    
-    /* 4. ENSURE Z-INDEX */
-    z-index: 50 !important;
-    margin: 0 !important;
-    
-    /* 5. ADD SHADOW so it pops over other elements */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+  /* Prevent scroll bouncing on mobile specifically */
+  html, body {
+    overscroll-behavior: none;
   }
 }
