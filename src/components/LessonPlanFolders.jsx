@@ -32,7 +32,7 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
     <>
       <div className={`w-full max-w-md relative p-4 transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
         <h2 className="text-xl font-bold text-stone-200/50 mb-6 text-center uppercase tracking-widest font-mono-typewriter">
-          Strategy Files
+          
         </h2>
         
         <div className="grid grid-cols-2 gap-x-8 gap-y-10">
