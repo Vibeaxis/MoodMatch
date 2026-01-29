@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { LESSON_TYPES, ACTIVITY_CARDS } from '@/lib/GameLogic';
 import FolderExpansion from './FolderExpansion';
 import { Lock } from 'lucide-react';
 
+// Safe Wood Texture Pattern (Base64 Noise)
+const WOOD_TEXTURE_STYLE = {
+  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E")`,
+  backgroundSize: '150px 150px'
+};
+
 function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onActivitySelect, highlightedFolder }) {
   const folders = Object.entries(LESSON_TYPES);
   const [expandedFolder, setExpandedFolder] = useState(null);
-
-  // Extended rotations to handle potential extra folders (Sabbatical, Extracurricular)
   const rotations = [-2, 1, -1, 2, -1, 1];
 
   const handleFolderClick = (type) => {
-    if (disabled) return;
-    if (disabledTypes.includes(type)) return;
+    if (disabled || disabledTypes.includes(type)) return;
     setExpandedFolder(type);
     onFolderSelect(type); 
   };
 
-  const handleCloseExpansion = () => {
-    setExpandedFolder(null);
-  };
+  const handleCloseExpansion = () => setExpandedFolder(null);
 
   const handleCardSelection = (activity) => {
     setExpandedFolder(null);
@@ -30,9 +31,7 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
   return (
     <>
       <div className={`w-full max-w-md relative p-4 transition-opacity duration-300 ${disabled ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
-        <h2 className="text-xl font-bold text-stone-200/50 mb-6 text-center uppercase tracking-widest font-mono-typewriter">
-          Strategy Files
-        </h2>
+        {/* Note: Removed the "STRATEGY FILES" text here as requested to reduce clutter */}
         
         <div className="grid grid-cols-2 gap-x-8 gap-y-10">
           {folders.map(([type, config], index) => {
@@ -75,7 +74,7 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
                   ${isLocked ? 'grayscale opacity-70 cursor-not-allowed' : ''}
                 `}
               >
-                {/* Folder Tab (Top Left) */}
+                {/* Folder Tab */}
                 <div className={`
                   absolute -top-3 left-0 w-5/12 h-6 
                   ${colors.tab} rounded-t-lg z-0
@@ -88,22 +87,23 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
                 </div>
 
                 {/* Main Folder Body */}
-                <div className={`
-                  relative z-10 w-full h-full 
-                  ${colors.base} rounded-r-md rounded-bl-md rounded-br-md rounded-tl-none
-                  shadow-xl ${colors.shadow}
-                  border-t-2 border-white/10
-                  flex flex-col items-start justify-center p-4
-                  wood-texture
-                `}>
-                  {/* Lock Overlay */}
+                <div 
+                  className={`
+                    relative z-10 w-full h-full 
+                    ${colors.base} rounded-r-md rounded-bl-md rounded-br-md rounded-tl-none
+                    shadow-xl ${colors.shadow}
+                    border-t-2 border-white/10
+                    flex flex-col items-start justify-center p-4
+                  `}
+                  style={WOOD_TEXTURE_STYLE} // Applying safe inline texture
+                >
                   {isLocked && (
                      <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 rounded-md">
                         <Lock className="w-12 h-12 text-white opacity-80" />
                      </div>
                   )}
 
-                  {/* Paper inside peeking out */}
+                  {/* Paper peeking out */}
                   <div className="absolute top-2 right-2 w-11/12 h-5/6 bg-white opacity-10 rotate-1 rounded-sm pointer-events-none" />
 
                   <div className="relative z-20 text-left">
@@ -126,10 +126,7 @@ function LessonPlanFolders({ onFolderSelect, disabled, disabledTypes = [], onAct
         </div>
       </div>
 
-      {/* --- FIX: Fixed Positioning Wrapper --- 
-          This forces the popup to ignore the parent container's padding and width constraints. 
-          pointer-events-none ensures you can click through it when it's closed.
-      */}
+      {/* Fixed Overlay for Expansion */}
       <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
         <div className={`${expandedFolder ? 'pointer-events-auto' : ''}`}>
           <FolderExpansion 
