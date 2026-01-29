@@ -816,41 +816,41 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-        {/* --- 4. MAIN GAMEPLAY AREA (The Paper) --- */}
+    {/* --- 4. MAIN GAMEPLAY AREA (The Paper) --- */}
         {/* CRITICAL FIX: 'pt-32' (mobile) and 'md:pt-48' (desktop) 
             This pushes the paper DOWN so it starts clearly below the ruler.
         */}
         <div className="w-full h-full flex flex-col items-center justify-start pt-32 md:pt-48 relative z-10 overflow-y-auto custom-scrollbar pb-32">
             <div className="w-full max-w-7xl mx-auto pointer-events-auto px-2 md:px-0">
-              
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${currentGradeLevel}-${dayCount}`} 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="relative z-10"
-          >
-            <ClassroomLogic
-              currentGradeLevel={currentGradeLevel}
-              onXPGained={handleXPGained}
-              onStreakUpdate={(val) => updateProfile({ streak: val })} 
-              onCorrectAnswer={handleCorrectAnswer}
-              onWrongAnswer={handleWrongAnswer}
-              streak={streak}
-              activeModifier={activeModifier}
-              hintActive={hintActive}
-              onPolaroidCreated={handlePolaroidCreated}
-              onGameNextDay={handleManualNextDay}
-              playerPhilosophy={playerProfile.philosophy}
-              playerSupplies={playerProfile.supplies}
-              onShiftComplete={handleShiftComplete}
-              onApplyBoon={handleApplyBoon}
-              dayCount={dayCount}
-            />
-          </motion.div>
-        </AnimatePresence>
+               <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${currentGradeLevel}-${dayCount}`} 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ClassroomLogic
+                      currentGradeLevel={currentGradeLevel}
+                      onXPGained={handleXPGained}
+                      onStreakUpdate={(val) => updateProfile({ streak: val })} 
+                      onCorrectAnswer={handleCorrectAnswer}
+                      onWrongAnswer={handleWrongAnswer}
+                      streak={streak}
+                      activeModifier={activeModifier}
+                      hintActive={hintActive}
+                      onPolaroidCreated={handlePolaroidCreated}
+                      onGameNextDay={handleManualNextDay}
+                      playerPhilosophy={playerProfile.philosophy}
+                      playerSupplies={playerProfile.supplies}
+                      onShiftComplete={handleShiftComplete}
+                      onApplyBoon={handleApplyBoon}
+                      dayCount={dayCount}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+            </div>
+        </div>
 
         <AnimatePresence>
           {isPlannerOpen && (
