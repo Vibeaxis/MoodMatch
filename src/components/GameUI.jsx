@@ -658,9 +658,14 @@ const finalRank = shiftData.rank || 'C';
       <Helmet>
         <title>Classroom Mood Matcher</title>
       </Helmet>
-
-      <div ref={gameContainerRef} className={`game-ui-container h-screen w-full bg-stone-900 font-serif relative overflow-y-auto overflow-x-hidden ${showTutorial ? 'tutorial-disabled' : ''}`}
->
+<div 
+        ref={gameContainerRef} 
+        className={`
+          relative w-full min-h-screen bg-stone-900 font-serif overflow-x-hidden
+          md:h-screen md:overflow-hidden md:flex md:flex-col md:items-center md:justify-center
+          ${showTutorial ? 'tutorial-disabled' : ''}
+        `}
+      >
         
         {/* Settings Button Header */}
         <div className="game-ui-header">
