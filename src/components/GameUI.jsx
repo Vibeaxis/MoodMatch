@@ -689,13 +689,13 @@ const finalRank = shiftData.rank || 'C';
   <SupplyDisplay unlockedSupplies={unlockedSupplies} />
 </div>
 
-        {/* Left: Handbook (Scaled down so it's not huge) */}
-        <div className="absolute top-28 left-4 z-30 md:top-32 md:left-10 origin-top-left transform scale-75 md:scale-90">
-            <DailyMemo 
-              memo={dailyMemo} 
-              onOpenHandbook={() => setIsHandbookOpen(true)} 
-            />
-        </div>
+      {/* Handbook */}
+                <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
+                    <DailyMemo 
+                      memo={dailyMemo} 
+                      onOpenHandbook={() => setIsHandbookOpen(true)} 
+                    />
+                </div>
 
         <EmployeeHandbook 
           isOpen={isHandbookOpen} 
@@ -776,11 +776,14 @@ const finalRank = shiftData.rank || 'C';
   </AnimatePresence>
 </div>
 
-        <CoffeeMug 
-          usesRemaining={coffeeUsesRemaining} 
-          maxUses={coffeeMaxUses}
-          onUse={handleCoffeeUse} 
-        />
+      {/* Coffee */}
+                <div className="absolute top-24 right-0 z-20 origin-right transform scale-50 md:scale-90 md:top-32 md:right-8">
+                    <CoffeeMug 
+                      usesRemaining={coffeeUsesRemaining} 
+                      maxUses={coffeeMaxUses}
+                      onUse={handleCoffeeUse} 
+                    />
+                </div>
 
 {/* --- 1. THE RULER (Top Z-Layer) --- */}
         <div className="absolute top-0 left-0 w-full z-20 pt-6 px-4 pointer-events-none flex justify-center">
@@ -795,34 +798,37 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${currentGradeLevel}-${dayCount}`} 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="relative z-10"
-          >
-            <ClassroomLogic
-              currentGradeLevel={currentGradeLevel}
-              onXPGained={handleXPGained}
-              onStreakUpdate={(val) => updateProfile({ streak: val })} 
-              onCorrectAnswer={handleCorrectAnswer}
-              onWrongAnswer={handleWrongAnswer}
-              streak={streak}
-              activeModifier={activeModifier}
-              hintActive={hintActive}
-              onPolaroidCreated={handlePolaroidCreated}
-              onGameNextDay={handleManualNextDay}
-              playerPhilosophy={playerProfile.philosophy}
-              playerSupplies={playerProfile.supplies}
-              onShiftComplete={handleShiftComplete}
-              onApplyBoon={handleApplyBoon}
-              dayCount={dayCount}
-            />
-          </motion.div>
-        </AnimatePresence>
+        {/* C. THE PAPER & FOLDERS (Gameplay) */}
+                {/* 'mt-4' gives just a little breathing room below the ruler */}
+                <div className="relative z-0 mt-4 md:mt-12 px-2">
+                   <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${currentGradeLevel}-${dayCount}`} 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <ClassroomLogic
+                          currentGradeLevel={currentGradeLevel}
+                          onXPGained={handleXPGained}
+                          onStreakUpdate={(val) => updateProfile({ streak: val })} 
+                          onCorrectAnswer={handleCorrectAnswer}
+                          onWrongAnswer={handleWrongAnswer}
+                          streak={streak}
+                          activeModifier={activeModifier}
+                          hintActive={hintActive}
+                          onPolaroidCreated={handlePolaroidCreated}
+                          onGameNextDay={handleManualNextDay}
+                          playerPhilosophy={playerProfile.philosophy}
+                          playerSupplies={playerProfile.supplies}
+                          onShiftComplete={handleShiftComplete}
+                          onApplyBoon={handleApplyBoon}
+                          dayCount={dayCount}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                </div>
 
         <AnimatePresence>
           {isPlannerOpen && (
