@@ -80,13 +80,14 @@ function DragStamp({ targetRef, onCommit, grade, isVisible }) {
   return (
     <div className="fixed bottom-10 right-10 z-[60] flex flex-col items-center">
       <motion.div
-        drag
-        dragConstraints={{ left: -1000, right: 1000, top: -1000, bottom: 500 }} // Loose constraints
-        dragElastic={0.2}
-        animate={controls}
-        onDragStart={handleDragStart}
-        onDrag={handleDrag}
-        onDragEnd={handleDragEnd}
+  drag
+  dragConstraints={null} // Let them drag anywhere on screen
+  dragElastic={1}        // Zero resistance (1 = follows mouse 1:1)
+  dragMomentum={false}   // Optional: Stops it from sliding like ice when released
+  animate={controls}
+  onDragStart={handleDragStart}
+  onDrag={handleDrag}
+  onDragEnd={handleDragEnd}
         whileHover={{ scale: 1.1, cursor: 'grab' }}
         whileTap={{ scale: 0.95, cursor: 'grabbing' }}
         whileDrag={{ scale: 1.1, opacity: 1 }}
