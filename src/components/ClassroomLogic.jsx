@@ -394,10 +394,12 @@ function ClassroomLogic({
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 max-w-7xl mx-auto pt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-          {/* Left side - Morning Report */}
-          <div className="flex justify-center lg:justify-end learning-log-container">
+   <div className="relative z-10 max-w-7xl mx-auto pt-4 md:pt-8"> {/* Reduced top padding */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-12 lg:gap-24 items-start"> {/* Removed mobile gap */}
+          
+          {/* Top/Left side - Morning Report */}
+          {/* Added negative margin bottom on mobile to pull folders up */}
+          <div className="flex justify-center lg:justify-end learning-log-container mb-[-2rem] md:mb-0 z-10 relative">
             <MorningReport 
               ref={reportRef}
               clue={currentPuzzle.text} 
@@ -408,8 +410,9 @@ function ClassroomLogic({
             />
           </div>
 
-          {/* Right side - Lesson Plan Folders */}
-          <div className="flex justify-center lg:justify-start pt-12 lg:pt-0 strategy-deck-container">
+          {/* Bottom/Right side - Lesson Plan Folders */}
+          {/* Removed pt-12, added z-20 to ensure folders slide OVER the paper if they overlap */}
+          <div className="flex justify-center lg:justify-start lg:pt-0 strategy-deck-container relative z-20 mt-4 md:mt-0">
             <LessonPlanFolders 
               onFolderSelect={() => {}} 
               onActivitySelect={handleActivitySelect}
@@ -420,6 +423,8 @@ function ClassroomLogic({
             />
           </div>
         </div>
+
+        {/* ... Grading Animation remains here ... */}
 
         <GradingAnimation
           shouldRender={showGrading}
