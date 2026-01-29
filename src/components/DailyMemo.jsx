@@ -1,16 +1,36 @@
 import React from 'react';
 import './DailyMemo.css';
 import { Book, Bookmark, Lock } from 'lucide-react';
+import { motion } from 'framer-motion'; // 1. Import Motion
 
 const DailyMemo = ({ memo, onOpenHandbook }) => {
   if (!memo) return null;
 
   return (
-    <div 
+    <motion.div 
       className="daily-memo-container"
+      
+      // 2. Physics & Drag Logic
+      drag
+      dragMomentum={false} // "Heavy" feel, no sliding
+      dragElastic={0.1}    // Minimal rubber-banding
+      
+      // 3. Constraints (Left side of desk only)
+      // These numbers act as boundaries relative to its starting position.
+      // Adjust 'right' to control how far towards the center it can go.
+      dragConstraints={{ left: 0, right: 300, top: -50, bottom: 300 }}
+      
+      // 4. Interaction Handling
+      // We use onTap instead of onClick because it's smarter about 
+      // distinguishing between a "drag" and a "click".
+      onTap={onOpenHandbook} 
+      whileHover={{ scale: 1.05, rotate: -2, cursor: 'grab' }}
+      whileTap={{ scale: 0.95, cursor: 'grabbing' }}
+      whileDrag={{ scale: 1.1, zIndex: 50, cursor: 'grabbing' }}
+      
+      // Accessibility
       role="button"
       tabIndex={0}
-      onClick={onOpenHandbook}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onOpenHandbook()}
       aria-label="Open Employee Handbook"
     >
@@ -49,7 +69,7 @@ const DailyMemo = ({ memo, onOpenHandbook }) => {
       <div className="hover-tooltip">
         Click to Consult Rules
       </div>
-    </div>
+    </motion.div>
   );
 };
 
