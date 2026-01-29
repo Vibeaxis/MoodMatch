@@ -20,30 +20,23 @@ function DragStamp({ targetRef, onCommit, grade, isVisible }) {
     if (navigator.vibrate) navigator.vibrate(5);
   };
 
-  const handleDrag = (event, info) => {
+ const handleDrag = (event, info) => {
     if (!targetRef.current) return;
 
     const stampRect = event.target.getBoundingClientRect();
     const targetRect = targetRef.current.getBoundingClientRect();
 
-    // Calculate center distance
-    const stampCenter = {
-      x: stampRect.left + stampRect.width / 2,
-      y: stampRect.top + stampRect.height / 2
-    };
-    const targetCenter = {
-      x: targetRect.left + targetRect.width / 2,
-      y: targetRect.top + targetRect.height / 2
-    };
+    // THE FIX: Use an invisible "Buffer" (Ghost Hitbox)
+    // This adds 50px of forgiveness to every side of the target.
+    const buffer = 50; 
 
-    const distance = Math.hypot(
-      stampCenter.x - targetCenter.x,
-      stampCenter.y - targetCenter.y
-    );
+    const isOverlapping = 
+      stampRect.right > (targetRect.left - buffer) &&
+      stampRect.left < (targetRect.right + buffer) &&
+      stampRect.bottom > (targetRect.top - buffer) &&
+      stampRect.top < (targetRect.bottom + buffer);
 
-    // Proximity logic
-    const threshold = 150; // px
-    if (distance < threshold) {
+    if (isOverlapping) {
       if (!isInZone) {
         setIsInZone(true);
         if (navigator.vibrate) navigator.vibrate([10, 5, 10]);
