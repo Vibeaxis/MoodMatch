@@ -1,4 +1,4 @@
-import StudentQueue from '@/components/StudentQueue';
+import StudentQueue from './StudentQueue';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Helmet } from 'react-helmet';
@@ -809,26 +809,17 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-      {/* C. THE PAPER & FOLDERS (Gameplay) */}
-  <div className="relative z-0 pt-32 md:pt-48 px-2">
-
-      {/* --- NEW: HALLWAY QUEUE --- */}
-      {/* absolute top-14 puts it inside the padding gap (behind the desk) */}
-    <div className="absolute top-32 left-0 w-full z-0 pointer-events-none">
-         <StudentQueue onNextStudent={queueTick} />
-      </div>
-      {/* -------------------------- */}
-
-      <AnimatePresence mode="wait">
-         {/* Add 'relative z-10' here to ensure papers slide OVER the students' feet */}
-         <motion.div
-           className="relative z-10" 
-           key={`${currentGradeLevel}-${dayCount}`} 
-           initial={{ opacity: 0 }}
-           animate={{ opacity: 1 }}
-           exit={{ opacity: 0 }}
-           transition={{ duration: 0.5 }}
-         >
+        {/* C. THE PAPER & FOLDERS (Gameplay) */}
+                {/* 'mt-4' gives just a little breathing room below the ruler */}
+ <div className="relative z-0 pt-32 md:pt-48 px-2">
+                   <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${currentGradeLevel}-${dayCount}`} 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
                         <ClassroomLogic
                           currentGradeLevel={currentGradeLevel}
                           onXPGained={handleXPGained}
