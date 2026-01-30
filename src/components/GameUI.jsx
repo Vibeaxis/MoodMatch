@@ -119,7 +119,7 @@ const [showAchievementGallery, setShowAchievementGallery] = useState(false);
   const [careerGPA, setCareerGPA] = useState(0);
   const [unlockedPerks, setUnlockedPerks] = useState([]);
   const [tenureProtectionUsed, setTenureProtectionUsed] = useState(false);
-const [queueTick, setQueueTick] = useState(0);
+
   // Interaction State
   const [coffeeUsesRemaining, setCoffeeUsesRemaining] = useState(1);
   const [coffeeMaxUses, setCoffeeMaxUses] = useState(1);
@@ -587,7 +587,7 @@ const finalRank = shiftData.rank || 'C';
  const handleCorrectAnswer = () => {
     const newStreak = streak + 1;
     updateProfile({ streak: newStreak });
-    setQueueTick(prev => prev + 1); // <--- Add this
+    
     stipendSystem.updateProgress('CARD_PLAYED', { cardType: 'ANY' }); 
     stipendSystem.updateProgress('MAINTAIN_STREAK', { streak: newStreak });
 
@@ -607,7 +607,6 @@ const finalRank = shiftData.rank || 'C';
     if (activeModifier && activeModifier.id === 'STREAK_SAVER') return;
     if (crisisActive && activeCrisis.id === 'OBSERVATION_DAY') {
        updateProfile({ streak: 0 });
-       setQueueTick(prev => prev + 1); // <--- Add this
        return;
     }
     updateProfile({ streak: 0 });
@@ -810,15 +809,16 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-<div className="relative z-0 pt-60 md:pt-48 px-2">
+      {/* C. THE PAPER & FOLDERS (Gameplay) */}
+  <div className="relative z-0 pt-32 md:pt-48 px-2">
 
-      {/* 2. QUEUE POSITION
-           Mobile: top-40 (Keep it low to clear mobile header)
-           Desktop: md:top-28 (Pull it UP closer to the ruler on desktop)
-      */}
-      <div className="absolute top-40 md:top-28 left-0 w-full z-0 pointer-events-none">
+      {/* --- NEW: HALLWAY QUEUE --- */}
+      {/* absolute top-14 puts it inside the padding gap (behind the desk) */}
+    <div className="absolute top-32 left-0 w-full z-0 pointer-events-none">
          <StudentQueue onNextStudent={queueTick} />
       </div>
+      {/* -------------------------- */}
+
       <AnimatePresence mode="wait">
          {/* Add 'relative z-10' here to ensure papers slide OVER the students' feet */}
          <motion.div
