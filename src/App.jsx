@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GameUI from '@/components/GameUI';
 import TitleScreen from '@/components/TitleScreen';
 import ErrorBoundary from '@/components/ErrorBoundary'; // <--- 1. IMPORT IT
-import { login } from '@/lib/LootLocker';
+
 const DEFAULT_PROFILE = {
   name: 'Teacher',
   xpTotal: 0,
@@ -32,11 +32,7 @@ function App() {
       return DEFAULT_PROFILE;
     }
   });
-// --- 2. PASTE IT RIGHT HERE ---
-  useEffect(() => {
-     // This runs once when the app mounts to establish the "Guest" session
-     LootLocker.login();
-  }, []);
+
   const handleClockIn = (newProfile) => {
     const profile = newProfile || DEFAULT_PROFILE;
     setPlayerProfile(profile);
