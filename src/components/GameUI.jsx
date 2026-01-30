@@ -42,7 +42,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 import { playFRankSound } from '@/lib/AudioUtils';
 import './GameUI.css';
-import { LootLocker } from '@/lib/LootLocker'; // Adjust path if needed
+
 // Helper to convert letter grade to GPA point
 const gradeToPoint = (grade) => {
   switch(grade) {
@@ -330,8 +330,7 @@ const [showAchievementGallery, setShowAchievementGallery] = useState(false);
     setPendingXP(0);
   };
 
-const handleShiftComplete = (shiftData) => {
-    // 1. Existing Logic
+  const handleShiftComplete = (shiftData) => {
     if (dailyDirective && checkDirectiveCompletion(dailyDirective, shiftData)) {
        handleXPGained(dailyDirective.xpBonus, 'Bonus');
        showDirectiveCompletionToast(dailyDirective);
@@ -341,22 +340,20 @@ const handleShiftComplete = (shiftData) => {
       stat: 'MORALE', 
       value: 100 
     });
-    
+    // --- LEADERBOARD INSERTION START ---
+    try {
+      // Calculate new total: Current Career XP + XP from this shift
+      const xpFromShift = shiftData.totalXPEarned || shiftData.xpEarned || 0;
+      const newTotalXP = (gameState.playerProfile.xpTotal || 0) + xpFromShift;
+      
+      // Submit to leaderboard
+      LootLocker.submitScore(newTotalXP, gameState.playerProfile.name || "Teacher");
+    } catch (err) {
+      console.log("Leaderboard skip:", err);
+    }
     if (crisisActive) {
       stipendSystem.updateProgress('COMPLETE_DURING_CRISIS', { duringCrisis: true });
     }
-
-    // --- NEW: Submit Score to Leaderboard ---
-    // Make sure you have access to your Total XP or Streak here.
-    // If 'xp' is stored in state, pass it here. 
-    // If shiftData has the day's score, use that + previous total.
-    
-    // Example: Submitting Total Career XP
-    const currentTotalXP = gameState.playerProfile.xpTotal + (shiftData.xpEarned || 0);
-    const playerName = gameState.playerProfile.name || "Teacher";
-
-    LootLocker.submitScore(currentTotalXP, playerName);
-};
 const finalRank = shiftData.rank || 'C';
   const finalGPA = gradeToPoint(finalRank);
 
