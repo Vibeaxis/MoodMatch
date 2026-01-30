@@ -810,20 +810,15 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-{/* 1. INCREASE PADDING on the Main Container 
-           pt-32 -> pt-60 (Mobile) / pt-72 (Desktop) 
-           This pushes the paper/folders WAY down so they don't cover the students.
-    */}
-    <div className="relative z-0 pt-60 md:pt-72 px-2">
+<div className="relative z-0 pt-60 md:pt-48 px-2">
 
-      {/* 2. LOWER THE QUEUE 
-             top-32 -> top-40 (Mobile) / top-44 (Desktop)
-             This pushes the students down out of the header area.
+      {/* 2. QUEUE POSITION
+           Mobile: top-40 (Keep it low to clear mobile header)
+           Desktop: md:top-28 (Pull it UP closer to the ruler on desktop)
       */}
-      <div className="absolute top-40 md:top-44 left-0 w-full z-0 pointer-events-none">
+      <div className="absolute top-40 md:top-28 left-0 w-full z-0 pointer-events-none">
          <StudentQueue onNextStudent={queueTick} />
       </div>
-
       <AnimatePresence mode="wait">
          {/* Add 'relative z-10' here to ensure papers slide OVER the students' feet */}
          <motion.div
