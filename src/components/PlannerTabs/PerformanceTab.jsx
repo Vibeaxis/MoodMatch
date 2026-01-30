@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Award, TrendingUp, Lock, CheckCircle, Shield, Eye, ShoppingCart, Coffee, Star, FileText } from 'lucide-react';
 import { RANK_CONFIG } from '@/lib/GameLogic';
 import './PerformanceTab.css';
-
+import { LeaderboardService } from '@/lib/LeaderboardService';
 const PERK_DEFINITIONS = [
   {
     id: 'TENURE',
