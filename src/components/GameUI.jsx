@@ -816,67 +816,42 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-        {/* C. THE PAPER & FOLDERS (Gameplay) */}
-                {/* 'mt-4' gives just a little breathing room below the ruler */}
- <div className="relative z-0 pt-32 md:pt-48 px-2">
-                   <AnimatePresence mode="wait">
-                      <motion.div
-                        key={`${currentGradeLevel}-${dayCount}`} 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                      >
-               {/* Wrap your component in AnimatePresence and motion.div */}
-<AnimatePresence mode="wait">
-  <motion.div
-    key={`${currentGradeLevel}-${dayCount}`} // Unique key forces a re-slam every day
-    className="relative z-10"
-    
-    // 1. START STATE: High up (-400px), invisible, and slightly tilted
-    initial={{ y: -400, opacity: 0, rotate: Math.random() * 6 - 3 }} 
-    
-    // 2. END STATE: Lands on the desk (0px), solid, and straightens out
-    animate={{ 
-      y: 0, 
-      opacity: 1, 
-      rotate: 0,
-      transition: { 
-        type: "spring", // Gives it weight
-        stiffness: 250, // Higher = harder slam
-        damping: 20     // Stops it from bouncing too much
-      } 
-    }}
-    
-    // 3. EXIT STATE: Flies off to the right when finished
-    exit={{ x: 500, opacity: 0, transition: { duration: 0.2 } }}
-  >
-    
-    {/* YOUR EXISTING COMPONENT GOES INSIDE */}
-    <ClassroomLogic
-      currentGradeLevel={currentGradeLevel}
-      onXPGained={handleXPGained}
-      onStreakUpdate={(val) => updateProfile({ streak: val })} 
-      onCorrectAnswer={handleCorrectAnswer}
-      onWrongAnswer={handleWrongAnswer}
-      streak={streak}
-      activeModifier={activeModifier}
-      hintActive={hintActive}
-      onPolaroidCreated={handlePolaroidCreated}
-      onGameNextDay={handleManualNextDay}
-      playerPhilosophy={playerProfile.philosophy}
-      playerSupplies={playerProfile.supplies}
-      onShiftComplete={handleShiftComplete}
-      onApplyBoon={handleApplyBoon}
-      dayCount={dayCount}
-    />
-    
-  </motion.div>
-</AnimatePresence>
-                      </motion.div>
-                    </AnimatePresence>
-                </div>
-
+     {/* C. THE PAPER & FOLDERS (Gameplay) */}
+    {/* Reverted padding to normal since we removed the student queue */}
+    <div className="relative z-0 pt-24 md:pt-32 px-2">
+      
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${currentGradeLevel}-${dayCount}`} 
+          className="relative z-10"
+          
+          // SIMPLE FADE: No slamming, just a clean cross-fade between days
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <ClassroomLogic
+            currentGradeLevel={currentGradeLevel}
+            onXPGained={handleXPGained}
+            onStreakUpdate={(val) => updateProfile({ streak: val })} 
+            onCorrectAnswer={handleCorrectAnswer}
+            onWrongAnswer={handleWrongAnswer}
+            streak={streak}
+            activeModifier={activeModifier}
+            hintActive={hintActive}
+            onPolaroidCreated={handlePolaroidCreated}
+            onGameNextDay={handleManualNextDay}
+            playerPhilosophy={playerProfile.philosophy}
+            playerSupplies={playerProfile.supplies}
+            onShiftComplete={handleShiftComplete}
+            onApplyBoon={handleApplyBoon}
+            dayCount={dayCount}
+          />
+        </motion.div>
+      </AnimatePresence>
+      
+    </div>
         <AnimatePresence>
           {isPlannerOpen && (
             <div className="performance-tab">
