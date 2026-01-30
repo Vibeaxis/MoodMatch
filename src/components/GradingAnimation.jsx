@@ -1,26 +1,25 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Check, X, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react'; // Removed Check and X imports
 
-function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, onAnimationComplete, shouldRender }) {
-  // 1. Local Active State: Keeps the window open even if parent turns off 'shouldRender'
+function GradingAnimation({ selectedActivity, modifierApplied, onAnimationComplete, shouldRender }) {
+  // 1. Local Active State
   const [isVisible, setIsVisible] = useState(false);
   
-  // 2. Data Snapshot: Saves the card info so it doesn't crash when parent clears 'selectedActivity'
+  // 2. Data Snapshot
   const [dataSnapshot, setDataSnapshot] = useState(null);
   
   const timerRef = useRef(null);
 
-  // TRIGGER: When parent says "Go", we lock the state and save the data
+  // TRIGGER
   useEffect(() => {
     if (shouldRender && selectedActivity) {
       setIsVisible(true);
-      setDataSnapshot(selectedActivity); // Capture the data immediately
+      setDataSnapshot(selectedActivity);
       
-      // Clear any running timers
       if (timerRef.current) clearTimeout(timerRef.current);
 
-      // Start the 3.5s countdown
+      // Keep the 3.5s timer so the card lingers before vanishing
       timerRef.current = setTimeout(() => {
         handleClose();
       }, 3500);
@@ -29,22 +28,17 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
 
   const handleClose = () => {
     setIsVisible(false);
-    // Slight delay to allow exit animation if needed, or clear immediately
     if (onAnimationComplete) onAnimationComplete();
   };
 
-  // CLEANUP: specific to unmounting
+  // CLEANUP
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
 
-  // RENDER CONDITION: Rely on local 'isVisible' and the saved 'dataSnapshot'
   if (!isVisible || !dataSnapshot) return null;
-
-  const isSuccess = rank === 'S' || rank === 'A';
-  const isPerfect = rank === 'S';
 
   return (
     <div 
@@ -56,7 +50,7 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
     >
       <div className="relative w-full max-w-lg flex flex-col items-center justify-center pointer-events-none">
 
-        {/* --- THE CARD --- */}
+        {/* --- THE CARD (KEPT) --- */}
         <motion.div
           initial={{ y: 200, opacity: 0, rotate: 10, scale: 0.8 }}
           animate={{ y: 0, opacity: 1, rotate: -2, scale: 1 }}
@@ -81,37 +75,9 @@ function GradingAnimation({ selectedActivity, rank, feedback, modifierApplied, o
           )}
         </motion.div>
 
-        {/* --- FEEDBACK PANEL --- */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-8 bg-stone-900/95 text-stone-100 p-6 rounded-lg max-w-md backdrop-blur-md shadow-2xl border border-stone-700 w-full pointer-events-auto"
-        >
-          <div className="flex items-start gap-4">
-            <div className={`mt-1 p-2 rounded-full shrink-0 ${isSuccess ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
-              {isSuccess ? <Check className="w-6 h-6 text-green-400" /> : <X className="w-6 h-6 text-red-400" />}
-            </div>
-            <div className="flex-grow">
-              <h3 className="font-bold text-lg mb-1 font-mono-typewriter flex items-center gap-2 uppercase tracking-tighter">
-                {isPerfect ? 'Excellent Choice' : (rank === 'A' ? 'Standard Procedure' : 'Deviation Detected')}
-              </h3>
-              <p className="text-stone-300 text-sm leading-relaxed font-serif italic opacity-80">
-                {feedback}
-              </p>
-            </div>
-          </div>
-          
-          {/* Progress bar */}
-          <div className="h-1 bg-stone-800 mt-4 rounded-full overflow-hidden">
-             <motion.div 
-               className="h-full bg-stone-500"
-               initial={{ width: "0%" }}
-               animate={{ width: "100%" }}
-               transition={{ duration: 3.5, ease: "linear" }}
-             />
-          </div>
-        </motion.div>
+        {/* --- FEEDBACK PANEL (DELETED) --- */}
+        {/* It used to be here. Now it is gone. */}
+
       </div>
     </div>
   );
