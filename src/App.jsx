@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GameUI from '@/components/GameUI';
 import TitleScreen from '@/components/TitleScreen';
 import ErrorBoundary from '@/components/ErrorBoundary'; // <--- 1. IMPORT IT
-import { LootLocker } from '@/lib/LootLocker'; // <--- 1. ADD THIS IMPORT
+import { login } from '@/lib/LootLocker';
 const DEFAULT_PROFILE = {
   name: 'Teacher',
   xpTotal: 0,
