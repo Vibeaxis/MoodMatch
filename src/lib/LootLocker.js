@@ -5,7 +5,7 @@
  */
 
 const API_DOMAIN = "https://ldqxmm6b.api.lootlocker.io";
-const GAME_API_KEY = "dev_a853d9ed19e941218e28becf795493ff"; // Staging Key
+const GAME_API_KEY = "dev_657786122f164bca9a847873369a41f3"; // Staging Key
 const LEADERBOARD_KEY = "global_highscore"; // Make sure this matches your Dashboard!
 const GAME_VERSION = "0.1.0";
 
