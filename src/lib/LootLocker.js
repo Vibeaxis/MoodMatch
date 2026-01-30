@@ -1,91 +1,111 @@
-import { LootLocker } from "@/lib/LootLocker";
+// A lightweight, dependency-free LootLocker client
+const API_KEY = "dev_93740266e7714856bd317a602128713d"; // Your Key
+const GAME_VERSION = "0.1";
+const BASE_URL = "https://api.lootlocker.io/game/v2";
 
-// 1. INITIAL SETUP
-// Replace this with your API Key if it's different, but this looks like the one we used before.
-const API_KEY = "dev_93740266e7714856bd317a602128713d"; 
-LootLocker.init(API_KEY, "0.1");
+// Helper to manage the session token
+const getSessionToken = () => localStorage.getItem("ll_session_token");
+const setSessionToken = (token) => localStorage.setItem("ll_session_token", token);
 
-// 2. THE SESSION MANAGER
+// 1. LOGIN (Guest)
 export const login = async () => {
   try {
-    // Check if we already have a session
-    const session = await LootLocker.getSession();
-    if (session && session.token) {
-      console.log("✅ LootLocker: Session already active.", session.player_id);
-      return session;
+    // If we already have a token, just assume it's good (basic check)
+    // In a real app, you might want to "ping" the server to verify it.
+    if (getSessionToken()) {
+      console.log("✅ LootLocker: Resuming session.");
+      return { success: true };
     }
 
-    // Start a Guest Session
-    // We use a random ID stored in localStorage so the user "keeps" their guest account on refresh
-    let playerId = localStorage.getItem("mood_player_id");
-    if (!playerId) {
-      playerId = "guest_" + Math.floor(Math.random() * 1000000);
-      localStorage.setItem("mood_player_id", playerId);
+    // Get or Create a Guest ID
+    let playerIdentifier = localStorage.getItem("mood_player_id");
+    if (!playerIdentifier) {
+      playerIdentifier = "guest_" + Math.floor(Math.random() * 10000000);
+      localStorage.setItem("mood_player_id", playerIdentifier);
     }
 
-    const response = await LootLocker.guestLogin(playerId);
+    const res = await fetch(`${BASE_URL}/session/guest`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        game_key: API_KEY,
+        game_version: GAME_VERSION,
+        player_identifier: playerIdentifier
+      })
+    });
+
+    const data = await res.json();
     
-    if (!response || response.error) {
-      console.error("❌ LootLocker Login Failed:", response?.error);
+    if (data.session_token) {
+      setSessionToken(data.session_token);
+      console.log("✅ LootLocker: Logged in as", data.player_id);
+      return data;
+    } else {
+      console.error("❌ LootLocker Login Failed:", data);
       return null;
     }
-
-    console.log("✅ LootLocker Logged in as:", response.player_id);
-    return response;
   } catch (err) {
-    console.error("❌ LootLocker Crash:", err);
+    console.error("❌ LootLocker Network Error:", err);
     return null;
   }
 };
 
-// 3. THE SCORE SUBMITTER
+// 2. SUBMIT SCORE
 export const submitScore = async (score) => {
-  // CRITICAL: This MUST match the yellow badge in your screenshot
-  const LEADERBOARD_KEY = "global_highscore"; 
-  
-  // LootLocker only accepts Integers (whole numbers). No decimals.
-  const cleanScore = Math.floor(score);
+  const LEADERBOARD_KEY = "global_highscore";
+  const token = getSessionToken();
 
-  if (cleanScore === 0) {
-    console.log("⚠️ LootLocker: Ignoring score of 0.");
-    return;
+  if (!token) {
+    await login(); // Auto-login if missing
   }
 
   try {
-    // Ensure we are logged in before sending
-    await login(); 
+    const res = await fetch(`${BASE_URL}/leaderboards/${LEADERBOARD_KEY}/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-session-token": getSessionToken() // Re-fetch token in case login() just set it
+      },
+      body: JSON.stringify({ score: Math.floor(score) }) // Must be integer
+    });
 
-    console.log(`📤 LootLocker: Submitting ${cleanScore} to '${LEADERBOARD_KEY}'...`);
-    
-    // The actual SDK call
-    const response = await LootLocker.submitScore(cleanScore, LEADERBOARD_KEY);
-    
-    if (response && !response.error) {
-      console.log("🏆 LootLocker Success! Rank:", response.rank);
-    } else {
-      console.error("❌ LootLocker Submit Failed:", response?.error);
-    }
-  } catch (error) {
-    console.error("❌ LootLocker Error:", error);
+    const data = await res.json();
+    console.log("📤 Score Upload:", data);
+    return data;
+  } catch (err) {
+    console.error("❌ Submit Score Error:", err);
   }
 };
 
-// 4. THE LEADERBOARD FETCHER
+// 3. GET LEADERBOARD
 export const getLeaderboard = async () => {
   const LEADERBOARD_KEY = "global_highscore";
-  try {
+  const token = getSessionToken();
+
+  if (!token) {
     await login();
-    // Get top 10 scores
-    const response = await LootLocker.getScoreList(LEADERBOARD_KEY, 10);
+  }
+
+  try {
+    // Fetch top 10
+    const res = await fetch(`${BASE_URL}/leaderboards/${LEADERBOARD_KEY}/list?count=10`, {
+      method: "GET",
+      headers: {
+        "x-session-token": getSessionToken()
+      }
+    });
+
+    const data = await res.json();
     
-    if (!response || response.error) {
-        console.error("❌ LootLocker Fetch Failed:", response?.error);
-        return [];
+    // LootLocker structure is usually data.items or data.items[].member
+    if (data.items) {
+      return data.items;
+    } else {
+      console.warn("⚠️ Leaderboard empty or invalid:", data);
+      return [];
     }
-    
-    return response.items || [];
-  } catch (error) {
-    console.error("❌ LootLocker Fetch Error:", error);
+  } catch (err) {
+    console.error("❌ Fetch Leaderboard Error:", err);
     return [];
   }
 };
