@@ -668,11 +668,14 @@ const finalRank = shiftData.rank || 'C';
       <Helmet>
         <title>Classroom Mood Matcher</title>
       </Helmet>
-{/* The Atmosphere Layer */}
-<div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-10">
-  {/* The Fan Shadow */}
-  <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_60deg,black_90deg,transparent_120deg,transparent_240deg,black_270deg,transparent_300deg)] animate-spin-slow" />
-</div>
+{/* ATMOSPHERE: The Vignette (Static Shadow in Corners) */}
+{/* pointer-events-none ensures clicks go right through it */}
+<div 
+  className="absolute inset-0 pointer-events-none z-0"
+  style={{
+    background: 'radial-gradient(circle at center, transparent 50%, rgba(0,0,0,0.5) 100%)'
+  }}
+/>
    {/* MASTER CONTAINER 
           - Mobile: min-h-screen (Scrolls normally if content overflows)
           - Desktop: h-screen + overflow-hidden (Locks everything in place like a game canvas) 
