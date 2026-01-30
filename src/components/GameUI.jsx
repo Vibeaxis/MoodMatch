@@ -42,7 +42,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 import { playFRankSound } from '@/lib/AudioUtils';
 import './GameUI.css';
-import { submitScore, login, getLeaderboard } from '@/lib/LootLocker';
 // Helper to convert letter grade to GPA point
 const gradeToPoint = (grade) => {
   switch(grade) {
