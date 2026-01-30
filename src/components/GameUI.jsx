@@ -119,7 +119,7 @@ const [showAchievementGallery, setShowAchievementGallery] = useState(false);
   const [careerGPA, setCareerGPA] = useState(0);
   const [unlockedPerks, setUnlockedPerks] = useState([]);
   const [tenureProtectionUsed, setTenureProtectionUsed] = useState(false);
-
+const [queueTick, setQueueTick] = useState(0);
   // Interaction State
   const [coffeeUsesRemaining, setCoffeeUsesRemaining] = useState(1);
   const [coffeeMaxUses, setCoffeeMaxUses] = useState(1);
@@ -587,7 +587,7 @@ const finalRank = shiftData.rank || 'C';
  const handleCorrectAnswer = () => {
     const newStreak = streak + 1;
     updateProfile({ streak: newStreak });
-    
+    setQueueTick(prev => prev + 1); // <--- Add this
     stipendSystem.updateProgress('CARD_PLAYED', { cardType: 'ANY' }); 
     stipendSystem.updateProgress('MAINTAIN_STREAK', { streak: newStreak });
 
@@ -607,6 +607,7 @@ const finalRank = shiftData.rank || 'C';
     if (activeModifier && activeModifier.id === 'STREAK_SAVER') return;
     if (crisisActive && activeCrisis.id === 'OBSERVATION_DAY') {
        updateProfile({ streak: 0 });
+       setQueueTick(prev => prev + 1); // <--- Add this
        return;
     }
     updateProfile({ streak: 0 });
