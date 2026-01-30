@@ -810,15 +810,19 @@ const finalRank = shiftData.rank || 'C';
               />
            </div>
         </div>
-      {/* C. THE PAPER & FOLDERS (Gameplay) */}
-  <div className="relative z-0 pt-32 md:pt-48 px-2">
+{/* 1. INCREASE PADDING on the Main Container 
+           pt-32 -> pt-60 (Mobile) / pt-72 (Desktop) 
+           This pushes the paper/folders WAY down so they don't cover the students.
+    */}
+    <div className="relative z-0 pt-60 md:pt-72 px-2">
 
-      {/* --- NEW: HALLWAY QUEUE --- */}
-      {/* absolute top-14 puts it inside the padding gap (behind the desk) */}
-    <div className="absolute top-32 left-0 w-full z-0 pointer-events-none">
+      {/* 2. LOWER THE QUEUE 
+             top-32 -> top-40 (Mobile) / top-44 (Desktop)
+             This pushes the students down out of the header area.
+      */}
+      <div className="absolute top-40 md:top-44 left-0 w-full z-0 pointer-events-none">
          <StudentQueue onNextStudent={queueTick} />
       </div>
-      {/* -------------------------- */}
 
       <AnimatePresence mode="wait">
          {/* Add 'relative z-10' here to ensure papers slide OVER the students' feet */}
