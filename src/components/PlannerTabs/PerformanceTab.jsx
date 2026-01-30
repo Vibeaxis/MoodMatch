@@ -64,7 +64,11 @@ const PerformanceTab = ({ playerProfile, unlockedPerks = [], shiftHistory }) => 
   const [isLoading, setIsLoading] = useState(false);
 
   const rankData = RANK_CONFIG[playerProfile.currentRank] || RANK_CONFIG[0];
-
+// PASTE THE RESTORED CODE HERE
+  const shiftHistoryList = shiftHistory ? shiftHistory.getHistory() : [];
+  const shiftStats = shiftHistory ? shiftHistory.getStatistics() : {
+    totalShifts: 0, averageRank: 0, averageGPA: 0, totalXP: 0, sRankCount: 0, fRankCount: 0, crisisCount: 0
+  };
   // --- NEW: Fetch Real Data when tab is opened ---
   useEffect(() => {
     if (activeView === 'LEADERBOARD') {
