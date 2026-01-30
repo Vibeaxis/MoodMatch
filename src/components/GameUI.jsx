@@ -814,9 +814,8 @@ const finalRank = shiftData.rank || 'C';
 
       {/* --- NEW: HALLWAY QUEUE --- */}
       {/* absolute top-14 puts it inside the padding gap (behind the desk) */}
-      <div className="absolute top-14 left-0 w-full z-0 pointer-events-none">
-         {/* We use 'streak' as the trigger - whenever it changes, the line moves */}
-         <StudentQueue onNextStudent={streak} />
+    <div className="absolute top-32 left-0 w-full z-0 pointer-events-none">
+         <StudentQueue onNextStudent={queueTick} />
       </div>
       {/* -------------------------- */}
 
