@@ -80,5 +80,7 @@ function App() {
     </ErrorBoundary>
   );
 }
-
+useEffect(() => {
+   LootLocker.login();
+}, []);
 export default App;
