@@ -340,17 +340,21 @@ const [showAchievementGallery, setShowAchievementGallery] = useState(false);
       stat: 'MORALE', 
       value: 100 
     });
-    // --- LEADERBOARD INSERTION START ---
-    try {
-      // Calculate new total: Current Career XP + XP from this shift
-      const xpFromShift = shiftData.totalXPEarned || shiftData.xpEarned || 0;
-      const newTotalXP = (gameState.playerProfile.xpTotal || 0) + xpFromShift;
-      
-      // Submit to leaderboard
-      LootLocker.submitScore(newTotalXP, gameState.playerProfile.name || "Teacher");
-    } catch (err) {
-      console.log("Leaderboard skip:", err);
-    }
+// --- LEADERBOARD INSERTION START ---
+try {
+  // 1. Calculate new total
+  const xpFromShift = shiftData.totalXPEarned || shiftData.xpEarned || 0;
+  const newTotalXP = (gameState.playerProfile.xpTotal || 0) + xpFromShift;
+  
+  // 2. Submit to leaderboard
+  // FIX: Call 'submitScore' directly. 
+  // NOTE: Our new function only needs the score. The Name is handled by the session/metadata now.
+  submitScore(newTotalXP); 
+  
+  console.log("🚀 XP Submitted to Leaderboard:", newTotalXP);
+} catch (err) {
+  console.log("⚠️ Leaderboard skip:", err);
+}
     if (crisisActive) {
       stipendSystem.updateProgress('COMPLETE_DURING_CRISIS', { duringCrisis: true });
     }
