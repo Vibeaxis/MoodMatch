@@ -57,36 +57,64 @@ const MOCK_LEADERBOARD = [
 
 const PerformanceTab = ({ playerProfile, unlockedPerks = [], shiftHistory }) => {
   const [activeView, setActiveView] = useState('PROFILE');
-  // eslint-disable-next-line no-unused-vars
   const [selectedStudent, setSelectedStudent] = useState(null);
+  
+  // New State for Real Data
+  const [leaderboardData, setLeaderboardData] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const rankData = RANK_CONFIG[playerProfile.currentRank] || RANK_CONFIG[0];
-  
-  // Merge player into leaderboard for display
-  const playerEntry = {
-    rank: 42, // Mock rank
-    callsign: playerProfile.name || 'YOU',
-    xp: playerProfile.xpTotal,
-    philosophy: playerProfile.philosophy,
-    isPlayer: true
-  };
 
-  // Sort leaderboard including player for local view
-  const displayLeaderboard = [...MOCK_LEADERBOARD, playerEntry]
+  // --- NEW: Fetch Real Data when tab is opened ---
+  useEffect(() => {
+    if (activeView === 'LEADERBOARD') {
+      setIsLoading(true);
+      
+      LeaderboardService.fetchLeaderboard()
+        .then((data) => {
+          // Map the Service format (totalXP) to this component's format (xp)
+          const formatted = data.map(item => ({
+             ...item,
+             xp: item.totalXP // Fix variable name mismatch
+          }));
+          setLeaderboardData(formatted);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [activeView]);
+
+  // --- MERGE LOGIC ---
+  // If we have real data, use it. Otherwise fallback to Mock.
+  const sourceData = leaderboardData.length > 0 ? leaderboardData : MOCK_LEADERBOARD;
+
+  // Check if player is already in the top list (by matching name/callsign)
+  const playerInTop = sourceData.some(entry => entry.callsign === playerProfile.name);
+
+  let displayLeaderboard = [...sourceData];
+
+  // If player isn't in the fetched list, force add them so they can compare
+  if (!playerInTop) {
+    displayLeaderboard.push({
+      rank: 999, // Temporary rank until sorted
+      callsign: playerProfile.name || 'YOU',
+      xp: playerProfile.xpTotal,
+      philosophy: playerProfile.philosophy,
+      isPlayer: true
+    });
+  } else {
+    // Mark the player's entry so we can highlight it
+    displayLeaderboard = displayLeaderboard.map(entry => 
+      entry.callsign === playerProfile.name ? { ...entry, isPlayer: true } : entry
+    );
+  }
+
+  // Sort by XP (Highest First) and Re-Rank
+  displayLeaderboard = displayLeaderboard
     .sort((a, b) => b.xp - a.xp)
-    .slice(0, 10)
+    .slice(0, 10) // Top 10 only
     .map((entry, index) => ({ ...entry, rank: index + 1 }));
 
-  // If player isn't in top 10, just show top 10 normally
-  const finalLeaderboard = displayLeaderboard.find(e => e.isPlayer) 
-    ? displayLeaderboard 
-    : MOCK_LEADERBOARD;
-
-  // Retrieve Shift History Data
-  const shiftHistoryList = shiftHistory ? shiftHistory.getHistory() : [];
-  const shiftStats = shiftHistory ? shiftHistory.getStatistics() : {
-    totalShifts: 0, averageRank: 0, averageGPA: 0, totalXP: 0, sRankCount: 0, fRankCount: 0, crisisCount: 0
-  };
+  // ... Rest of your render logic ...
 
   return (
     <div className="performance-tab-container">
@@ -178,8 +206,9 @@ const PerformanceTab = ({ playerProfile, unlockedPerks = [], shiftHistory }) => 
           </div>
         )}
 
-        {activeView === 'LEADERBOARD' && (
+      {activeView === 'LEADERBOARD' && (
           <div className="leaderboard-view">
+            {/* 1. The Header Row (Same as before) */}
             <div className="leaderboard-header-row">
               <span className="col-rank">RANK</span>
               <span className="col-name">FACULTY MEMBER</span>
@@ -188,31 +217,51 @@ const PerformanceTab = ({ playerProfile, unlockedPerks = [], shiftHistory }) => 
             </div>
             
             <div className="leaderboard-list">
-              {finalLeaderboard.map((entry) => (
-                <div key={entry.rank} className={`leaderboard-row ${entry.isPlayer ? 'player-row' : ''}`}>
-                  <div className="col-rank">
-                    <span className={`rank-badge rank-${entry.rank <= 3 ? entry.rank : 'other'}`}>
-                      {entry.rank}
-                    </span>
-                  </div>
-                  <div className="col-name">
-                    {entry.callsign}
-                    {entry.isPlayer && <span className="you-indicator">(YOU)</span>}
-                  </div>
-                  <div className="col-phil">
-                    <span className={`phil-tag ${entry.philosophy.toLowerCase()}`}>
-                      {entry.philosophy}
-                    </span>
-                  </div>
-                  <div className="col-xp">{entry.xp.toLocaleString()}</div>
+              {/* 2. THE NEW PART: Check if Loading */}
+              {isLoading ? (
+                <div style={{ padding: '40px', textAlign: 'center', color: '#888' }}>
+                   {/* Simple CSS Spinner */}
+                   <div style={{ 
+                       display: 'inline-block',
+                       width: '20px', 
+                       height: '20px', 
+                       border: '3px solid #ccc', 
+                       borderTop: '3px solid #333', 
+                       borderRadius: '50%', 
+                       animation: 'spin 1s linear infinite',
+                       marginBottom: '10px'
+                   }}></div>
+                   <div>Contacting District Mainframe...</div>
+                   <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
                 </div>
-              ))}
+              ) : (
+                /* 3. THE DATA PART: Use 'displayLeaderboard' instead of 'finalLeaderboard' */
+                displayLeaderboard.map((entry) => (
+                  <div key={entry.rank} className={`leaderboard-row ${entry.isPlayer ? 'player-row' : ''}`}>
+                    <div className="col-rank">
+                      <span className={`rank-badge rank-${entry.rank <= 3 ? entry.rank : 'other'}`}>
+                        {entry.rank}
+                      </span>
+                    </div>
+                    <div className="col-name">
+                      {entry.callsign}
+                      {entry.isPlayer && <span className="you-indicator">(YOU)</span>}
+                    </div>
+                    <div className="col-phil">
+                      <span className={`phil-tag ${entry.philosophy ? entry.philosophy.toLowerCase() : 'pragmatist'}`}>
+                        {entry.philosophy || 'Unknown'}
+                      </span>
+                    </div>
+                    <div className="col-xp">{entry.xp.toLocaleString()}</div>
+                  </div>
+                ))
+              )}
             </div>
 
             <div className="leaderboard-footer">
                <div className="status-indicator">
-                 <span className="status-dot"></span>
-                 System Status: Online
+                 <span className={`status-dot ${isLoading ? 'orange' : 'green'}`}></span>
+                 System Status: {isLoading ? 'Syncing...' : 'Online'}
                </div>
                <p className="motivational-text">"Excellence is not an act, but a habit."</p>
             </div>
