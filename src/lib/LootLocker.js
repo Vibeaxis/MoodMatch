@@ -1,4 +1,4 @@
-import { LootLocker } from "lootlocker-sdk";
+import { LootLocker } from "@/lib/LootLocker";
 
 // 1. INITIAL SETUP
 // Replace this with your API Key if it's different, but this looks like the one we used before.
