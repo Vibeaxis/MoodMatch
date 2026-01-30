@@ -668,7 +668,11 @@ const finalRank = shiftData.rank || 'C';
       <Helmet>
         <title>Classroom Mood Matcher</title>
       </Helmet>
-
+{/* The Atmosphere Layer */}
+<div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-10">
+  {/* The Fan Shadow */}
+  <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_60deg,black_90deg,transparent_120deg,transparent_240deg,black_270deg,transparent_300deg)] animate-spin-slow" />
+</div>
    {/* MASTER CONTAINER 
           - Mobile: min-h-screen (Scrolls normally if content overflows)
           - Desktop: h-screen + overflow-hidden (Locks everything in place like a game canvas) 
@@ -820,23 +824,52 @@ const finalRank = shiftData.rank || 'C';
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                       >
-                        <ClassroomLogic
-                          currentGradeLevel={currentGradeLevel}
-                          onXPGained={handleXPGained}
-                          onStreakUpdate={(val) => updateProfile({ streak: val })} 
-                          onCorrectAnswer={handleCorrectAnswer}
-                          onWrongAnswer={handleWrongAnswer}
-                          streak={streak}
-                          activeModifier={activeModifier}
-                          hintActive={hintActive}
-                          onPolaroidCreated={handlePolaroidCreated}
-                          onGameNextDay={handleManualNextDay}
-                          playerPhilosophy={playerProfile.philosophy}
-                          playerSupplies={playerProfile.supplies}
-                          onShiftComplete={handleShiftComplete}
-                          onApplyBoon={handleApplyBoon}
-                          dayCount={dayCount}
-                        />
+               {/* Wrap your component in AnimatePresence and motion.div */}
+<AnimatePresence mode="wait">
+  <motion.div
+    key={`${currentGradeLevel}-${dayCount}`} // Unique key forces a re-slam every day
+    className="relative z-10"
+    
+    // 1. START STATE: High up (-400px), invisible, and slightly tilted
+    initial={{ y: -400, opacity: 0, rotate: Math.random() * 6 - 3 }} 
+    
+    // 2. END STATE: Lands on the desk (0px), solid, and straightens out
+    animate={{ 
+      y: 0, 
+      opacity: 1, 
+      rotate: 0,
+      transition: { 
+        type: "spring", // Gives it weight
+        stiffness: 250, // Higher = harder slam
+        damping: 20     // Stops it from bouncing too much
+      } 
+    }}
+    
+    // 3. EXIT STATE: Flies off to the right when finished
+    exit={{ x: 500, opacity: 0, transition: { duration: 0.2 } }}
+  >
+    
+    {/* YOUR EXISTING COMPONENT GOES INSIDE */}
+    <ClassroomLogic
+      currentGradeLevel={currentGradeLevel}
+      onXPGained={handleXPGained}
+      onStreakUpdate={(val) => updateProfile({ streak: val })} 
+      onCorrectAnswer={handleCorrectAnswer}
+      onWrongAnswer={handleWrongAnswer}
+      streak={streak}
+      activeModifier={activeModifier}
+      hintActive={hintActive}
+      onPolaroidCreated={handlePolaroidCreated}
+      onGameNextDay={handleManualNextDay}
+      playerPhilosophy={playerProfile.philosophy}
+      playerSupplies={playerProfile.supplies}
+      onShiftComplete={handleShiftComplete}
+      onApplyBoon={handleApplyBoon}
+      dayCount={dayCount}
+    />
+    
+  </motion.div>
+</AnimatePresence>
                       </motion.div>
                     </AnimatePresence>
                 </div>
