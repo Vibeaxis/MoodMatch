@@ -62,11 +62,13 @@ export class LeaderboardService {
     }
 
     // 3. Prepare Payload
-    // LootLocker takes one integer "score" and a "metadata" string for everything else.
+    // FIX: DO NOT send 'member_id'. Let the session token identify the user.
+    // We store the visual name (callsign) in metadata instead.
     const payload = {
       score: Math.floor(profileData.totalXP),
-      member_id: profileData.callsign, // Display name on the board
+      // member_id: profileData.callsign, <--- REMOVED THIS. IT CAUSES ERRORS.
       metadata: JSON.stringify({
+        callsign: profileData.callsign, // <--- MOVED NAME HERE
         philosophy: profileData.philosophy || "Unknown",
         gpa: profileData.gpa || "0.0",
         rankIndex: profileData.rankIndex || 0,
@@ -124,7 +126,8 @@ export class LeaderboardService {
 
           return {
             rank: item.rank,
-            callsign: item.member_id || "Anonymous",
+            // FIX: Read name from METADATA, not member_id (which is just a number)
+            callsign: meta.callsign || item.member_id || "Anonymous", 
             totalXP: item.score,
             philosophy: meta.philosophy || "Unknown",
             gpa: meta.gpa || "0.00"
@@ -132,7 +135,7 @@ export class LeaderboardService {
         });
       }
 
-      // Apply Filter Client-Side (LootLocker filtering is complex, this is easier for <100 items)
+      // Apply Filter Client-Side
       if (philosophyFilter && philosophyFilter !== 'All') {
         formattedItems = formattedItems.filter(i => i.philosophy === philosophyFilter);
       }
@@ -147,7 +150,7 @@ export class LeaderboardService {
     }
   }
 
-  // --- Offline & Helpers (Kept mostly the same) ---
+  // --- Offline & Helpers (Keep exactly as they were) ---
 
   static saveOfflineScore(scorePayload) {
     const current = this.getPendingScores();
@@ -173,21 +176,12 @@ export class LeaderboardService {
 
     console.log(`Attempting to sync ${pending.length} offline scores...`);
 
-    // Try to submit each one (LIFO or FIFO doesn't matter much here, usually FIFO)
     for (const scoreData of pending) {
-       // We re-use submitScore but we must be careful not to create an infinite loop 
-       // of saving offline again. 
-       // Simple trick: We call the internal fetch logic or just await submitScore.
-       // If submitScore fails, it re-saves. We should probably clear queue first, 
-       // then process, and re-add failures.
-       
        const success = await this.submitScore(scoreData);
        if (success) synced++;
        else failed++;
     }
     
-    // In a robust system we would remove only the successful ones. 
-    // For now, we clear the queue to prevent permanent retry loops on bad data.
     if (synced > 0) this.clearOfflineQueue();
 
     return { synced, failed };
@@ -207,7 +201,6 @@ export class LeaderboardService {
   }
 
   static getMockLeaderboard() {
-    // Keep this as the "Internet is down" fallback
     const philosophies = ['Traditionalist', 'Progressive', 'Pragmatist'];
     const mockData = Array.from({ length: 10 }, (_, i) => ({
       rank: i + 1,
