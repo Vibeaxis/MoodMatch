@@ -1,21 +1,16 @@
 /* --- CONTAINER --- */
-/* Invisible container fixed to bottom left */
 .inbox-tray-container {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
+  position: absolute; /* Anchored to the scrollable document */
+  bottom: 0;          /* Sits at the very bottom of the page */
+  left: 1rem;         /* Left aligned */
   width: 200px;
   height: 200px;
-  pointer-events: none; /* Clicks pass through empty space */
-  z-index: 30; /* Below the popover */
+  pointer-events: none; 
+  z-index: 30;
 }
 
-/* HIDE THE UI LABEL */
-.tray-label {
-  display: none; 
-}
-
-/* HIDE THE TRAY BED (No more brown dashed box) */
+/* HIDE LABEL & BORDER */
+.tray-label { display: none; }
 .tray-bed {
   position: relative;
   width: 100%;
@@ -25,44 +20,34 @@
   box-shadow: none;
 }
 
-/* Empty State - Subtle text etched into the desk */
+/* Empty State */
 .empty-state {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: rgba(255, 255, 255, 0.15); /* Faint white text on dark wood */
+  color: rgba(255, 255, 255, 0.2);
   font-family: 'Courier Prime', monospace;
   font-size: 0.8rem;
   font-weight: bold;
   letter-spacing: 2px;
   text-transform: uppercase;
-  pointer-events: none;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.5); /* Embossed look */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.5);
 }
 
-/* --- THE SLIPS (Physical Objects) --- */
+/* SLIP STYLING (Same as before) */
 .request-slip {
   position: absolute;
   width: 180px;
   height: 110px;
-  background-color: #fdfbf7; /* Creamy paper */
+  background-color: #fdfbf7;
   padding: 1rem;
-  
-  /* BORDER LOGIC: Color comes from React inline style */
   border-left-width: 6px;
-  border-left-style: solid; 
-  
-  /* SHADOW: Makes it look like it's sitting on the wood */
+  border-left-style: solid;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
-  
   cursor: pointer;
   pointer-events: auto;
-  transform-origin: center center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  overflow: hidden;
-  
-  /* LINED PAPER EFFECT */
   background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
   background-size: 100% 20px;
 }
@@ -286,32 +271,22 @@
 
 /* ... existing desktop CSS ... */
 
+/* --- MOBILE TWEAKS --- */
 @media (max-width: 768px) {
   .inbox-tray-container {
-    /* CHANGE: Switch to fixed so it stays in the corner while you scroll */
-    position: fixed; 
-    
-    /* Shrink it significantly */
-    width: 140px;
-    height: 100px;
-    
-    /* Pin to bottom-left "thumb zone" */
-    bottom: 10px;
-    left: 10px;
-    right: auto;
-    
-    /* Lower z-index so if a folder scrolls under it, the folder might still be clickable? 
-       Actually, keep it high so the inbox is accessible, but small enough to ignore. */
-    z-index: 40; 
+    /* On mobile, it sits at the bottom of the long scroll */
+    width: 160px;
+    height: 120px;
+    left: 50%; /* Center it? Or keep left? */
+    transform: translateX(-50%); /* Center it on mobile */
+    bottom: 2rem; 
   }
   
   .request-slip {
-    /* Make the papers smaller on mobile */
-    width: 120px;
-    height: 80px;
-    padding: 8px;
+    width: 140px;
+    height: 90px;
   }
-  
+}
   /* Scale down text */
   .slip-category-code { font-size: 0.8rem; }
   .slip-student { font-size: 0.7rem; }

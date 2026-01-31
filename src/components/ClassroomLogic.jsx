@@ -295,10 +295,7 @@ function ClassroomLogic({
     handleManualNextDay(); 
   };
 return (
-    <div 
-      className="w-full p-8 relative overflow-hidden bg-transparent"
-      // DELETED: style={{ background: 'radial-gradient...' }} 
-    >
+   <div className="w-full p-8 pb-64 relative overflow-hidden bg-transparent">
       
       {/* DELETED: The old noise texture div that was here */}
       
