@@ -271,22 +271,25 @@
 
 /* ... existing desktop CSS ... */
 
-/* --- MOBILE TWEAKS --- */
 @media (max-width: 768px) {
   .inbox-tray-container {
-    /* On mobile, it sits at the bottom of the long scroll */
+    /* Mobile Sizing */
     width: 160px;
     height: 120px;
-    left: 50%; /* Center it? Or keep left? */
-    transform: translateX(-50%); /* Center it on mobile */
-    bottom: 2rem; 
+    
+    /* POSITIONING FIX: Anchor to bottom-left */
+    left: 1rem; 
+    bottom: 1rem; 
+    
+    /* REMOVE CENTERING */
+    transform: none; 
   }
   
   .request-slip {
     width: 140px;
     height: 90px;
   }
-
+  
   /* Scale down text */
   .slip-category-code { font-size: 0.8rem; }
   .slip-student { font-size: 0.7rem; }
