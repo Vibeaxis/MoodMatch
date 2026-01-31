@@ -43,6 +43,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { playFRankSound } from '@/lib/AudioUtils';
 import './GameUI.css';
 import deskBg from '../assets/desk_bg.jpg';
+
 // Helper to convert letter grade to GPA point
 const gradeToPoint = (grade) => {
   switch(grade) {
@@ -666,8 +667,7 @@ const finalRank = shiftData.rank || 'C';
       className: "bg-amber-100 border-amber-500 text-amber-900"
     });
   };
-
- return (
+return (
     <>
       <Helmet>
         <title>Classroom Mood Matcher</title>
@@ -683,39 +683,38 @@ const finalRank = shiftData.rank || 'C';
           bg-stone-900
         `}
       >
-         {/* --- 1. BACKGROUND LAYERS (Split View) --- */}
+         {/* --- 1. BACKGROUND LAYERS --- */}
 
-         {/* A. The Shelf / Hutch (Top Header Area) */}
-         {/* This sits behind the Ruler, Settings, and Handbook */}
+         {/* A. THE DESK (Base Layer) - Covers Full Screen */}
+         <div 
+           className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
+           style={{ 
+               backgroundImage: `url(${deskBg})`,
+               // transform: 'scaleX(-1)' // Optional flip if needed
+           }}
+         >
+            {/* Dark Overlay for text readability */}
+            <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+         </div>
+
+         {/* B. THE SHELF (Header Layer) - Sits ON TOP of the desk */}
+         {/* This ensures the 'Hutch' visual covers the top part of the wood */}
          <div 
             className="absolute top-0 left-0 w-full h-32 md:h-40 z-0 border-b-4 border-[#1a0f0a] shadow-2xl"
             style={{ 
-               // Placeholder Gradient until you generate a shelf image
-               background: 'linear-gradient(to bottom, #2c1810, #1a0f0a)', 
-               // Uncomment this when you have the image:
-               // backgroundImage: `url(${shelfBg})`, 
+               backgroundImage: `url(${shelfBg})`, 
                backgroundSize: 'cover',
                backgroundPosition: 'center'
             }}
-         />
-
-         {/* B. The Desk Surface (The Main Work Area) */}
-         {/* This starts BELOW the shelf and fills the rest */}
-         <div 
-           className="absolute top-32 md:top-40 bottom-0 left-0 w-full z-0 bg-cover bg-center pointer-events-none"
-           style={{ 
-               backgroundImage: `url(${deskBg})`,
-               // transform: 'scaleX(-1)' // Optional: Flip if needed later
-           }}
          >
-            {/* Dark Overlay for just the desk part */}
-            <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+             {/* Shelf Shadow/Overlay for blending */}
+             <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
          </div>
 
 
          {/* --- 2. HUD LAYER (High Z-Index) --- */}
          
-         {/* Settings Button */}
+         {/* Settings Button (Now sits on the Shelf) */}
          <div className="absolute top-4 right-4 z-50">
             <button 
               className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
@@ -742,7 +741,7 @@ const finalRank = shiftData.rank || 'C';
 
          {/* --- 3. INTERACTIVE OBJECTS (Mid Z-Index) --- */}
 
-         {/* Handbook */}
+         {/* Handbook (Visually rests on the Shelf/Desk seam) */}
          <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
              <DailyMemo 
                memo={dailyMemo} 
@@ -750,7 +749,7 @@ const finalRank = shiftData.rank || 'C';
              />
          </div>
 
-         {/* The Ruler / XP Bar */}
+         {/* The Ruler / XP Bar (Sits on the Shelf) */}
          <div className="absolute top-0 left-0 w-full z-20 pt-10 px-4 pb-0 flex justify-center pointer-events-none">
              <div className="w-full max-w-7xl pointer-events-auto">
                <ProgressionBar
@@ -773,7 +772,7 @@ const finalRank = shiftData.rank || 'C';
          />
 
          {/* --- 4. GAMEPLAY LAYER (Base Z-Index) --- */}
-         {/* Sits on top of the desk background */}
+         {/* Pushed down to start below the shelf */}
          <div className="relative z-10 pt-24 md:pt-32 px-2">
            <AnimatePresence mode="wait">
              <motion.div
