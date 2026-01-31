@@ -668,304 +668,323 @@ const finalRank = shiftData.rank || 'C';
   };
 
  return (
-  <>
-    <Helmet>
-      <title>Classroom Mood Matcher</title>
-    </Helmet>
+    <>
+      <Helmet>
+        <title>Classroom Mood Matcher</title>
+      </Helmet>
 
-    {/* MASTER CONTAINER */}
-    <div 
-      ref={gameContainerRef} 
-      className={`
-        relative w-full font-serif text-slate-800
-        min-h-screen overflow-y-auto overflow-x-hidden md:h-screen md:overflow-hidden 
-        ${showTutorial ? 'tutorial-disabled' : ''}
-      `}
-    >
-       {/* --- 1. BACKGROUND LAYERS (Absolute & z-0) --- */}
-       
-       {/* Wood Texture */}
-       <div 
-         className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
-         style={{ backgroundImage: `url(${deskBg})` }}
-       />
+      {/* MASTER CONTAINER */}
+      <div 
+        ref={gameContainerRef} 
+        className={`
+          relative w-full font-serif text-slate-800
+          min-h-screen overflow-y-auto overflow-x-hidden md:h-screen md:overflow-hidden 
+          ${showTutorial ? 'tutorial-disabled' : ''}
+          bg-stone-900
+        `}
+      >
+         {/* --- 1. BACKGROUND LAYERS (Split View) --- */}
 
-       {/* Dark Overlay (Crucial for readability) */}
-       <div className="absolute inset-0 z-0 bg-black/40 pointer-events-none mix-blend-multiply" />
+         {/* A. The Shelf / Hutch (Top Header Area) */}
+         {/* This sits behind the Ruler, Settings, and Handbook */}
+         <div 
+            className="absolute top-0 left-0 w-full h-32 md:h-40 z-0 border-b-4 border-[#1a0f0a] shadow-2xl"
+            style={{ 
+               // Placeholder Gradient until you generate a shelf image
+               background: 'linear-gradient(to bottom, #2c1810, #1a0f0a)', 
+               // Uncomment this when you have the image:
+               // backgroundImage: `url(${shelfBg})`, 
+               backgroundSize: 'cover',
+               backgroundPosition: 'center'
+            }}
+         />
+
+         {/* B. The Desk Surface (The Main Work Area) */}
+         {/* This starts BELOW the shelf and fills the rest */}
+         <div 
+           className="absolute top-32 md:top-40 bottom-0 left-0 w-full z-0 bg-cover bg-center pointer-events-none"
+           style={{ 
+               backgroundImage: `url(${deskBg})`,
+               // transform: 'scaleX(-1)' // Optional: Flip if needed later
+           }}
+         >
+            {/* Dark Overlay for just the desk part */}
+            <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+         </div>
 
 
-       {/* --- 2. HUD LAYER (High Z-Index) --- */}
-       
-       {/* Settings Button */}
-       <div className="absolute top-4 right-4 z-50">
-          <button 
-            className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
-            onClick={() => setShowSettings(true)} 
-            aria-label="Settings"
-          >
-            <SettingsIcon size={24} />
-          </button>
-       </div>
+         {/* --- 2. HUD LAYER (High Z-Index) --- */}
+         
+         {/* Settings Button */}
+         <div className="absolute top-4 right-4 z-50">
+            <button 
+              className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
+              onClick={() => setShowSettings(true)} 
+              aria-label="Settings"
+            >
+              <SettingsIcon size={24} />
+            </button>
+         </div>
 
-       {/* Supplies HUD */}
-       <div className="supplies-container fixed inset-0 z-50 pointer-events-none">
-          <SupplyDisplay unlockedSupplies={unlockedSupplies} />
-       </div>
+         {/* Supplies HUD */}
+         <div className="supplies-container fixed inset-0 z-50 pointer-events-none">
+            <SupplyDisplay unlockedSupplies={unlockedSupplies} />
+         </div>
 
-       {/* Coffee Mug */}
-       <div className="fixed bottom-32 right-4 z-50 md:bottom-12 md:right-12">
-           <CoffeeMug 
-             usesRemaining={coffeeUsesRemaining} 
-             maxUses={coffeeMaxUses}
-             onUse={handleCoffeeUse} 
-           />
-       </div>
-
-       {/* --- 3. INTERACTIVE OBJECTS (Mid Z-Index) --- */}
-
-       {/* Handbook */}
-       <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
-           <DailyMemo 
-             memo={dailyMemo} 
-             onOpenHandbook={() => setIsHandbookOpen(true)} 
-           />
-       </div>
-
-       {/* The Ruler / XP Bar */}
-       <div className="absolute top-0 left-0 w-full z-20 pt-10 px-4 pb-0 flex justify-center pointer-events-none">
-           <div className="w-full max-w-7xl pointer-events-auto">
-             <ProgressionBar
-               xp={xpTotal}
-               maxXp={maxXp}
-               streak={streak}
-               gradeLevel={currentGradeLevel}
-               nextUnlockAt={getNextUnlockStreak()}
-               onPlannerClick={() => setIsPlannerOpen(true)}
+         {/* Coffee Mug */}
+         <div className="fixed bottom-32 right-4 z-50 md:bottom-12 md:right-12">
+             <CoffeeMug 
+               usesRemaining={coffeeUsesRemaining} 
+               maxUses={coffeeMaxUses}
+               onUse={handleCoffeeUse} 
              />
-           </div>
-       </div>
+         </div>
 
-       {/* Inbox Tray */}
-       <InboxTray 
-         requests={requests} 
-         onApprove={handleRequestApproveWrapper} 
-         onDeny={handleDeny} 
-         onTopple={handleTopple} 
-       />
+         {/* --- 3. INTERACTIVE OBJECTS (Mid Z-Index) --- */}
 
-       {/* --- 4. GAMEPLAY LAYER (Base Z-Index) --- */}
-       {/* Added relative and z-10 so it sits ON TOP of the wood bg */}
-       <div className="relative z-10 pt-24 md:pt-32 px-2">
-         <AnimatePresence mode="wait">
-           <motion.div
-             key={`${currentGradeLevel}-${dayCount}`} 
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             exit={{ opacity: 0 }}
-             transition={{ duration: 0.5 }}
-           >
-             <ClassroomLogic
-               currentGradeLevel={currentGradeLevel}
-               onXPGained={handleXPGained}
-               onStreakUpdate={(val) => updateProfile({ streak: val })} 
-               onCorrectAnswer={handleCorrectAnswer}
-               onWrongAnswer={handleWrongAnswer}
-               streak={streak}
-               activeModifier={activeModifier}
-               hintActive={hintActive}
-               onPolaroidCreated={handlePolaroidCreated}
-               onGameNextDay={handleManualNextDay}
-               playerPhilosophy={playerProfile.philosophy}
-               playerSupplies={playerProfile.supplies}
-               onShiftComplete={handleShiftComplete}
-               onApplyBoon={handleApplyBoon}
-               dayCount={dayCount}
+         {/* Handbook */}
+         <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
+             <DailyMemo 
+               memo={dailyMemo} 
+               onOpenHandbook={() => setIsHandbookOpen(true)} 
              />
-           </motion.div>
-         </AnimatePresence>
-       </div>
+         </div>
 
-       {/* --- 5. MODALS & OVERLAYS (Highest Z-Index) --- */}
-       
-       <EmployeeHandbook 
-         isOpen={isHandbookOpen} 
-         onClose={() => setIsHandbookOpen(false)} 
-         stipendState={{
-           activeContract: stipendSystem.activeContract,
-           progress: stipendSystem.progress,
-           isComplete: stipendSystem.isComplete
-         }}
-         onSignContract={stipendSystem.signContract}
-         onAbandonContract={stipendSystem.abandonContract}
-         onClaimReward={handleClaimReward}
-       />
-
-       <AnimatePresence>
-         {showFinalExam && (
-           <FinalExamModal
-             isOpen={showFinalExam}
-             previousLevel={finalExamData.previousLevel}
-             nextLevel={finalExamData.nextLevel}
-             playerPhilosophy={playerProfile.philosophy}
-             onComplete={handleFinalExamComplete}
-             onClose={() => setShowFinalExam(false)}
-           />
-         )}
-       </AnimatePresence>
-
-       <SettingsModal 
-         isOpen={showSettings}
-         onClose={() => setShowSettings(false)}
-         currentSettings={settings}
-         onSettingsChange={handleSettingsChange}
-         onHardReset={() => {
-           onClockOut(); 
-           window.location.reload();
-         }}
-       />
-
-       {showTutorial && (
-         <TutorialOverlay onComplete={handleTutorialComplete} />
-       )}
-
-       <AnimatePresence>
-         {isPlannerOpen && (
-           <div className="performance-tab">
-             <TeacherPlanner
-               isOpen={isPlannerOpen}
-               onClose={() => setIsPlannerOpen(false)}
-               gameData={{
-                 currentLevel: currentGradeLevel,
-                 totalXP: xpTotal,
-                 currentStreak: streak,
-                 dailyMemo: dailyMemo,
-                 activeModifier: activeModifier,
-                 unlockedSupplies: unlockedSupplies,
-                 careerGPA: careerGPA,
-                 performanceHistory: performanceHistory,
-                 unlockedPerks: unlockedPerks,
-                 currentRank: currentRank,
-                 playerProfile: playerProfile,
-                 weeklySchedule: weeklySchedule,
-                 dayOfWeek: dayOfWeek,
-                 weekNumber: weekNumber,
-                 shiftHistory: shiftHistory 
-               }}
-               onReadMemo={handleReadMemo}
-               onRequisition={handleRequisition}
-             />
-           </div>
-         )}
-       </AnimatePresence>
-
-       {/* Crisis Alert Banner */}
-       <AnimatePresence>
-         {crisisActive && activeCrisis && (
-           <motion.div
-             initial={{ y: -100, opacity: 0 }}
-             animate={{ y: 0, opacity: 1 }}
-             exit={{ y: -100, opacity: 0 }}
-             transition={{ type: 'spring', stiffness: 100 }}
-             className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-4"
-           >
-             <div className="bg-red-600 text-white rounded-lg shadow-2xl border-2 border-red-800 p-4 flex items-center gap-4">
-               <div className="bg-red-800 p-2 rounded-full animate-pulse">
-                 <AlertTriangle className="w-6 h-6 text-white" />
-               </div>
-               <div>
-                 <h3 className="font-bold text-lg leading-tight uppercase tracking-wider">{activeCrisis.name}</h3>
-                 <p className="text-red-100 text-xs font-mono-typewriter">{activeCrisis.description}</p>
-               </div>
+         {/* The Ruler / XP Bar */}
+         <div className="absolute top-0 left-0 w-full z-20 pt-10 px-4 pb-0 flex justify-center pointer-events-none">
+             <div className="w-full max-w-7xl pointer-events-auto">
+               <ProgressionBar
+                 xp={xpTotal}
+                 maxXp={maxXp}
+                 streak={streak}
+                 gradeLevel={currentGradeLevel}
+                 nextUnlockAt={getNextUnlockStreak()}
+                 onPlannerClick={() => setIsPlannerOpen(true)}
+               />
              </div>
-           </motion.div>
-         )}
-       </AnimatePresence>
+         </div>
 
-       {/* Floating Polaroids */}
-       <div className="absolute inset-0 pointer-events-none z-30">
-         <AnimatePresence>
-           {dailyPolaroids.map((p, index) => (
-             <Polaroid 
-               key={p.id} 
-               grade={p.grade} 
-               timestamp={p.timestamp} 
-               index={index} 
-               isVisible={p.visible}
-               onClick={() => setShowAchievementGallery(true)}
-             />
-           ))}
-         </AnimatePresence>
-       </div>
+         {/* Inbox Tray */}
+         <InboxTray 
+           requests={requests} 
+           onApprove={handleRequestApproveWrapper} 
+           onDeny={handleDeny} 
+           onTopple={handleTopple} 
+         />
 
-       {/* Achievement Gallery Modal */}
-       <AnimatePresence>
-         {showAchievementGallery && (
-           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
-             <div className="absolute inset-0" onClick={() => setShowAchievementGallery(false)} />
-             
-             <motion.div 
-               initial={{ scale: 0.9, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
-               exit={{ scale: 0.9, opacity: 0 }}
-               className="relative bg-[#FDFBF7] w-full max-w-5xl h-[85vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
+         {/* --- 4. GAMEPLAY LAYER (Base Z-Index) --- */}
+         {/* Sits on top of the desk background */}
+         <div className="relative z-10 pt-24 md:pt-32 px-2">
+           <AnimatePresence mode="wait">
+             <motion.div
+               key={`${currentGradeLevel}-${dayCount}`} 
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               transition={{ duration: 0.5 }}
              >
-               <button 
-                 onClick={() => setShowAchievementGallery(false)}
-                 className="absolute top-6 right-6 p-2 hover:bg-stone-200 rounded-full z-50 transition-colors"
-               >
-                 <X className="w-8 h-8 text-stone-800" />
-               </button>
+               <ClassroomLogic
+                 currentGradeLevel={currentGradeLevel}
+                 onXPGained={handleXPGained}
+                 onStreakUpdate={(val) => updateProfile({ streak: val })} 
+                 onCorrectAnswer={handleCorrectAnswer}
+                 onWrongAnswer={handleWrongAnswer}
+                 streak={streak}
+                 activeModifier={activeModifier}
+                 hintActive={hintActive}
+                 onPolaroidCreated={handlePolaroidCreated}
+                 onGameNextDay={handleManualNextDay}
+                 playerPhilosophy={playerProfile.philosophy}
+                 playerSupplies={playerProfile.supplies}
+                 onShiftComplete={handleShiftComplete}
+                 onApplyBoon={handleApplyBoon}
+                 dayCount={dayCount}
+               />
+             </motion.div>
+           </AnimatePresence>
+         </div>
 
-               <h2 className="font-mono-typewriter text-4xl font-bold text-stone-800 mb-2 uppercase tracking-widest border-b-4 border-stone-800 pb-6">
-                 Hall of Records
-               </h2>
-               
-               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {ACHIEVEMENTS.map((ach) => {
-                    const isUnlocked = playerProfile.unlockedAchievements?.includes(ach.id);
-                    return (
-                      <div 
-                        key={ach.id} 
-                        className={`p-6 border-2 rounded-lg relative overflow-hidden transition-all ${
-                          isUnlocked 
-                            ? 'bg-white border-stone-800 shadow-md opacity-100' 
-                            : 'bg-stone-200 border-stone-300 opacity-60 grayscale'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between mb-4">
-                           <div className={`p-3 rounded-full flex items-center justify-center w-12 h-12 ${
-                             isUnlocked ? 'bg-amber-100 text-amber-600' : 'bg-stone-300 text-stone-500'
-                           }`}>
-                             <Award size={24} />
-                           </div>
-                           {isUnlocked && (
-                             <span className="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded uppercase tracking-wider border border-green-200">
-                               Unlocked
-                             </span>
-                           )}
-                        </div>
-                        <h3 className="font-bold text-lg font-mono-typewriter leading-tight mb-2 text-stone-900">
-                          {ach.name}
-                        </h3>
-                        <p className="text-sm text-stone-600 font-serif leading-relaxed">
-                          {ach.hidden && !isUnlocked ? "???" : ach.description}
-                        </p>
-                        <div className="absolute bottom-3 right-3 text-xs font-mono font-bold text-stone-400">
-                          +{ach.xpReward} XP
-                        </div>
-                      </div>
-                    );
-                  })}
+         {/* --- 5. MODALS & OVERLAYS (Highest Z-Index) --- */}
+         
+         <EmployeeHandbook 
+           isOpen={isHandbookOpen} 
+           onClose={() => setIsHandbookOpen(false)} 
+           stipendState={{
+             activeContract: stipendSystem.activeContract,
+             progress: stipendSystem.progress,
+             isComplete: stipendSystem.isComplete
+           }}
+           onSignContract={stipendSystem.signContract}
+           onAbandonContract={stipendSystem.abandonContract}
+           onClaimReward={handleClaimReward}
+         />
+
+         <AnimatePresence>
+           {showFinalExam && (
+             <FinalExamModal
+               isOpen={showFinalExam}
+               previousLevel={finalExamData.previousLevel}
+               nextLevel={finalExamData.nextLevel}
+               playerPhilosophy={playerProfile.philosophy}
+               onComplete={handleFinalExamComplete}
+               onClose={() => setShowFinalExam(false)}
+             />
+           )}
+         </AnimatePresence>
+
+         <SettingsModal 
+           isOpen={showSettings}
+           onClose={() => setShowSettings(false)}
+           currentSettings={settings}
+           onSettingsChange={handleSettingsChange}
+           onHardReset={() => {
+             onClockOut(); 
+             window.location.reload();
+           }}
+         />
+
+         {showTutorial && (
+           <TutorialOverlay onComplete={handleTutorialComplete} />
+         )}
+
+         <AnimatePresence>
+           {isPlannerOpen && (
+             <div className="performance-tab">
+               <TeacherPlanner
+                 isOpen={isPlannerOpen}
+                 onClose={() => setIsPlannerOpen(false)}
+                 gameData={{
+                   currentLevel: currentGradeLevel,
+                   totalXP: xpTotal,
+                   currentStreak: streak,
+                   dailyMemo: dailyMemo,
+                   activeModifier: activeModifier,
+                   unlockedSupplies: unlockedSupplies,
+                   careerGPA: careerGPA,
+                   performanceHistory: performanceHistory,
+                   unlockedPerks: unlockedPerks,
+                   currentRank: currentRank,
+                   playerProfile: playerProfile,
+                   weeklySchedule: weeklySchedule,
+                   dayOfWeek: dayOfWeek,
+                   weekNumber: weekNumber,
+                   shiftHistory: shiftHistory 
+                 }}
+                 onReadMemo={handleReadMemo}
+                 onRequisition={handleRequisition}
+               />
+             </div>
+           )}
+         </AnimatePresence>
+
+         {/* Crisis Alert Banner */}
+         <AnimatePresence>
+           {crisisActive && activeCrisis && (
+             <motion.div
+               initial={{ y: -100, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               exit={{ y: -100, opacity: 0 }}
+               transition={{ type: 'spring', stiffness: 100 }}
+               className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-4"
+             >
+               <div className="bg-red-600 text-white rounded-lg shadow-2xl border-2 border-red-800 p-4 flex items-center gap-4">
+                 <div className="bg-red-800 p-2 rounded-full animate-pulse">
+                   <AlertTriangle className="w-6 h-6 text-white" />
+                 </div>
+                 <div>
+                   <h3 className="font-bold text-lg leading-tight uppercase tracking-wider">{activeCrisis.name}</h3>
+                   <p className="text-red-100 text-xs font-mono-typewriter">{activeCrisis.description}</p>
+                 </div>
                </div>
              </motion.div>
-           </div>
-         )}
-       </AnimatePresence>
+           )}
+         </AnimatePresence>
 
-       <Toaster />
-    </div>
-  </>
-);
+         {/* Floating Polaroids */}
+         <div className="absolute inset-0 pointer-events-none z-30">
+           <AnimatePresence>
+             {dailyPolaroids.map((p, index) => (
+               <Polaroid 
+                 key={p.id} 
+                 grade={p.grade} 
+                 timestamp={p.timestamp} 
+                 index={index} 
+                 isVisible={p.visible}
+                 onClick={() => setShowAchievementGallery(true)}
+               />
+             ))}
+           </AnimatePresence>
+         </div>
+
+         {/* Achievement Gallery Modal */}
+         <AnimatePresence>
+           {showAchievementGallery && (
+             <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+               <div className="absolute inset-0" onClick={() => setShowAchievementGallery(false)} />
+               
+               <motion.div 
+                 initial={{ scale: 0.9, opacity: 0 }}
+                 animate={{ scale: 1, opacity: 1 }}
+                 exit={{ scale: 0.9, opacity: 0 }}
+                 className="relative bg-[#FDFBF7] w-full max-w-5xl h-[85vh] overflow-y-auto rounded-lg shadow-2xl p-8 border-4 border-stone-800"
+               >
+                 <button 
+                   onClick={() => setShowAchievementGallery(false)}
+                   className="absolute top-6 right-6 p-2 hover:bg-stone-200 rounded-full z-50 transition-colors"
+                 >
+                   <X className="w-8 h-8 text-stone-800" />
+                 </button>
+
+                 <h2 className="font-mono-typewriter text-4xl font-bold text-stone-800 mb-2 uppercase tracking-widest border-b-4 border-stone-800 pb-6">
+                   Hall of Records
+                 </h2>
+                 
+                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {ACHIEVEMENTS.map((ach) => {
+                      const isUnlocked = playerProfile.unlockedAchievements?.includes(ach.id);
+                      return (
+                        <div 
+                          key={ach.id} 
+                          className={`p-6 border-2 rounded-lg relative overflow-hidden transition-all ${
+                            isUnlocked 
+                              ? 'bg-white border-stone-800 shadow-md opacity-100' 
+                              : 'bg-stone-200 border-stone-300 opacity-60 grayscale'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                             <div className={`p-3 rounded-full flex items-center justify-center w-12 h-12 ${
+                               isUnlocked ? 'bg-amber-100 text-amber-600' : 'bg-stone-300 text-stone-500'
+                             }`}>
+                               <Award size={24} />
+                             </div>
+                             {isUnlocked && (
+                               <span className="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded uppercase tracking-wider border border-green-200">
+                                 Unlocked
+                               </span>
+                             )}
+                          </div>
+                          <h3 className="font-bold text-lg font-mono-typewriter leading-tight mb-2 text-stone-900">
+                            {ach.name}
+                          </h3>
+                          <p className="text-sm text-stone-600 font-serif leading-relaxed">
+                            {ach.hidden && !isUnlocked ? "???" : ach.description}
+                          </p>
+                          <div className="absolute bottom-3 right-3 text-xs font-mono font-bold text-stone-400">
+                            +{ach.xpReward} XP
+                          </div>
+                        </div>
+                      );
+                    })}
+                 </div>
+               </motion.div>
+             </div>
+           )}
+         </AnimatePresence>
+
+         <Toaster />
+      </div>
+    </>
+  );
 }
 
 export default GameUI;
