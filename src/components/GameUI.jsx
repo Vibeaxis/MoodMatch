@@ -668,120 +668,111 @@ const finalRank = shiftData.rank || 'C';
     });
   };
 return (
-    <>
-      <Helmet>
-        <title>Classroom Mood Matcher</title>
-      </Helmet>
+  <>
+    <Helmet>
+      <title>Classroom Mood Matcher</title>
+    </Helmet>
 
-      {/* MASTER CONTAINER */}
-      <div 
-        ref={gameContainerRef} 
-        className={`
-          relative w-full font-serif text-slate-800
-          min-h-screen overflow-y-auto overflow-x-hidden md:h-screen md:overflow-hidden 
-          ${showTutorial ? 'tutorial-disabled' : ''}
-          /* REMOVED bg-stone-900 so no brown posterboard hides the image */
-        `}
-      >
-         {/* --- 1. BACKGROUND LAYERS --- */}
-
-      {/* A. THE DESK (Base Layer) */}
-      {/* CHANGE: 'absolute' -> 'fixed'. Now it never scrolls away. */}
-      <div 
-        className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none"
-        style={{ 
-            backgroundImage: `url(${deskBg})`,
-        }}
-      >
-         <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
-      </div>
-          {/* B. THE SHELF (Header Layer) */}
-      {/* CHANGE: 'absolute' -> 'fixed'. It stays pinned to the top. */}
-      <div 
-         className="fixed top-0 left-0 w-full h-32 md:h-40 z-0 shadow-2xl"
-         style={{ 
-            backgroundImage: `url(${shelfBg})`, 
-            backgroundSize: 'cover',
-            backgroundPosition: 'center bottom', 
-            borderBottom: '4px solid rgba(0,0,0,0.3)' 
-         }}
-      >
+    {/* MASTER CONTAINER */}
+    {/* min-h-screen allows it to grow. overflow-x-hidden prevents side-scroll wiggles. */}
+    <div 
+      ref={gameContainerRef} 
+      className={`
+        relative w-full font-serif text-slate-800
+        min-h-screen overflow-x-hidden
+        ${showTutorial ? 'tutorial-disabled' : ''}
+      `}
+    >
+       {/* --- 1. BACKGROUND LAYERS (The "Infinite" Desk) --- */}
        
-             {/* Shelf Shadow/Overlay */}
-             <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
-         </div>
+       {/* A. THE DESK SURFACE */}
+       {/* FIXED: It stays pinned to the window so you never scroll past it into darkness */}
+       <div 
+         className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none"
+         style={{ 
+             backgroundImage: `url(${deskBg})`,
+         }}
+       >
+          <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
+       </div>
 
+       {/* B. THE SHELF (Header Layer) */}
+       {/* ABSOLUTE: It sits at the top of the document. If you scroll down, it leaves. */}
+       <div 
+          className="absolute top-0 left-0 w-full h-32 md:h-40 z-0 shadow-2xl"
+          style={{ 
+             backgroundImage: `url(${shelfBg})`, 
+             backgroundSize: 'cover',
+             backgroundPosition: 'center bottom', 
+             borderBottom: '4px solid rgba(0,0,0,0.3)' 
+          }}
+       >
+           <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
+       </div>
 
-         {/* --- 2. HUD LAYER (High Z-Index) --- */}
-         
-         {/* Settings Button */}
-         <div className="absolute top-4 right-4 z-50">
-            <button 
-              className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
-              onClick={() => setShowSettings(true)} 
-              aria-label="Settings"
-            >
-              <SettingsIcon size={24} />
-            </button>
-         </div>
+       {/* --- 2. HUD & INTERACTIVE OBJECTS --- */}
+       
+       {/* Settings Button - ABSOLUTE (Scrolls with shelf) */}
+       <div className="absolute top-4 right-4 z-50">
+          <button 
+            className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
+            onClick={() => setShowSettings(true)} 
+            aria-label="Settings"
+          >
+            <SettingsIcon size={24} />
+          </button>
+       </div>
 
-         {/* Supplies HUD */}
-         <div className="supplies-container fixed inset-0 z-50 pointer-events-none">
-            <SupplyDisplay unlockedSupplies={unlockedSupplies} />
-         </div>
+       {/* Supplies - FIXED/ABSOLUTE MIX */}
+       {/* We keep this container fixed so dragging physics don't break, but items scroll? 
+           Actually, let's keep this overlay simple. */}
+       <div className="supplies-container absolute inset-0 z-50 pointer-events-none">
+          <SupplyDisplay unlockedSupplies={unlockedSupplies} />
+       </div>
 
-         {/* Coffee Mug */}
-         <div className="fixed bottom-32 right-4 z-50 md:bottom-12 md:right-12">
-             <CoffeeMug 
-               usesRemaining={coffeeUsesRemaining} 
-               maxUses={coffeeMaxUses}
-               onUse={handleCoffeeUse} 
+       {/* Handbook - ABSOLUTE (Scrolls with page) */}
+       <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
+           <DailyMemo 
+             memo={dailyMemo} 
+             onOpenHandbook={() => setIsHandbookOpen(true)} 
+           />
+       </div>
+
+       {/* XP Ruler - ABSOLUTE (Scrolls with shelf) */}
+       <div className="absolute top-0 left-0 w-full z-20 pt-10 px-4 pb-0 flex justify-center pointer-events-none">
+           <div className="w-full max-w-7xl pointer-events-auto">
+             <ProgressionBar
+               xp={xpTotal}
+               maxXp={maxXp}
+               streak={streak}
+               gradeLevel={currentGradeLevel}
+               nextUnlockAt={getNextUnlockStreak()}
+               onPlannerClick={() => setIsPlannerOpen(true)}
              />
-         </div>
+           </div>
+       </div>
 
-         {/* --- 3. INTERACTIVE OBJECTS (Mid Z-Index) --- */}
+       {/* --- 3. INBOX TRAY (The Problem Child) --- */}
+       {/* ABSOLUTE: Sits at the bottom of the SCROLLABLE content. 
+           ClassroomLogic needs padding-bottom so this doesn't overlap folders. */}
+       <InboxTray 
+         requests={requests} 
+         onApprove={handleRequestApproveWrapper} 
+         onDeny={handleDeny} 
+         onTopple={handleTopple} 
+       />
 
-         {/* Handbook (Visually rests on the Shelf/Desk seam) */}
-         <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
-             <DailyMemo 
-               memo={dailyMemo} 
-               onOpenHandbook={() => setIsHandbookOpen(true)} 
-             />
-         </div>
-
-         {/* The Ruler / XP Bar (Sits on the Shelf) */}
-         <div className="absolute top-0 left-0 w-full z-20 pt-10 px-4 pb-0 flex justify-center pointer-events-none">
-             <div className="w-full max-w-7xl pointer-events-auto">
-               <ProgressionBar
-                 xp={xpTotal}
-                 maxXp={maxXp}
-                 streak={streak}
-                 gradeLevel={currentGradeLevel}
-                 nextUnlockAt={getNextUnlockStreak()}
-                 onPlannerClick={() => setIsPlannerOpen(true)}
-               />
-             </div>
-         </div>
-
-         {/* Inbox Tray */}
-         <InboxTray 
-           requests={requests} 
-           onApprove={handleRequestApproveWrapper} 
-           onDeny={handleDeny} 
-           onTopple={handleTopple} 
-         />
-
-         {/* --- 4. GAMEPLAY LAYER (Base Z-Index) --- */}
-         {/* Pushed down to start below the shelf */}
-         <div className="relative z-10 pt-24 md:pt-32 px-2">
-           <AnimatePresence mode="wait">
-             <motion.div
-               key={`${currentGradeLevel}-${dayCount}`} 
-               initial={{ opacity: 0 }}
-               animate={{ opacity: 1 }}
-               exit={{ opacity: 0 }}
-               transition={{ duration: 0.5 }}
-             >
+       {/* --- 4. GAMEPLAY LAYER --- */}
+       {/* Added pb-32 (padding bottom) to create space for the Inbox */}
+       <div className="relative z-10 pt-32 md:pt-40 px-2 pb-0">
+         <AnimatePresence mode="wait">
+           <motion.div
+             key={`${currentGradeLevel}-${dayCount}`} 
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             transition={{ duration: 0.5 }}
+           >
                <ClassroomLogic
                  currentGradeLevel={currentGradeLevel}
                  onXPGained={handleXPGained}
