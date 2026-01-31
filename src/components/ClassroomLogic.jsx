@@ -299,34 +299,36 @@ return (
       
       {/* DELETED: The old noise texture div that was here */}
       
-      <div className="combo-indicator morale-meter-container">
-        <div className="combo-counter">
-          <span className="combo-value">{shiftCombo > 0 ? `${shiftCombo}x` : '0x'}</span>
-          <span className="combo-label">{shiftCombo > 0 ? 'COMBO' : 'No Combo'}</span>
-        </div>
-        <div className="combo-history">
-          {comboHistory.map((entry, idx) => (
-            <div key={idx} className="combo-entry">
-              <span className={`combo-grade ${entry.grade === 'F' ? 'text-red-500' : ''}`}>{entry.grade}</span>
-              {entry.bonus > 0 && <span className="combo-bonus">+{entry.bonus}</span>}
-            </div>
+     {/* --- NEW COMBO HUD (Fixed to Top Right Shelf) --- */}
+      <div className="fixed top-6 right-20 z-50 flex items-center gap-3 pointer-events-none font-mono-typewriter">
+        
+        {/* The History (Small grades fading out to the left) */}
+        <div className="flex items-center gap-1 opacity-80">
+          {comboHistory.slice(-4).map((entry, idx) => (
+            <span 
+              key={idx} 
+              className={`text-xs font-bold ${entry.grade === 'F' ? 'text-red-500' : 'text-stone-400'}`}
+            >
+              {entry.grade}
+            </span>
           ))}
         </div>
-      </div>
 
-      <div className="absolute bottom-10 left-10 z-0 pointer-events-none opacity-60">
-        <p className="font-mono-typewriter text-stone-400/50 text-xs mb-1 tracking-widest">SUCCESS STREAK</p>
-        <div className="flex flex-wrap gap-4 max-w-xs">
-          {Array.from({ length: streak }).map((_, i) => (
-             <motion.div 
-               key={i}
-               className="w-1 h-8 bg-stone-400/70 rounded-full transform rotate-6 shadow-sm" 
-               style={{ 
-                 marginLeft: i % 5 === 0 ? '10px' : '2px',
-                 transform: i > 0 && (i + 1) % 5 === 0 ? 'rotate(-60deg) translateX(-15px) translateY(10px)' : 'rotate(5deg)'
-               }}
-             />
-          ))}
+        {/* The Main Counter (Skinny Pill) */}
+        <div className={`
+          flex items-center gap-2 px-3 py-1 rounded-full border shadow-lg backdrop-blur-md transition-all
+          ${shiftCombo > 0 
+            ? 'bg-amber-100/90 border-amber-400 text-amber-800' 
+            : 'bg-stone-900/50 border-stone-700 text-stone-500'}
+        `}>
+          <span className="text-xl font-bold leading-none">
+            {shiftCombo > 0 ? `${shiftCombo}x` : '0x'}
+          </span>
+          {shiftCombo > 1 && (
+            <span className="text-[10px] uppercase tracking-wider font-bold opacity-75">
+              Combo
+            </span>
+          )}
         </div>
       </div>
       
