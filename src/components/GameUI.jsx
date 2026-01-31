@@ -667,7 +667,7 @@ const finalRank = shiftData.rank || 'C';
     });
   };
 
-  return (
+ return (
   <>
     <Helmet>
       <title>Classroom Mood Matcher</title>
@@ -677,18 +677,26 @@ const finalRank = shiftData.rank || 'C';
     <div 
       ref={gameContainerRef} 
       className={`
-        relative w-full font-serif
+        relative w-full font-serif text-slate-800
         min-h-screen overflow-y-auto overflow-x-hidden md:h-screen md:overflow-hidden 
         ${showTutorial ? 'tutorial-disabled' : ''}
       `}
     >
-       {/* Note: The Background Image & Overlay we added earlier should be on the parent 
-           of this div, or applied here via style/class if this is the root. 
-           If this div is transparent, the wood desk will show through. */}
-
-       {/* --- 1. HUD LAYER (High Z-Index) --- */}
+       {/* --- 1. BACKGROUND LAYERS (Absolute & z-0) --- */}
        
-       {/* Settings Button (Top Right) */}
+       {/* Wood Texture */}
+       <div 
+         className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
+         style={{ backgroundImage: `url(${deskBg})` }}
+       />
+
+       {/* Dark Overlay (Crucial for readability) */}
+       <div className="absolute inset-0 z-0 bg-black/40 pointer-events-none mix-blend-multiply" />
+
+
+       {/* --- 2. HUD LAYER (High Z-Index) --- */}
+       
+       {/* Settings Button */}
        <div className="absolute top-4 right-4 z-50">
           <button 
             className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
@@ -699,12 +707,12 @@ const finalRank = shiftData.rank || 'C';
           </button>
        </div>
 
-       {/* Supplies HUD (Pointer events none so you can click through empty space) */}
+       {/* Supplies HUD */}
        <div className="supplies-container fixed inset-0 z-50 pointer-events-none">
           <SupplyDisplay unlockedSupplies={unlockedSupplies} />
        </div>
 
-       {/* Coffee Mug (Bottom Right) */}
+       {/* Coffee Mug */}
        <div className="fixed bottom-32 right-4 z-50 md:bottom-12 md:right-12">
            <CoffeeMug 
              usesRemaining={coffeeUsesRemaining} 
@@ -713,9 +721,9 @@ const finalRank = shiftData.rank || 'C';
            />
        </div>
 
-       {/* --- 2. INTERACTIVE OBJECTS (Mid Z-Index) --- */}
+       {/* --- 3. INTERACTIVE OBJECTS (Mid Z-Index) --- */}
 
-       {/* Handbook (Top Left) */}
+       {/* Handbook */}
        <div className="absolute top-24 left-0 z-20 origin-left transform scale-50 md:scale-90 md:top-32 md:left-8">
            <DailyMemo 
              memo={dailyMemo} 
@@ -723,7 +731,7 @@ const finalRank = shiftData.rank || 'C';
            />
        </div>
 
-       {/* The Ruler / XP Bar (Top Center) */}
+       {/* The Ruler / XP Bar */}
        <div className="absolute top-0 left-0 w-full z-20 pt-10 px-4 pb-0 flex justify-center pointer-events-none">
            <div className="w-full max-w-7xl pointer-events-auto">
              <ProgressionBar
@@ -737,7 +745,7 @@ const finalRank = shiftData.rank || 'C';
            </div>
        </div>
 
-       {/* Inbox Tray (Bottom Left usually) */}
+       {/* Inbox Tray */}
        <InboxTray 
          requests={requests} 
          onApprove={handleRequestApproveWrapper} 
@@ -745,8 +753,8 @@ const finalRank = shiftData.rank || 'C';
          onTopple={handleTopple} 
        />
 
-       {/* --- 3. GAMEPLAY LAYER (Base Z-Index) --- */}
-       {/* This contains the folders/papers. z-10 ensures it sits above the background but below HUD */}
+       {/* --- 4. GAMEPLAY LAYER (Base Z-Index) --- */}
+       {/* Added relative and z-10 so it sits ON TOP of the wood bg */}
        <div className="relative z-10 pt-24 md:pt-32 px-2">
          <AnimatePresence mode="wait">
            <motion.div
@@ -777,7 +785,7 @@ const finalRank = shiftData.rank || 'C';
          </AnimatePresence>
        </div>
 
-       {/* --- 4. MODALS & OVERLAYS (Highest Z-Index) --- */}
+       {/* --- 5. MODALS & OVERLAYS (Highest Z-Index) --- */}
        
        <EmployeeHandbook 
          isOpen={isHandbookOpen} 
