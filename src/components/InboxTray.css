@@ -1,236 +1,245 @@
-
+/* --- CONTAINER --- */
+/* Invisible container fixed to bottom left */
 .inbox-tray-container {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  right: auto;
-  z-index: 35;
-  width: 240px;
-  height: 160px;
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  width: 200px;
+  height: 200px;
+  pointer-events: none; /* Clicks pass through empty space */
+  z-index: 30; /* Below the popover */
 }
 
+/* HIDE THE UI LABEL */
 .tray-label {
-  background: #3e2723;
-  color: #fff;
-  padding: 4px 12px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-  display: inline-block;
-  border-radius: 4px 4px 0 0;
-  position: relative;
-  z-index: 2;
-  font-family: 'Courier Prime', monospace;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  display: none; 
 }
 
+/* HIDE THE TRAY BED (No more brown dashed box) */
 .tray-bed {
-  background: rgba(255, 255, 255, 0.4);
-  border: 2px dashed #8d6e63;
+  position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 0 8px 8px 8px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
+/* Empty State - Subtle text etched into the desk */
 .empty-state {
-  color: #8d6e63;
-  font-size: 0.9rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.15); /* Faint white text on dark wood */
   font-family: 'Courier Prime', monospace;
+  font-size: 0.8rem;
   font-weight: bold;
-  opacity: 0.5;
-  text-transform: uppercase;
   letter-spacing: 2px;
+  text-transform: uppercase;
+  pointer-events: none;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.5); /* Embossed look */
 }
 
-/* Slips */
+/* --- THE SLIPS (Physical Objects) --- */
 .request-slip {
   position: absolute;
-  width: 190px;
+  width: 180px;
   height: 110px;
-  padding: 12px;
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 2px 4px 8px rgba(0,0,0,0.15);
+  background-color: #fdfbf7; /* Creamy paper */
+  padding: 1rem;
+  
+  /* BORDER LOGIC: Color comes from React inline style */
+  border-left-width: 6px;
+  border-left-style: solid; 
+  
+  /* SHADOW: Makes it look like it's sitting on the wood */
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+  
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 2px;
-  font-family: 'Courier Prime', monospace;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border-left-width: 6px; /* Dynamic color applied inline */
-  background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px);
+  pointer-events: auto;
+  transform-origin: center center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  
+  /* LINED PAPER EFFECT */
+  background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
   background-size: 100% 20px;
 }
 
-.request-slip:hover {
-  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+/* Texture Overlay */
+.request-slip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* Hover Effect: Lift the paper up */
+.request-slip.hovered {
   z-index: 100 !important;
+  box-shadow: 4px 8px 12px rgba(0, 0, 0, 0.4);
 }
 
-.request-slip.pink {
-  background-color: #fce7f3;
-}
+/* Type Variants */
+.request-slip.pink { background-color: #fff1f2; } /* Pink Slip */
+.request-slip.blue { background-color: #eff6ff; } /* Blue Slip */
 
-.request-slip.blue {
-  background-color: #e0f2fe;
+/* --- SLIP CONTENT --- */
+.slip-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .slip-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .slip-category-code {
+  font-family: 'Courier Prime', monospace;
   font-weight: 900;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .slip-student {
-  font-size: 0.8rem;
+  font-family: 'Handlee', cursive, sans-serif; /* Handwritten font if avail */
   font-weight: bold;
-  margin-top: auto;
+  font-size: 1rem;
+  color: #1c1917;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #333;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  padding-top: 4px;
+  transform: rotate(-2deg); /* Slight handwriting tilt */
 }
 
-/* Popover */
+/* --- POPOVER MODAL (The Detailed View) --- */
 .inbox-popover-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.4);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* Dim the desk */
   backdrop-filter: blur(2px);
-  z-index: 45;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
 }
 
 .inbox-popover {
-  width: 340px;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 
-    0 20px 50px rgba(0,0,0,0.4),
-    0 0 0 1px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  font-family: 'Merriweather', serif;
-  z-index: 46;
+  position: relative;
+  /* Graph Paper Texture for the modal */
+  background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .popover-header {
-  background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
-  color: #d7ccc8;
-  padding: 12px 16px;
+  background: #f5f5f4;
+  padding: 1rem;
+  border-bottom: 2px solid #e7e5e4;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #8d6e63;
 }
 
 .popover-header h3 {
-  margin: 0;
-  font-size: 0.95rem;
-  letter-spacing: 1.5px;
   font-family: 'Courier Prime', monospace;
   font-weight: bold;
+  color: #444;
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 1px;
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: #a1887f;
   cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s;
+  color: #78716c;
 }
-.close-btn:hover { color: white; }
+.close-btn:hover { color: #000; }
 
 .popover-body {
-  padding: 20px;
-  background: #fffcf5;
+  padding: 1.5rem;
 }
 
 .popover-meta {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
-  border-bottom: 1px dashed #d7ccc8;
-  padding-bottom: 10px;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .urgency-badge {
   font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
-.urgency-badge.critical { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-.urgency-badge.high { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
-.urgency-badge.medium { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
-.urgency-badge.low { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.urgency-badge.critical { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.urgency-badge.high { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; }
+.urgency-badge.normal { background: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
 
 .category-name {
   font-family: 'Courier Prime', monospace;
-  font-size: 0.8rem;
-  color: #795548;
   font-weight: bold;
+  color: #57534e;
+  font-size: 0.8rem;
 }
 
 .student-header {
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #000;
   display: flex;
-  gap: 8px;
   align-items: baseline;
+  gap: 0.5rem;
 }
 
 .student-label {
-  font-size: 0.7rem;
-  color: #888;
-  font-weight: bold;
   font-family: 'Courier Prime', monospace;
+  font-size: 0.8rem;
+  color: #666;
 }
 
 .student-name {
+  font-family: 'Merriweather', serif;
   font-weight: 900;
-  font-size: 1.1rem;
-  color: #2c1810;
+  font-size: 1.2rem;
+  color: #000;
 }
 
 .request-text {
-  font-style: italic;
-  color: #444;
-  margin: 15px 0;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.95rem;
   line-height: 1.6;
-  font-size: 1.05rem;
-  background: rgba(0,0,0,0.02);
-  padding: 10px;
-  border-left: 3px solid #8d6e63;
-  border-radius: 0 4px 4px 0;
+  color: #1f2937;
+  background: #fff;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
 }
 
 .impact-preview {
   display: flex;
   gap: 10px;
-  margin-top: 15px;
   font-family: 'Courier Prime', monospace;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: bold;
 }
 
@@ -238,68 +247,38 @@
   padding: 4px 8px;
   border-radius: 4px;
 }
-.impact-item.negative { color: #b91c1c; background: #fee2e2; }
-.impact-item.positive { color: #15803d; background: #dcfce7; }
+.impact-item.positive { background: #dcfce7; color: #166534; }
+.impact-item.negative { background: #fee2e2; color: #991b1b; }
 
 .popover-actions {
-  display: flex;
-  border-top: 1px solid #e0e0e0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 2px solid #e7e5e4;
 }
 
 .action-btn {
-  flex: 1;
-  padding: 16px;
+  padding: 1rem;
   border: none;
-  font-weight: 900;
-  font-family: 'Courier Prime', monospace;
   cursor: pointer;
+  font-family: 'Courier Prime', monospace;
+  font-weight: bold;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-}
-
-.action-btn.approve {
-  background: #f0fdf4;
-  color: #166534;
-}
-.action-btn.approve:hover {
-  background: #22c55e;
-  color: white;
+  gap: 0.5rem;
+  transition: background 0.2s;
 }
 
 .action-btn.deny {
-  background: #fef2f2;
-  color: #991b1b;
-  border-right: 1px solid #e0e0e0;
+  background: #fff1f2;
+  color: #be123c;
+  border-right: 1px solid #e5e7eb;
 }
-.action-btn.deny:hover {
-  background: #ef4444;
-  color: white;
-}
+.action-btn.deny:hover { background: #ffe4e6; }
 
-@media (max-width: 768px) {
-  .inbox-tray-container {
-    width: 180px;
-    height: 120px;
-    bottom: 1rem;
-    left: 1rem;
-    right: auto;
-  }
-  
-  .request-slip {
-    width: 140px;
-    height: 90px;
-    padding: 8px;
-  }
-  
-  .slip-category-code { font-size: 0.9rem; }
-  .slip-student { font-size: 0.7rem; }
-
-  .inbox-popover {
-    width: 90%;
-    max-width: 320px;
-  }
+.action-btn.approve {
+  background: #f0fdf4;
+  color: #15803d;
 }
+.action-btn.approve:hover { background: #dcfce7; }
