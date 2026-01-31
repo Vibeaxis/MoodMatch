@@ -282,3 +282,43 @@
   color: #15803d;
 }
 .action-btn.approve:hover { background: #dcfce7; }
+/* src/components/InboxTray.css */
+
+/* ... existing desktop CSS ... */
+
+@media (max-width: 768px) {
+  .inbox-tray-container {
+    /* CHANGE: Switch to fixed so it stays in the corner while you scroll */
+    position: fixed; 
+    
+    /* Shrink it significantly */
+    width: 140px;
+    height: 100px;
+    
+    /* Pin to bottom-left "thumb zone" */
+    bottom: 10px;
+    left: 10px;
+    right: auto;
+    
+    /* Lower z-index so if a folder scrolls under it, the folder might still be clickable? 
+       Actually, keep it high so the inbox is accessible, but small enough to ignore. */
+    z-index: 40; 
+  }
+  
+  .request-slip {
+    /* Make the papers smaller on mobile */
+    width: 120px;
+    height: 80px;
+    padding: 8px;
+  }
+  
+  /* Scale down text */
+  .slip-category-code { font-size: 0.8rem; }
+  .slip-student { font-size: 0.7rem; }
+
+  /* Ensure the Popover fits on small screens */
+  .inbox-popover {
+    width: 90%;
+    max-width: 320px;
+  }
+}

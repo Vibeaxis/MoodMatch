@@ -685,28 +685,28 @@ return (
       >
          {/* --- 1. BACKGROUND LAYERS --- */}
 
-         {/* A. THE DESK (Base Layer) - Fills the whole screen */}
-         <div 
-           className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
-           style={{ 
-               backgroundImage: `url(${deskBg})`,
-           }}
-         >
-            {/* Lighter Overlay: Just enough to make white text readable, but keeps grain visible */}
-            <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
-         </div>
-
-         {/* B. THE SHELF (Header Layer) - Sits ON TOP of the desk */}
-         {/* I added a shadow-xl to make the shelf cast a shadow onto the desk */}
-         <div 
-            className="absolute top-0 left-0 w-full h-32 md:h-40 z-0 shadow-2xl"
-            style={{ 
-               backgroundImage: `url(${shelfBg})`, 
-               backgroundSize: 'cover',
-               backgroundPosition: 'center bottom', // Aligns bottom of shelf to seam
-               borderBottom: '4px solid rgba(0,0,0,0.3)' // darkened seam
-            }}
-         >
+      {/* A. THE DESK (Base Layer) */}
+      {/* CHANGE: 'absolute' -> 'fixed'. Now it never scrolls away. */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none"
+        style={{ 
+            backgroundImage: `url(${deskBg})`,
+        }}
+      >
+         <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
+      </div>
+          {/* B. THE SHELF (Header Layer) */}
+      {/* CHANGE: 'absolute' -> 'fixed'. It stays pinned to the top. */}
+      <div 
+         className="fixed top-0 left-0 w-full h-32 md:h-40 z-0 shadow-2xl"
+         style={{ 
+            backgroundImage: `url(${shelfBg})`, 
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom', 
+            borderBottom: '4px solid rgba(0,0,0,0.3)' 
+         }}
+      >
+       
              {/* Shelf Shadow/Overlay */}
              <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
          </div>
