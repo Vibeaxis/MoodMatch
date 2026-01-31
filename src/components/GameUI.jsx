@@ -43,7 +43,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { playFRankSound } from '@/lib/AudioUtils';
 import './GameUI.css';
 import deskBg from '../assets/desk_bg.jpg';
-
+import shelfBg from '../assets/shelf_bg.jpg';
 // Helper to convert letter grade to GPA point
 const gradeToPoint = (grade) => {
   switch(grade) {
