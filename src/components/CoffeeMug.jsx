@@ -13,27 +13,24 @@ function CoffeeMug({ usesRemaining, maxUses, onUse }) {
   const hasUsesLeft = usesRemaining > 0;
 
   return (
-    // POSITIONING: 
-    // Mobile: bottom-6, right-4 (Tucked in corner, smaller)
-    // Desktop: bottom-10, right-10 (Standard size)
+    // POSITIONING: Bottom Right Corner
     <div className="fixed bottom-6 right-4 md:bottom-10 md:right-10 z-[60]">
-      <div className="relative">
+      <div className="relative group">
         
-        {/* Steam Animation (Only when full) */}
+        {/* Steam Animation (Only when full and hovering/active) */}
         {hasUsesLeft && (
-          <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex gap-1 pointer-events-none">
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex gap-1 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
             {[0, 1, 2].map((i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 0 }}
-                animate={{ opacity: [0, 0.4, 0], y: -15, x: i % 2 === 0 ? 3 : -3 }}
+                animate={{ opacity: [0, 0.3, 0], y: -20, x: i % 2 === 0 ? 5 : -5 }}
                 transition={{ 
-                  duration: 2.5, 
+                  duration: 2 + i, 
                   repeat: Infinity, 
-                  delay: i * 0.8,
                   ease: "easeInOut" 
                 }}
-                className="w-1.5 h-1.5 bg-white rounded-full blur-[2px]"
+                className="w-1.5 h-1.5 bg-white rounded-full blur-sm"
               />
             ))}
           </div>
@@ -45,70 +42,77 @@ function CoffeeMug({ usesRemaining, maxUses, onUse }) {
           whileHover={hasUsesLeft ? { scale: 1.05 } : {}}
           whileTap={hasUsesLeft ? { scale: 0.95 } : {}}
           className={`
-            relative rounded-full shadow-2xl flex items-center justify-center
+            relative flex items-center justify-center
+            /* SIZE: Fixed sizes to ensure handle aligns perfectly */
+            w-14 h-14 md:w-16 md:h-16
+            rounded-full shadow-2xl
             transition-all duration-300
-            /* SIZE: Smaller on mobile (w-12), Regular on desktop (w-16) */
-            w-12 h-12 md:w-16 md:h-16
-            /* CERAMIC LOOK: White body, subtle border */
-            bg-[#f5f5f4] border border-stone-300
-            ${!hasUsesLeft ? 'opacity-80 cursor-default' : 'cursor-pointer hover:shadow-orange-900/20'}
+            ${!hasUsesLeft ? 'cursor-default' : 'cursor-pointer'}
           `}
         >
-          {/* MUG HANDLE (Pseudo-element style) */}
-          <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-3 h-6 md:w-4 md:h-8 border-2 border-stone-300 rounded-r-md bg-[#f5f5f4] -z-10" />
-
-          {/* LIQUID SURFACE / INTERIOR */}
+          {/* 1. THE HANDLE (Sits behind the mug) */}
           <div className={`
-             rounded-full transition-colors duration-500 overflow-hidden relative
-             /* SIZE: Inner circle is slightly smaller than container */
-             w-9 h-9 md:w-12 md:h-12
-             ${hasUsesLeft 
-               ? 'bg-[#3e2723] shadow-inner' /* Dark Coffee */ 
-               : 'bg-stone-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]' /* Empty Stain */
-             }
-          `}>
-             {/* Liquid Reflection (Only if full) */}
-             {hasUsesLeft && (
-               <div className="absolute top-2 left-2 w-2 h-1.5 bg-white/10 rounded-full rotate-12 blur-[1px]" />
-             )}
+             absolute top-1/2 -translate-y-1/2 -right-3 
+             w-6 h-8 md:w-8 md:h-10 
+             border-[6px] md:border-[8px] border-[#EFEBE9] 
+             rounded-r-xl bg-transparent shadow-sm -z-10
+          `} />
+
+          {/* 2. THE CERAMIC BODY (The Container) */}
+          <div className="w-full h-full rounded-full bg-[#EFEBE9] flex items-center justify-center shadow-md relative overflow-hidden">
+            
+            {/* 3. THE LIQUID / INTERIOR */}
+            <div className={`
+               w-[80%] h-[80%] rounded-full shadow-inner transition-colors duration-500 relative
+               ${hasUsesLeft 
+                 ? 'bg-[#3E2723]' // Dark Coffee
+                 : 'bg-[#D7CCC8] shadow-[inset_0_4px_8px_rgba(0,0,0,0.2)]' // Empty Cup Bottom
+               }
+            `}>
+              {/* Liquid Reflection/Sheen */}
+              {hasUsesLeft && (
+                <div className="absolute top-[15%] left-[15%] w-[30%] h-[20%] bg-white/10 rounded-full blur-[1px] rotate-[-45deg]" />
+              )}
+            </div>
+
           </div>
-          
-          {/* USES BADGE (Notification Dot) */}
+
+          {/* USES BADGE */}
           {hasUsesLeft && maxUses > 1 && (
-             <div className="absolute -top-1 -right-1 md:top-0 md:right-0 bg-red-600 text-white text-[10px] font-bold rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center border border-white shadow-sm z-20">
+             <div className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm z-20">
                 {usesRemaining}
              </div>
           )}
         </motion.button>
 
-        {/* ACTION MENU (Popup) */}
+        {/* ACTION MENU */}
         <AnimatePresence>
           {isOpen && hasUsesLeft && (
             <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.9, x: 20 }}
               animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
-              className="absolute bottom-full right-0 mb-3 w-36 bg-[#fdfbf7] shadow-2xl rounded border border-stone-300 z-50 origin-bottom-right"
+              className="absolute bottom-full right-0 mb-3 w-40 bg-[#fdfbf7] shadow-xl rounded border border-stone-300 z-50 origin-bottom-right"
             >
               <div className="flex flex-col p-1">
                 <button
                   onClick={() => handleInteraction('REROLL')}
                   className="flex items-center gap-3 px-3 py-3 hover:bg-stone-100 rounded text-stone-800 font-bold text-xs font-mono-typewriter transition-colors border-b border-stone-100"
                 >
-                  <RefreshCw className="w-3.5 h-3.5 text-amber-600" /> 
+                  <RefreshCw className="w-4 h-4 text-amber-600" /> 
                   <span>New Memo</span>
                 </button>
                 <button
                   onClick={() => handleInteraction('HINT')}
                   className="flex items-center gap-3 px-3 py-3 hover:bg-stone-100 rounded text-stone-800 font-bold text-xs font-mono-typewriter transition-colors"
                 >
-                  <Lightbulb className="w-3.5 h-3.5 text-blue-600" /> 
+                  <Lightbulb className="w-4 h-4 text-blue-600" /> 
                   <span>Get Hint</span>
                 </button>
               </div>
               
               {/* Arrow pointing to mug */}
-              <div className="absolute -bottom-1.5 right-4 w-3 h-3 bg-[#fdfbf7] transform rotate-45 border-b border-r border-stone-300" />
+              <div className="absolute -bottom-1.5 right-6 w-3 h-3 bg-[#fdfbf7] transform rotate-45 border-b border-r border-stone-300" />
             </motion.div>
           )}
         </AnimatePresence>
