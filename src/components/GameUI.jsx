@@ -680,41 +680,41 @@ return (
           relative w-full font-serif text-slate-800
           min-h-screen overflow-y-auto overflow-x-hidden md:h-screen md:overflow-hidden 
           ${showTutorial ? 'tutorial-disabled' : ''}
-          bg-stone-900
+          /* REMOVED bg-stone-900 so no brown posterboard hides the image */
         `}
       >
          {/* --- 1. BACKGROUND LAYERS --- */}
 
-         {/* A. THE DESK (Base Layer) - Covers Full Screen */}
+         {/* A. THE DESK (Base Layer) - Fills the whole screen */}
          <div 
            className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
            style={{ 
                backgroundImage: `url(${deskBg})`,
-               // transform: 'scaleX(-1)' // Optional flip if needed
            }}
          >
-            {/* Dark Overlay for text readability */}
-            <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
+            {/* Lighter Overlay: Just enough to make white text readable, but keeps grain visible */}
+            <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
          </div>
 
          {/* B. THE SHELF (Header Layer) - Sits ON TOP of the desk */}
-         {/* This ensures the 'Hutch' visual covers the top part of the wood */}
+         {/* I added a shadow-xl to make the shelf cast a shadow onto the desk */}
          <div 
-            className="absolute top-0 left-0 w-full h-32 md:h-40 z-0 border-b-4 border-[#1a0f0a] shadow-2xl"
+            className="absolute top-0 left-0 w-full h-32 md:h-40 z-0 shadow-2xl"
             style={{ 
                backgroundImage: `url(${shelfBg})`, 
                backgroundSize: 'cover',
-               backgroundPosition: 'center'
+               backgroundPosition: 'center bottom', // Aligns bottom of shelf to seam
+               borderBottom: '4px solid rgba(0,0,0,0.3)' // darkened seam
             }}
          >
-             {/* Shelf Shadow/Overlay for blending */}
-             <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
+             {/* Shelf Shadow/Overlay */}
+             <div className="absolute inset-0 bg-black/20 mix-blend-multiply" />
          </div>
 
 
          {/* --- 2. HUD LAYER (High Z-Index) --- */}
          
-         {/* Settings Button (Now sits on the Shelf) */}
+         {/* Settings Button */}
          <div className="absolute top-4 right-4 z-50">
             <button 
               className="settings-button w-12 h-12 rounded-full bg-stone-900/50 hover:bg-stone-900 text-stone-400 border border-stone-700 flex items-center justify-center transition-all shadow-lg" 
