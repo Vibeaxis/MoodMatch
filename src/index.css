@@ -11,11 +11,13 @@ html, body, #root {
   margin: 0;
   padding: 0;
   overflow: hidden; /* Prevents bouncing */
-  background-color: #1c1917; /* stone-900 */
+background-color: #000; /* Change to solid black so if images fail, it's dark, not brown */
 }
 
 body {
-  @apply bg-stone-900 text-stone-100;
+  /* DELETE 'bg-stone-900' from here too */
+  /* @apply bg-stone-900 text-stone-100; */
+  @apply bg-black text-stone-100; /* Use bg-black instead */
   font-family: 'Merriweather', serif;
 }
 
