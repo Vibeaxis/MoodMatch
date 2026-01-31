@@ -294,16 +294,13 @@ function ClassroomLogic({
     // Proceed to next day
     handleManualNextDay(); 
   };
-
-  return (
+return (
     <div 
-      className="min-h-screen w-full p-8 relative overflow-hidden"
-      style={{
-        background: 'radial-gradient(circle at center, #78350f 0%, #0c0a09 100%)', 
-      }}
+      className="w-full p-8 relative overflow-hidden bg-transparent"
+      // DELETED: style={{ background: 'radial-gradient...' }} 
     >
-      {/* Wood Texture */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply url('data:image/svg+xml;base64,...') z-0" />
+      
+      {/* DELETED: The old noise texture div that was here */}
       
       <div className="combo-indicator morale-meter-container">
         <div className="combo-counter">
@@ -373,13 +370,13 @@ function ClassroomLogic({
                 <div className="boon-rarity-badge">{activeBoon.rarity}</div>
               </div>
               <div className="boon-modal-content">
-                 <p className="boon-description">{activeBoon.description}</p>
-                 <p className="boon-flavor">"{activeBoon.flavor}"</p>
+                  <p className="boon-description">{activeBoon.description}</p>
+                  <p className="boon-flavor">"{activeBoon.flavor}"</p>
               </div>
               <div className="boon-modal-actions">
-                 <button className="boon-btn" onClick={handleClaimBoon}>
+                  <button className="boon-btn" onClick={handleClaimBoon}>
                     CLAIM REWARD
-                 </button>
+                  </button>
               </div>
              </motion.div>
            </div>
